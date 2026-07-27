@@ -1,5 +1,5 @@
 # Ghastling Launcher
-开源，新一代的全版本启动器
+开源，新一代的小乐魂启动器
 
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](COPYING.md)
 
@@ -19,4 +19,6 @@
 
 ## 状态
 
-⚠️ **项目状态：规划中（尚未开始开发）**
+⚠️ **项目状态：开发中（尚未完成开发）**
+
+⚠️ 本项目由单人维护，开发进度较为 **缓慢** ，更新周期 **较长** 。
