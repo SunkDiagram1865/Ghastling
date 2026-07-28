@@ -48,6 +48,6 @@ jobs:
         with:
           personal_token: ${{ secrets.DEPLOY_TOKEN }}
           external_repository: sunkdiagram1865/Ghastling
-          publish_branch: gh-pages
+          publish_branch: website
           publish_dir: apps/ghastling/.output/public
           keep_files: false
