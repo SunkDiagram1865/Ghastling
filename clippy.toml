@@ -1,2 +1,0 @@
-allow-dbg-in-tests = true
-msrv = "1.90.0"

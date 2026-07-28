@@ -1,1 +1,0 @@
-ALTER TABLE settings ADD COLUMN mc_memory_optimize INTEGER NOT NULL DEFAULT FALSE;
