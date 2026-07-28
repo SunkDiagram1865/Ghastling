@@ -44,7 +44,6 @@ async-tungstenite = { version = "0.31.0", default-features = false, features = [
 ] }
 async-walkdir = "2.1.0"
 async_zip = "0.0.18"
-xz2 = "0.1.7"
 aws-sdk-s3 = { version = "=1.122.0", default-features = false, features = [
   "default-https-client",
   "rt-tokio",
@@ -142,8 +141,8 @@ prometheus = "0.14.0"
 quartz_nbt = "0.2.9"
 quick-xml = "0.38.3"
 quote = { version = "1.0" }
-rand = "=0.8.5"  # Locked on 0.8 until argon2 and p256 update to 0.9
-rand_chacha = "=0.3.1"  # Locked on 0.3 until we can update rand to 0.9
+rand = "=0.8.5"
+rand_chacha = "=0.3.1"
 rdkafka = { version = "0.36.2", features = ["cmake-build"] }
 redis = "0.32.7"
 regex = "1.12.2"
@@ -177,7 +176,7 @@ serde_cbor = "0.11.2"
 serde_ini = "0.2.0"
 serde_json = "1.0.145"
 serde_with = "3.15.0"
-serde-xml-rs = "0.8.1"  # Also an XML (de)serializer, consider dropping yaserde in favor of this
+serde-xml-rs = "0.8.1"
 sha1 = "0.10.6"
 sha1_smol = { version = "1.0.1", features = ["std"] }
 sha2 = "0.10.9"
@@ -229,8 +228,8 @@ webauthn-rs = "0.5.5"
 webauthn-rs-proto = "0.5.5"
 webp = { version = "0.3.1", default-features = false }
 whoami = "1.6.1"
-windows = "=0.61.3"  # Locked on 0.61 until we can update windows-core to 0.62
-windows-core = "=0.61.2"  # Locked on 0.61 until webview2-com updates to 0.62
+windows = "=0.61.3"
+windows-core = "=0.61.2"
 winreg = "0.55.0"
 woothee = "0.13.0"
 yaserde = "0.12.0"
@@ -288,20 +287,18 @@ wildcard_dependencies = "warn"
 [profile.dev.package.sqlx-macros]
 opt-level = 3
 
-# Optimize for speed and reduce size on release builds
 [profile.release]
-opt-level = "s"  # Optimize for binary size
-strip = true  # Remove debug symbols
-lto = true  # Enables link to optimizations
-panic = "abort"  # Strip expensive panic clean-up logic
+opt-level = "s"
+strip = true
+lto = true
+panic = "abort"
 
-# Specific profile for labrinth production builds
 [profile.release-labrinth]
 inherits = "release"
 opt-level = 2
-strip = false  # Keep debug symbols for Sentry
-lto = "thin"  # Enable LTO but keep compile times reasonable
-panic = "unwind"  # Don't exit the whole app on panic in production
+strip = false
+lto = "thin"
+panic = "unwind"
 
 [patch.crates-io]
 tauri-plugin-window-state = { git = "https://github.com/Lintern/plugins-workspace", branch = "v2" }

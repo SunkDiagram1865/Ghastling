@@ -10,10 +10,10 @@ export default defineNuxtConfig({
 				class: 'accent-pink dark-mode',
 				lang: 'zh-CN',
 			},
-			title: 'Ghastling Launcher - 免费开源的 Minecraft 启动器',
+			title: 'Axolotl Launcher - 免费开源的 Minecraft 启动器',
 			link: [
-				{ rel: 'icon', type: 'image/png', href: '/ghastling.png' },
-				{ rel: 'apple-touch-icon', type: 'image/png', href: '/ghastling.png' },
+				{ rel: 'icon', type: 'image/png', href: '/axolotl.png' },
+				{ rel: 'apple-touch-icon', type: 'image/png', href: '/axolotl.png' },
 			],
 		},
 	},
@@ -61,11 +61,12 @@ export default defineNuxtConfig({
 	nitro: {
 		prerender: {
 			crawlLinks: false,
-			routes: ['/'],
+			routes: ['/', '/changelog'],
 		},
 	},
 	routeRules: {
 		'/': { static: true },
+		'/changelog': { static: true },
 	},
 	typescript: {
 		shim: false,

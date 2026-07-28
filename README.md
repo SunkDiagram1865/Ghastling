@@ -17,8 +17,77 @@
 
 
 
-## 状态
+## 功能
 
-⚠️ **项目状态：开发中（尚未完成开发）**
+- 支持 Windows10/11 64位操作系统
+- 管理 Minecraft 实例、整合包、模组、资源包和光影
+- 支持 Microsoft 正版账户、离线账户与第三方账户
+- 支持实例截图管理、离线皮肤和服务器管理
+- 可自定义主题强调色与启动器背景
+- 完整的简体中文界面
+- 通过签名的 GitHub Release 更新包自动检查和安装新版本
 
-⚠️ 本项目由单人维护，开发进度较为 **缓慢** ，更新周期 **较长** 。
+
+
+## 下载与安装
+
+前往 [GitHub Releases](https://github.com/SunkDiagram1865/Ghastling/releases/latest) 下载适合当前系统的安装包：
+
+| 系统              | 安装包                 |
+| ----------------- | ---------------------- |
+| Windows 10/11 x64 | Ghastling Launcher.exe |
+
+
+
+## 本地开发
+
+### 环境要求
+
+- Node.js：以 [`.nvmrc`](.nvmrc) 为准
+- pnpm：以根目录 [`package.json`](package.json) 的 `packageManager` 为准
+- Rust：以 [`rust-toolchain.toml`](rust-toolchain.toml) 为准
+- [Tauri v2 系统依赖](https://v2.tauri.app/start/prerequisites/)
+
+### 启动开发环境
+
+```powershell
+corepack enable
+pnpm install --frozen-lockfile
+pnpm app:dev
+```
+
+### 构建缓存与磁盘空间
+
+Rust 编译产物位于 `target`，首次完整构建可能占用数 GB。Turbo 只缓存前端输出，不会缓存 `target/**`；桌面应用的 Tauri 构建任务也已明确关闭 Turbo 缓存。需要释放本地开发缓存时，可以仅删除：
+
+```powershell
+Remove-Item -Recurse -Force .turbo\cache
+Remove-Item -Recurse -Force target\debug
+```
+
+这不会删除 `target\installer-test` 中单独生成的安装包，但下次启动开发模式时需要重新编译 Rust 依赖。
+
+## 仓库范围与上游 (Modrinth APP) 和分支 (Axolotl) 同步
+
+Ghastling 的产品改动主要位于：
+
+- `apps/app-frontend`
+- `apps/app`
+- `packages/app-lib`
+- 上述包所需的共享 UI 与资源包
+
+Modrinth, Axolotl 网站和后端并不是 Ghastling 产品。`upstream` 远程指向 Modrinth 原仓库；上游更新应先审查影响再合并，不应使用强制推送覆盖 Ghastling 的提交历史。
+
+
+
+## 隐私与第三方服务
+
+启动器会按用户操作访问 Microsoft/Minecraft 登录服务、Modrinth API、Minecraft 内容服务以及所安装内容声明的第三方下载地址。Ghastling 已禁用原上游的私有服务能力；具体网络端点可在项目配置与源码中审查。
+
+
+
+## 许可证
+
+桌面相关包继续使用 **GPL-3.0-only** 许可证。详情请查看各包中的 `LICENSE`、`COPYING.md` 以及仓库根目录的 [`COPYING.md`](COPYING.md)。
+
+官方网站：https://sunkdiagram1865.github.io/Ghastling
