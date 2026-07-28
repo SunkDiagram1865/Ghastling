@@ -1,0 +1,53 @@
+name: Deploy Ghastling Website
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/ghastling/**'
+      - 'packages/**'
+      - '.github/workflows/ghastling-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ghastling-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build and deploy to GitHub Pages
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out source
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@008330803749db0355799c670092d9a85fd074e9 # v6.0.9
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build website
+        run: pnpm run website:ghastling-build
+
+      - name: Disable Jekyll
+        run: touch apps/ghastling/.output/public/.nojekyll
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@4f9cc660216d49f2b7163d2d633a914b01b3f5d9 # v4.0.0
+        with:
+          personal_token: ${{ secrets.DEPLOY_TOKEN }}
+          external_repository: sunkdiagram1865/Ghastling
+          publish_branch: gh-pages
+          publish_dir: apps/ghastling/.output/public
+          keep_files: false
