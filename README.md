@@ -16,15 +16,15 @@
 
 ## 项目结构
 
-本仓库包含以下核心文件与目录，其余文件均为上游 Modrinth Website 或分支 Axolotl Website 的遗留内容，与本项目无关。
+本仓库包含以下核心文件与目录，其余文件（如打包生成文件、上游 Modrinth Website 及分支 Axolotl Website ）遗留内容，与本项目无关。
 
-```
-.
+```.
+/
 ├── index.html # 网站主页面
-├── ghastling.png # 小乐魂 Logo 图标
-├── ghastling_background.png # 背景图片
+├── ghastling.png # 小乐魂图标
+├── ghastling_background.png # 小乐魂（带背景）
 ├── sounds/ # 网站音效资源目录
-│ └── ... # 音效文件
+│ 	   └── *.ogg # 音效文件
 └── README.md # 项目说明文档
 ```
 
