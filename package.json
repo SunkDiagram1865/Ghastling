@@ -7,6 +7,8 @@
 		"web:build": "turbo run build --filter=@modrinth/frontend",
 		"website:dev": "turbo run dev --filter=@axolotl/website",
 		"website:build": "turbo run build --filter=@axolotl/website",
+    "website:ghastling": "turbo run dev --filter=@ghastling/website",
+    "website:ghastling-build": "turbo run build --filter=@ghastling/website",
 		"app:dev": "turbo run dev --filter=@modrinth/app",
     "app:build": "turbo run build --filter=@modrinth/app",
     "docs:dev": "turbo run dev --filter=@modrinth/docs",
