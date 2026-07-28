@@ -6,15 +6,11 @@
 
 本项目基于 GitHub Pages 静态网页部署，为 Ghastling 启动器提供简洁、美观的品牌展示页面。
 
----
-
 
 
 ## 在线访问
 
  [https://sunkdiagram1865.github.io/Ghastling](https://sunkdiagram1865.github.io/Ghastling)
-
----
 
 
 
@@ -31,8 +27,6 @@
 │ └── ... # 音效文件
 └── README.md # 项目说明文档
 ```
-
----
 
 
 
