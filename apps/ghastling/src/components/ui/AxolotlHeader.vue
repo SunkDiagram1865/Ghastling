@@ -33,14 +33,15 @@ const messages = defineMessages({
 	download: { id: 'axolotl-site.navigation.download', defaultMessage: '下载' },
 })
 
+const base = import.meta.env.BASE_URL
 const sounds = [
-	'/sounds/Ghastling_ambient1.ogg',
-	'/sounds/Ghastling_ambient2.ogg',
-	'/sounds/Ghastling_ambient3.ogg',
-	'/sounds/Ghastling_ambient4.ogg',
-	'/sounds/Ghastling_ambient5.ogg',
-	'/sounds/Ghastling_ambient6.ogg',
-	'/sounds/Ghastling_ambient7.ogg',
+	`${base}sounds/Ghastling_ambient1.ogg`,
+	`${base}sounds/Ghastling_ambient2.ogg`,
+	`${base}sounds/Ghastling_ambient3.ogg`,
+	`${base}sounds/Ghastling_ambient4.ogg`,
+	`${base}sounds/Ghastling_ambient5.ogg`,
+	`${base}sounds/Ghastling_ambient6.ogg`,
+	`${base}sounds/Ghastling_ambient7.ogg`,
 ]
 
 function playRandomSound() {
