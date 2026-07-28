@@ -1,19 +1,22 @@
 import svgLoader from 'vite-svg-loader'
 
-const SITE_URL = 'https://www.axlmc.org'
+const SITE_URL = 'https://sunkdiagram1865.github.io/Ghastling/'
 
 export default defineNuxtConfig({
 	srcDir: 'src/',
+	ssr: false,
 	app: {
+		baseURL: '/Ghastling/',
+		buildAssetsDir: '_nuxt',
 		head: {
 			htmlAttrs: {
 				class: 'accent-pink dark-mode',
 				lang: 'zh-CN',
 			},
-			title: 'Axolotl Launcher - 免费开源的 Minecraft 启动器',
+			title: 'Ghastling Launcher - 免费开源的 Minecraft 启动器',
 			link: [
-				{ rel: 'icon', type: 'image/png', href: '/axolotl.png' },
-				{ rel: 'apple-touch-icon', type: 'image/png', href: '/axolotl.png' },
+				{ rel: 'icon', type: 'image/png', href: '/Ghastling/ghastling.png' },
+				{ rel: 'apple-touch-icon', type: 'image/png', href: '/Ghastling/ghastling.png' },
 			],
 		},
 	},
@@ -23,6 +26,7 @@ export default defineNuxtConfig({
 		},
 	},
 	vite: {
+		base: '/Ghastling/',
 		css: {
 			preprocessorOptions: {
 				scss: {
@@ -59,19 +63,14 @@ export default defineNuxtConfig({
 		},
 	},
 	nitro: {
-		prerender: {
-			crawlLinks: false,
-			routes: ['/', '/changelog'],
-		},
-	},
-	routeRules: {
-		'/': { static: true },
-		'/changelog': { static: true },
 	},
 	typescript: {
 		shim: false,
 		strict: true,
 		typeCheck: false,
+	},
+	experimental: {
+		appManifest: false,
 	},
 	compatibilityDate: '2025-01-01',
 	telemetry: false,
