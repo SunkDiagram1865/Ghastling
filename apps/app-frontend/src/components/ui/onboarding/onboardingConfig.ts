@@ -1,0 +1,566 @@
+import { defineMessages, type MessageDescriptor } from '@modrinth/ui'
+
+export type OnboardingInteraction = 'manual' | 'navigate' | 'activate' | 'inspect'
+export type OnboardingMode = 'main' | 'instance'
+export type CreationPath = 'custom' | 'modpack'
+export type StepDestination = string | 'complete'
+
+export type OnboardingStep = {
+	id: string
+	targetId?: string
+	interaction: OnboardingInteraction
+	title: MessageDescriptor
+	description: MessageDescriptor
+	action: MessageDescriptor
+	spotlight?: 'control'
+	expectedPath?: string
+	closeSettingsAfter?: boolean
+	nextByCreationPath?: Partial<Record<CreationPath, StepDestination>>
+	branchByTarget?: Record<
+		string,
+		{
+			creationPath?: CreationPath
+			next: StepDestination
+		}
+	>
+}
+
+export const onboardingMessages = defineMessages({
+	welcomeTitle: {
+		id: 'app.onboarding.welcome.title',
+		defaultMessage: 'Everything is ready',
+	},
+	welcomeDescription: {
+		id: 'app.onboarding.welcome.description',
+		defaultMessage:
+			'Your instances, content, worlds, and downloads now have one home. Let us take a quick lap before you settle in.',
+	},
+	welcomeFooter: {
+		id: 'app.onboarding.welcome.footer',
+		defaultMessage: 'Your last next launcher.',
+	},
+	start: { id: 'app.onboarding.action.start', defaultMessage: 'Take the tour' },
+	recentTitle: { id: 'app.onboarding.recent.title', defaultMessage: 'No more losing your place' },
+	recentDescription: {
+		id: 'app.onboarding.recent.description',
+		defaultMessage: 'Recently played instances and worlds stay here, ready for a quick return.',
+	},
+	continueArea: {
+		id: 'app.onboarding.action.continue-area',
+		defaultMessage: 'Click anywhere for the next bit',
+	},
+	featuredTitle: { id: 'app.onboarding.featured.title', defaultMessage: 'A little inspiration' },
+	featuredDescription: {
+		id: 'app.onboarding.featured.description',
+		defaultMessage:
+			'Recommended modpacks and mods live here for when your next project needs ideas.',
+	},
+	discoverTitle: { id: 'app.onboarding.discover.title', defaultMessage: 'Find something new' },
+	discoverDescription: {
+		id: 'app.onboarding.discover.description',
+		defaultMessage:
+			'Modpacks, mods, plugins, resource packs, shaders: the good kind of rabbit hole.',
+	},
+	clickDiscover: {
+		id: 'app.onboarding.action.click-discover',
+		defaultMessage: 'Click Discover content to continue',
+	},
+	browseTitle: { id: 'app.onboarding.browse.title', defaultMessage: 'Search with receipts' },
+	browseDescription: {
+		id: 'app.onboarding.browse.description',
+		defaultMessage:
+			'Use types, search, and filters to narrow things down. Project pages keep versions, changelogs, galleries, and install options in one place.',
+	},
+	skinsTitle: { id: 'app.onboarding.skins.title', defaultMessage: 'A new look, maybe' },
+	skinsDescription: {
+		id: 'app.onboarding.skins.description',
+		defaultMessage:
+			'Keep your Minecraft skins together. Signing in can wait until you feel like it.',
+	},
+	clickSkins: {
+		id: 'app.onboarding.action.click-skins',
+		defaultMessage: 'Click Skin selector to continue',
+	},
+	skinsPageTitle: { id: 'app.onboarding.skins-page.title', defaultMessage: 'Your skin drawer' },
+	skinsPageDescription: {
+		id: 'app.onboarding.skins-page.description',
+		defaultMessage: 'Add, preview, sort, and apply skins here. No pressure to sign in just yet.',
+	},
+	accountTitle: {
+		id: 'app.onboarding.account.title',
+		defaultMessage: 'Accounts, on your schedule',
+	},
+	accountDescription: {
+		id: 'app.onboarding.account.description',
+		defaultMessage:
+			'When you are ready, sign in, switch accounts, or open your profile here. No deadline.',
+	},
+	downloadsTitle: { id: 'app.onboarding.downloads.title', defaultMessage: 'Download control room' },
+	downloadsDescription: {
+		id: 'app.onboarding.downloads.description',
+		defaultMessage:
+			'Installations and content downloads report in here, so nothing has to disappear mysteriously.',
+	},
+	clickDownloads: {
+		id: 'app.onboarding.action.click-downloads',
+		defaultMessage: 'Click Downloads to continue',
+	},
+	downloadsPageTitle: {
+		id: 'app.onboarding.downloads-page.title',
+		defaultMessage: 'Nothing gets lost',
+	},
+	downloadsPageDescription: {
+		id: 'app.onboarding.downloads-page.description',
+		defaultMessage:
+			'Active work, history, errors, retries, cancellations, and diagnostics all leave a paper trail here.',
+	},
+	settingsTitle: { id: 'app.onboarding.settings.title', defaultMessage: 'Make it yours' },
+	settingsDescription: {
+		id: 'app.onboarding.settings.description',
+		defaultMessage:
+			'The useful knobs live here: appearance, language, translation, Java, storage, and updates.',
+	},
+	clickSettings: {
+		id: 'app.onboarding.action.click-settings',
+		defaultMessage: 'Click Settings to continue',
+	},
+	appearanceTitle: { id: 'app.onboarding.appearance.title', defaultMessage: 'Set the vibe' },
+	appearanceDescription: {
+		id: 'app.onboarding.appearance.description',
+		defaultMessage:
+			'Theme, accent, background, and window behavior. Make this launcher look familiar.',
+	},
+	languageTitle: { id: 'app.onboarding.language.title', defaultMessage: 'Speak your language' },
+	languageDescription: {
+		id: 'app.onboarding.language.description',
+		defaultMessage: 'Pick the launcher language and manage translations. No decoder ring required.',
+	},
+	translationTitle: {
+		id: 'app.onboarding.translation.title',
+		defaultMessage: 'Translation, the Axolotl way',
+	},
+	translationDescription: {
+		id: 'app.onboarding.translation.description',
+		defaultMessage:
+			'Translate Modrinth project titles, summaries, and descriptions while you browse. Keep the original, show both, or make the translation the main character.',
+	},
+	javaTitle: { id: 'app.onboarding.java.title', defaultMessage: 'Java, under the hood' },
+	javaDescription: {
+		id: 'app.onboarding.java.description',
+		defaultMessage:
+			'The Java runtimes that start Minecraft live here. Technical, but well-behaved.',
+	},
+	defaultsTitle: { id: 'app.onboarding.defaults.title', defaultMessage: 'Start ahead' },
+	defaultsDescription: {
+		id: 'app.onboarding.defaults.description',
+		defaultMessage:
+			'New instances inherit these choices, so you do not have to repeat the homework.',
+	},
+	resourcesTitle: {
+		id: 'app.onboarding.resources.title',
+		defaultMessage: 'Do not cook the computer',
+	},
+	resourcesDescription: {
+		id: 'app.onboarding.resources.description',
+		defaultMessage: 'Tune downloads, storage, and app resources. Give the fan a little dignity.',
+	},
+	updatesTitle: { id: 'app.onboarding.updates.title', defaultMessage: 'Stay in the loop' },
+	updatesDescription: {
+		id: 'app.onboarding.updates.description',
+		defaultMessage: 'Choose when Axolotl checks for updates and whether it installs them for you.',
+	},
+	clickTab: { id: 'app.onboarding.action.click-tab', defaultMessage: 'Click this tab to continue' },
+	libraryTitle: { id: 'app.onboarding.library.title', defaultMessage: 'Your launch shelf' },
+	libraryDescription: {
+		id: 'app.onboarding.library.description',
+		defaultMessage:
+			'Instances keep versions, loaders, content, and saves separate. No accidental mod soup.',
+	},
+	clickLibrary: {
+		id: 'app.onboarding.action.click-library',
+		defaultMessage: 'Click Library to continue',
+	},
+	libraryPageTitle: {
+		id: 'app.onboarding.library-page.title',
+		defaultMessage: 'Everything, in its place',
+	},
+	libraryPageDescription: {
+		id: 'app.onboarding.library-page.description',
+		defaultMessage:
+			'Filter by modpack, server, or custom setup, then open any instance to manage it.',
+	},
+	createTitle: { id: 'app.onboarding.create.title', defaultMessage: 'Make a fresh start' },
+	createDescription: {
+		id: 'app.onboarding.create.description',
+		defaultMessage:
+			'Start from scratch, grab a modpack, or bring in an existing instance. Your call.',
+	},
+	clickCreate: {
+		id: 'app.onboarding.action.click-create',
+		defaultMessage: 'Click Create new instance to continue',
+	},
+	creationTitle: { id: 'app.onboarding.creation.title', defaultMessage: 'Pick your route' },
+	creationDescription: {
+		id: 'app.onboarding.creation.description',
+		defaultMessage:
+			'Custom setup, modpack, or import. The choices are yours; I am just here for the subtitles.',
+	},
+	clickCreationMethod: {
+		id: 'app.onboarding.action.click-creation-method',
+		defaultMessage: 'Choose a route to continue',
+	},
+	creationNameTitle: {
+		id: 'app.onboarding.creation-name.title',
+		defaultMessage: 'Give it a memorable name',
+	},
+	creationNameDescription: {
+		id: 'app.onboarding.creation-name.description',
+		defaultMessage: 'Pick a name your future self will recognize at a glance.',
+	},
+	creationLoaderTitle: {
+		id: 'app.onboarding.creation-loader.title',
+		defaultMessage: 'Choose the engine',
+	},
+	creationLoaderDescription: {
+		id: 'app.onboarding.creation-loader.description',
+		defaultMessage: 'Vanilla, Fabric, Forge, NeoForge, and friends. Pick what your content needs.',
+	},
+	creationVersionTitle: {
+		id: 'app.onboarding.creation-version.title',
+		defaultMessage: 'Set the game version',
+	},
+	creationVersionDescription: {
+		id: 'app.onboarding.creation-version.description',
+		defaultMessage:
+			'Choose the Minecraft version for this instance. Compatibility likes specifics.',
+	},
+	creationModpackTitle: {
+		id: 'app.onboarding.creation-modpack.title',
+		defaultMessage: 'Find your next modpack',
+	},
+	creationModpackDescription: {
+		id: 'app.onboarding.creation-modpack.description',
+		defaultMessage:
+			'Search Modrinth, browse modpacks, or import a pack file. Plenty of adventures ahead.',
+	},
+	creationConfirmTitle: {
+		id: 'app.onboarding.creation-confirm.title',
+		defaultMessage: 'One last look',
+	},
+	creationConfirmDescription: {
+		id: 'app.onboarding.creation-confirm.description',
+		defaultMessage:
+			'This creates the instance with your choices. I keep a strict hands-off policy.',
+	},
+	finishArea: {
+		id: 'app.onboarding.action.finish-area',
+		defaultMessage: 'Click anywhere and you are all set',
+	},
+	instanceActionsTitle: {
+		id: 'app.onboarding.instance-actions.title',
+		defaultMessage: 'The main controls',
+	},
+	instanceActionsDescription: {
+		id: 'app.onboarding.instance-actions.description',
+		defaultMessage:
+			'Launch, stop, repair, configure, export, or open the instance from its header.',
+	},
+	instanceTabsTitle: {
+		id: 'app.onboarding.instance-tabs.title',
+		defaultMessage: 'The rest of the workshop',
+	},
+	instanceTabsDescription: {
+		id: 'app.onboarding.instance-tabs.description',
+		defaultMessage: 'Use these tabs for content, files, screenshots, worlds, and logs. Tidy chaos.',
+	},
+	skip: { id: 'app.onboarding.action.skip', defaultMessage: 'Leave the tour' },
+	mascotAlt: { id: 'app.onboarding.mascot-alt', defaultMessage: 'Axolotl guide' },
+})
+
+const step = (
+	id: string,
+	interaction: OnboardingInteraction,
+	copy: {
+		title: MessageDescriptor
+		description: MessageDescriptor
+		action: MessageDescriptor
+	},
+	options: Omit<OnboardingStep, 'id' | 'interaction' | 'title' | 'description' | 'action'> = {},
+): OnboardingStep => ({ id, interaction, ...copy, ...options })
+
+const copy = (
+	title: MessageDescriptor,
+	description: MessageDescriptor,
+	action: MessageDescriptor,
+) => ({ title, description, action })
+
+const control = (targetId: string, expectedPath?: string) => ({
+	targetId,
+	spotlight: 'control' as const,
+	...(expectedPath ? { expectedPath } : {}),
+})
+
+const inspect = (
+	id: string,
+	targetId: string,
+	title: MessageDescriptor,
+	description: MessageDescriptor,
+) => step(id, 'inspect', copy(title, description, onboardingMessages.continueArea), { targetId })
+
+const settingsTourSteps: Array<[string, string, MessageDescriptor, MessageDescriptor]> = [
+	[
+		'settings-appearance',
+		'settings-tab-appearance',
+		onboardingMessages.appearanceTitle,
+		onboardingMessages.appearanceDescription,
+	],
+	[
+		'settings-language',
+		'settings-tab-language',
+		onboardingMessages.languageTitle,
+		onboardingMessages.languageDescription,
+	],
+	[
+		'settings-translation',
+		'settings-tab-translation',
+		onboardingMessages.translationTitle,
+		onboardingMessages.translationDescription,
+	],
+	[
+		'settings-java',
+		'settings-tab-java',
+		onboardingMessages.javaTitle,
+		onboardingMessages.javaDescription,
+	],
+	[
+		'settings-defaults',
+		'settings-tab-defaults',
+		onboardingMessages.defaultsTitle,
+		onboardingMessages.defaultsDescription,
+	],
+	[
+		'settings-resources',
+		'settings-tab-resources',
+		onboardingMessages.resourcesTitle,
+		onboardingMessages.resourcesDescription,
+	],
+	[
+		'settings-updates',
+		'settings-tab-updates',
+		onboardingMessages.updatesTitle,
+		onboardingMessages.updatesDescription,
+	],
+]
+
+export const onboardingTours: Record<OnboardingMode, OnboardingStep[]> = {
+	main: [
+		step(
+			'welcome',
+			'manual',
+			copy(
+				onboardingMessages.welcomeTitle,
+				onboardingMessages.welcomeDescription,
+				onboardingMessages.start,
+			),
+		),
+		inspect(
+			'home-recent',
+			'home-recent',
+			onboardingMessages.recentTitle,
+			onboardingMessages.recentDescription,
+		),
+		inspect(
+			'home-featured',
+			'home-featured',
+			onboardingMessages.featuredTitle,
+			onboardingMessages.featuredDescription,
+		),
+		step(
+			'discover-navigation',
+			'navigate',
+			copy(
+				onboardingMessages.discoverTitle,
+				onboardingMessages.discoverDescription,
+				onboardingMessages.clickDiscover,
+			),
+			control('nav-discover', '/browse'),
+		),
+		inspect(
+			'discover-content',
+			'browse-content',
+			onboardingMessages.browseTitle,
+			onboardingMessages.browseDescription,
+		),
+		step(
+			'skins-navigation',
+			'navigate',
+			copy(
+				onboardingMessages.skinsTitle,
+				onboardingMessages.skinsDescription,
+				onboardingMessages.clickSkins,
+			),
+			control('nav-skins', '/skins'),
+		),
+		inspect(
+			'skins-page',
+			'skins-page',
+			onboardingMessages.skinsPageTitle,
+			onboardingMessages.skinsPageDescription,
+		),
+		step(
+			'account',
+			'inspect',
+			copy(
+				onboardingMessages.accountTitle,
+				onboardingMessages.accountDescription,
+				onboardingMessages.continueArea,
+			),
+			control('account-entry'),
+		),
+		step(
+			'downloads-navigation',
+			'navigate',
+			copy(
+				onboardingMessages.downloadsTitle,
+				onboardingMessages.downloadsDescription,
+				onboardingMessages.clickDownloads,
+			),
+			control('nav-downloads', '/downloads'),
+		),
+		inspect(
+			'downloads-tabs',
+			'downloads-tabs',
+			onboardingMessages.downloadsPageTitle,
+			onboardingMessages.downloadsPageDescription,
+		),
+		step(
+			'settings-navigation',
+			'activate',
+			copy(
+				onboardingMessages.settingsTitle,
+				onboardingMessages.settingsDescription,
+				onboardingMessages.clickSettings,
+			),
+			control('nav-settings'),
+		),
+		...settingsTourSteps.map(([id, targetId, title, description], index) =>
+			step(id, 'activate', copy(title, description, onboardingMessages.clickTab), {
+				...control(targetId),
+				closeSettingsAfter: index === settingsTourSteps.length - 1,
+			}),
+		),
+		step(
+			'library-navigation',
+			'navigate',
+			copy(
+				onboardingMessages.libraryTitle,
+				onboardingMessages.libraryDescription,
+				onboardingMessages.clickLibrary,
+			),
+			control('nav-library', '/library'),
+		),
+		inspect(
+			'library-content',
+			'library-content',
+			onboardingMessages.libraryPageTitle,
+			onboardingMessages.libraryPageDescription,
+		),
+		step(
+			'create-instance',
+			'activate',
+			copy(
+				onboardingMessages.createTitle,
+				onboardingMessages.createDescription,
+				onboardingMessages.clickCreate,
+			),
+			control('create-instance'),
+		),
+		step(
+			'creation-flow',
+			'activate',
+			copy(
+				onboardingMessages.creationTitle,
+				onboardingMessages.creationDescription,
+				onboardingMessages.clickCreationMethod,
+			),
+			{
+				targetId: 'creation-methods',
+				branchByTarget: {
+					'creation-method-custom': { creationPath: 'custom', next: 'creation-name' },
+					'creation-method-modpack': { creationPath: 'modpack', next: 'creation-modpack' },
+					'creation-method-import': { next: 'complete' },
+				},
+			},
+		),
+		inspect(
+			'creation-name',
+			'creation-name',
+			onboardingMessages.creationNameTitle,
+			onboardingMessages.creationNameDescription,
+		),
+		inspect(
+			'creation-loader',
+			'creation-loader',
+			onboardingMessages.creationLoaderTitle,
+			onboardingMessages.creationLoaderDescription,
+		),
+		step(
+			'creation-version',
+			'inspect',
+			copy(
+				onboardingMessages.creationVersionTitle,
+				onboardingMessages.creationVersionDescription,
+				onboardingMessages.continueArea,
+			),
+			{
+				targetId: 'creation-game-version',
+				nextByCreationPath: { custom: 'creation-confirm' },
+			},
+		),
+		step(
+			'creation-modpack',
+			'inspect',
+			copy(
+				onboardingMessages.creationModpackTitle,
+				onboardingMessages.creationModpackDescription,
+				onboardingMessages.continueArea,
+			),
+			{
+				targetId: 'creation-modpack-source',
+				nextByCreationPath: { modpack: 'complete' },
+			},
+		),
+		step(
+			'creation-confirm',
+			'inspect',
+			copy(
+				onboardingMessages.creationConfirmTitle,
+				onboardingMessages.creationConfirmDescription,
+				onboardingMessages.finishArea,
+			),
+			{ targetId: 'creation-confirm' },
+		),
+	],
+	instance: [
+		inspect(
+			'instance-actions',
+			'instance-actions',
+			onboardingMessages.instanceActionsTitle,
+			onboardingMessages.instanceActionsDescription,
+		),
+		step(
+			'instance-tabs',
+			'inspect',
+			copy(
+				onboardingMessages.instanceTabsTitle,
+				onboardingMessages.instanceTabsDescription,
+				onboardingMessages.finishArea,
+			),
+			{ targetId: 'instance-tabs' },
+		),
+	],
+}
+
+export function onboardingTargetSelector(targetId: string) {
+	return `[data-onboarding-id="${targetId}"]`
+}

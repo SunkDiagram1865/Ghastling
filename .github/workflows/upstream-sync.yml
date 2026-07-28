@@ -1,0 +1,49 @@
+name: Sync Modrinth upstream
+
+on:
+  schedule:
+    - cron: '17 3 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+      - name: Merge upstream into a review branch
+        id: merge
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "GHS Upstream Sync"
+          git config user.email "noreply@users.noreply.github.com"
+          git config rerere.enabled true
+          git remote add upstream https://github.com/modrinth/code.git
+          git fetch upstream main
+          branch="automation/upstream-${GITHUB_RUN_ID}"
+          git switch -c "$branch"
+          if ! git merge --no-edit upstream/main; then
+            git merge --abort
+            gh issue create --title "Upstream synchronization requires conflict resolution" --body "The scheduled merge of Modrinth upstream/main failed during run ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}. Resolve it locally with rerere enabled and submit a reviewed PR."
+            exit 1
+          fi
+          if git diff --quiet origin/main...HEAD; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          node scripts/axolotl/upstream-impact-report.mjs origin/main HEAD upstream-impact.md
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" --title "chore: sync Modrinth upstream" --body-file upstream-impact.md
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+      - name: Run Axolotl invariants
+        if: steps.merge.outputs.changed == 'true'
+        run: |
+          node scripts/axolotl/brand-guard.mjs
+          node scripts/axolotl/i18n-check.mjs
