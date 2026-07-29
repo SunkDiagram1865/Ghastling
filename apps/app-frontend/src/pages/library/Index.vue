@@ -10,7 +10,6 @@ import {
 import { onUnmounted, shallowRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { NewInstanceImage } from '@/assets/icons'
 import { useNetworkStatus } from '@/composables/useNetworkStatus'
 import { instance_listener } from '@/helpers/events.js'
 import { list } from '@/helpers/instance'
@@ -68,9 +67,7 @@ onUnmounted(() => {
 			<RouterView v-if="route.path.startsWith('/library')" :instances="instances" />
 		</template>
 		<div v-else class="no-instance">
-			<div class="icon">
-				<NewInstanceImage />
-			</div>
+			<img class="no-instance-img" src="@/assets/ghastling.png" alt="" />
 			<h3>{{ formatMessage(messages.noInstances) }}</h3>
 			<ButtonStyled color="brand">
 				<button
@@ -100,11 +97,10 @@ onUnmounted(() => {
 		margin: 0;
 	}
 
-	.icon {
-		svg {
-			width: 10rem;
-			height: 10rem;
-		}
+	.no-instance-img {
+		width: 10rem;
+		height: 10rem;
+		object-fit: contain;
 	}
 }
 </style>

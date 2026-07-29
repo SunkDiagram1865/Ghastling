@@ -35,7 +35,7 @@ Memorysettings {
 export type UpdateSource = 'cnb' | 'github'
 export type DownloadSourceMode = 'auto' | 'official_only' | 'mirror_preferred'
 
-const UPDATE_SOURCE_STORAGE_KEY = 'axolotl-update-source'
+const UPDATE_SOURCE_STORAGE_KEY = 'ghastling-update-source'
 
 export function getUpdateSource(): UpdateSource {
 	const value = localStorage.getItem(UPDATE_SOURCE_STORAGE_KEY)

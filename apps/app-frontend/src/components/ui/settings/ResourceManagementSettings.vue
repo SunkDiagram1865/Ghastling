@@ -63,7 +63,7 @@ const messages = defineMessages({
 	appCacheDescription: {
 		id: 'app.settings.resources.app-cache-description',
 		defaultMessage:
-			'Axolotl Launcher caches data to speed up loading. Purging it forces the app to reload data and may temporarily slow the app down.',
+			'Ghastling Launcher caches data to speed up loading. Purging it forces the app to reload data and may temporarily slow the app down.',
 	},
 	downloadMirrors: {
 		id: 'app.settings.resources.download-mirrors',

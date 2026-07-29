@@ -165,7 +165,7 @@ const messages = defineMessages({
 	},
 	excitedRinthbotAlt: {
 		id: 'app.skins.sign-in.rinthbot-alt',
-		defaultMessage: 'Axolotl Launcher',
+		defaultMessage: 'Ghastling Launcher',
 	},
 	signInTitle: {
 		id: 'app.skins.sign-in.title',
@@ -174,7 +174,7 @@ const messages = defineMessages({
 	signInDescription: {
 		id: 'app.skins.sign-in.description',
 		defaultMessage:
-			'Please sign into your Minecraft account to use the skin management features of Axolotl Launcher.',
+			'Please sign into your Minecraft account to use the skin management features of Ghastling Launcher.',
 	},
 	signInButton: {
 		id: 'app.skins.sign-in.button',

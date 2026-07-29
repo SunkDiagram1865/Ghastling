@@ -1390,7 +1390,7 @@ mod offline_skin_resource_pack_tests {
 
         assert_eq!(
             options,
-            "resourcePacks:[\"vanilla\",\"file/Axolotl Offline Skin.zip\"]"
+            "resourcePacks:[\"vanilla\",\"file/Ghastling Offline Skin.zip\"]"
         );
     }
 
@@ -1411,13 +1411,13 @@ mod offline_skin_resource_pack_tests {
 
         assert_eq!(
             options,
-            "resourcePacks:[\"vanilla\",\"file/user-pack.zip\",\"file/Axolotl Offline Skin.zip\"]"
+            "resourcePacks:[\"vanilla\",\"file/user-pack.zip\",\"file/Ghastling Offline Skin.zip\"]"
         );
     }
 
     #[test]
     fn removes_both_offline_skin_pack_id_variants() {
-        let mut options = "resourcePacks:[\"vanilla\",\"Axolotl Offline Skin.zip\",\"file/Axolotl Offline Skin.zip\"]".to_string();
+        let mut options = "resourcePacks:[\"vanilla\",\"Ghastling Offline Skin.zip\",\"file/Ghastling Offline Skin.zip\"]".to_string();
 
         update_offline_skin_resource_pack_option(
             &mut options,

@@ -14,7 +14,7 @@ export interface InstalledCurseForgeContentItem {
 	}>
 }
 
-const STORAGE_KEY = 'axolotl.curseforge.manual-downloads.v1'
+const STORAGE_KEY = 'ghastling.curseforge.manual-downloads.v1'
 
 type ManualDownloadMap = Record<string, CurseForgeManualDownloadItem[]>
 

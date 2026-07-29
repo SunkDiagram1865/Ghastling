@@ -342,7 +342,7 @@ export const launcherAnnouncements: readonly LauncherAnnouncement[] = [
 				{
 					'en-US':
 						'Empty log consoles now show Chinese startup guidance with a pink side-view axolotl illustration matching the launcher icon.',
-					'zh-CN': '空日志控制台现在会显示中文启动提示，以及贴近启动器图标的粉色美西螈侧视字符画。',
+					'zh-CN': '空日志控制台现在会显示中文启动提示，以及贴近启动器图标的粉色恶魂侧视字符画。',
 				},
 				{
 					'en-US':

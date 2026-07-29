@@ -95,9 +95,9 @@ pub async fn parse_command(
 ) -> crate::Result<CommandPayload> {
     tracing::debug!("Parsing command: {}", &command_string);
 
-    // axolotl://some-command
+    // ghastling://some-command
     // This occurs when following a web redirect link
-    if let Some(sublink) = command_string.strip_prefix("axolotl://") {
+    if let Some(sublink) = command_string.strip_prefix("ghastling://") {
         Ok(handle_url(sublink).await?)
     } else {
         // We assume anything else is a filepath to a modpack file; zip

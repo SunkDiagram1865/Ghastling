@@ -1,4 +1,5 @@
 use crate::api::Result;
+use crate::portable::is_portable_mode;
 use serde::Serialize;
 use std::sync::{Arc, Mutex};
 use tauri::http::HeaderValue;
@@ -30,11 +31,11 @@ pub struct PendingUpdateData(pub Mutex<Option<(Arc<Update>, Vec<u8>)>>);
 fn update_endpoints(source: &str) -> Result<Vec<Url>> {
     let endpoints = match source {
         "github" | "official" => vec![
-            "https://github.com/Mystic-Stars/Axolotl/releases/latest/download/latest.json",
+            "https://github.com/SunkDiagram1865/Ghastling/releases/latest/download/latest.json",
         ],
         "cnb" => vec![
-            "https://cnb.cool/axlmc/Axolotl/-/git/raw/update/latest.json",
-            "https://github.com/Mystic-Stars/Axolotl/releases/latest/download/latest.json",
+            "https://cnb.cool/ghs/Ghastling/-/git/raw/update/latest.json",
+            "https://github.com/SunkDiagram1865/Ghastling/releases/latest/download/latest.json",
         ],
         _ => {
             return Err(theseus::Error::from(theseus::ErrorKind::OtherError(
@@ -70,6 +71,22 @@ pub async fn check_app_update<R: Runtime>(
         return Ok(None);
     };
 
+    // 如果是便携模式，需要手动替换下载 URL 和签名
+    // 因为 Tauri updater 只识别 windows-x86_64，不识别便携版
+    let update = if is_portable_mode() {
+        match get_portable_update(&update, &source).await {
+            Ok(portable) => portable,
+            Err(e) => {
+                tracing::warn!(
+                    "Failed to get portable update, falling back to original: {e}"
+                );
+                update
+            }
+        }
+    } else {
+        update
+    };
+
     let metadata = UpdateMetadata {
         rid: webview.resources_table().add(update.clone()),
         current_version: update.current_version.clone(),
@@ -80,6 +97,62 @@ pub async fn check_app_update<R: Runtime>(
     };
 
     Ok(Some(metadata))
+}
+
+/// 获取便携版的更新信息（下载 URL 和签名）
+async fn get_portable_update(update: &Update, source: &str) -> Result<Update> {
+    let version = &update.version;
+
+    let (portable_url, portable_sig_url) = match source {
+        "github" | "official" => (
+            format!(
+                "https://github.com/SunkDiagram1865/Ghastling/releases/download/v{version}/Ghastling_portable_{version}_x64.bin"
+            ),
+            format!(
+                "https://github.com/SunkDiagram1865/Ghastling/releases/download/v{version}/Ghastling_portable_{version}_x64.bin.sig"
+            ),
+        ),
+        "cnb" => (
+            format!(
+                "https://cnb.cool/ghs/Ghastling/-/releases/download/v{version}/Ghastling_portable_{version}_x64.bin"
+            ),
+            format!(
+                "https://cnb.cool/ghs/Ghastling/-/releases/download/v{version}/Ghastling_portable_{version}_x64.bin.sig"
+            ),
+        ),
+        _ => {
+            return Err(theseus::Error::from(theseus::ErrorKind::OtherError(
+                format!("Unknown update source: {source}"),
+            ))
+            .into());
+        }
+    };
+
+    // 下载签名文件
+    let signature = download_signature(&portable_sig_url).await?;
+
+    let mut portable_update = update.clone();
+    portable_update.download_url = Url::parse(&portable_url).map_err(|e| {
+        theseus::Error::from(theseus::ErrorKind::OtherError(e.to_string()))
+    })?;
+    portable_update.signature = signature;
+
+    Ok(portable_update)
+}
+
+/// 下载签名文件内容
+async fn download_signature(url: &str) -> Result<String> {
+    let response = ClientBuilder::new().build()?.get(url).send().await?;
+
+    if !response.status().is_success() {
+        return Err(theseus::Error::from(theseus::ErrorKind::OtherError(
+            format!("Failed to download signature: {}", response.status()),
+        ))
+        .into());
+    }
+
+    let signature = response.text().await?;
+    Ok(signature)
 }
 
 // Reimplementation of Update::download mostly, minus the actual download part

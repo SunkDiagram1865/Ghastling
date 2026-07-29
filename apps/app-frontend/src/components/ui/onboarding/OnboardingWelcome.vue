@@ -13,6 +13,7 @@ defineProps<{
 defineEmits<{
 	start: []
 	skip: []
+	browse: []
 }>()
 
 const { formatMessage } = useVIntl()
@@ -25,8 +26,8 @@ const { formatMessage } = useVIntl()
 				<div class="onboarding-welcome-logo">
 					<AxolotlLogo icon-only />
 				</div>
-				<div class="onboarding-welcome-wordmark" aria-label="Axolotl Launcher">
-					<span class="onboarding-welcome-wordmark-core" data-wordmark="Axolotl"> Axolotl </span>
+				<div class="onboarding-welcome-wordmark" aria-label="Ghastling Launcher">
+					<span class="onboarding-welcome-wordmark-core" data-wordmark="Ghastling"> Ghastling </span>
 					<span class="onboarding-welcome-wordmark-suffix" data-wordmark="Launcher">
 						Launcher
 					</span>
@@ -43,7 +44,7 @@ const { formatMessage } = useVIntl()
 				</div>
 				<div class="onboarding-welcome-actions">
 					<ButtonStyled color="brand">
-						<button @click="$emit('start')">
+						<button @click="$emit('browse')">
 							{{ formatMessage(step.action) }}
 							<RightArrowIcon />
 						</button>
@@ -108,7 +109,7 @@ const { formatMessage } = useVIntl()
 	max-width: 0;
 	overflow: hidden;
 	color: var(--color-contrast);
-	font-size: 4.5rem;
+	font-size: 3.5rem;
 	font-weight: 800;
 	line-height: 1;
 	letter-spacing: 0;
@@ -259,7 +260,7 @@ const { formatMessage } = useVIntl()
 		max-width: 0;
 	}
 	to {
-		max-width: 42rem;
+		max-width: 50rem;
 	}
 }
 
@@ -319,7 +320,7 @@ const { formatMessage } = useVIntl()
 	}
 
 	.onboarding-welcome-wordmark {
-		max-width: 42rem;
+		max-width: 50rem;
 	}
 
 	.onboarding-welcome-logo,
@@ -348,7 +349,7 @@ const { formatMessage } = useVIntl()
 		flex-direction: column;
 		align-items: flex-start;
 		gap: 0.1rem;
-		font-size: 2.5rem;
+		font-size: 2rem;
 	}
 
 	.onboarding-welcome-panel-inner {
@@ -375,7 +376,7 @@ const { formatMessage } = useVIntl()
 
 @media (max-width: 480px) {
 	.onboarding-welcome-wordmark {
-		font-size: 1.875rem;
+		font-size: 1.5rem;
 	}
 
 	.onboarding-welcome-secondary-action > span {
@@ -385,7 +386,7 @@ const { formatMessage } = useVIntl()
 
 @media (min-width: 701px) and (max-width: 1000px) {
 	.onboarding-welcome-wordmark {
-		font-size: 3.5rem;
+		font-size: 2.75rem;
 	}
 }
 
@@ -400,7 +401,7 @@ const { formatMessage } = useVIntl()
 	}
 
 	.onboarding-welcome-wordmark {
-		font-size: 2.5rem;
+		font-size: 2rem;
 	}
 
 	.onboarding-welcome-panel-inner {

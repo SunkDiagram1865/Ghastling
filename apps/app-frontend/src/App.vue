@@ -637,7 +637,7 @@ async function setupApp() {
 	const version = await getVersion()
 	pendingUpdateAnnouncementVersion.value = pending_update_toast_for_version
 	if (!onboarded && route.path !== '/') await router.replace('/')
-	showOnboarding.value = !onboarded
+	showOnboarding.value = false
 	onboardingSettings.value = initialSettings
 
 	nativeDecorations.value = native_decorations
@@ -743,6 +743,11 @@ async function finishOnboarding() {
 
 async function skipOnboarding() {
 	await finishOnboarding()
+}
+
+async function browseOnboarding() {
+	await finishOnboarding()
+	await router.push('/browse')
 }
 
 function closeOnboardingSettings() {
@@ -1947,16 +1952,16 @@ const updatePopupMessages = defineMessages({
 	},
 	meteredBody: {
 		id: 'app.update-popup.body.metered',
-		defaultMessage: `Axolotl Launcher v{version} is available now! Since you're on a metered network, we didn't automatically download it.`,
+		defaultMessage: `Ghastling Launcher v{version} is available now! Since you're on a metered network, we didn't automatically download it.`,
 	},
 	downloadedBody: {
 		id: 'app.update-popup.body.download-complete',
-		defaultMessage: `Axolotl Launcher v{version} has finished downloading. Reload to update now, or automatically when you close Axolotl Launcher.`,
+		defaultMessage: `Ghastling Launcher v{version} has finished downloading. Reload to update now, or automatically when you close Ghastling Launcher.`,
 	},
 	linuxBody: {
 		id: 'app.update-popup.body.linux',
 		defaultMessage:
-			'Axolotl Launcher v{version} is available. Use your package manager to update for the latest features and fixes!',
+			'Ghastling Launcher v{version} is available. Use your package manager to update for the latest features and fixes!',
 	},
 	reload: {
 		id: 'app.update-popup.reload',
@@ -2717,6 +2722,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		:mode="onboardingMode"
 		@complete="finishOnboarding"
 		@skip="skipOnboarding"
+		@browse="browseOnboarding"
 		@request-close-settings="closeOnboardingSettings"
 	/>
 </template>

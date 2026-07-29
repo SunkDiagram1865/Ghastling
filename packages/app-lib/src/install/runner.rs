@@ -460,11 +460,7 @@ async fn prepare_initial_instance(
             prepare_existing_rollback(job_state, state, &instance_id).await?;
         }
         InstallRequest::DownloadJava { vendor, version } => {
-            set_display(
-                job_state,
-                format!("Java {version} ({vendor})"),
-                None,
-            );
+            set_display(job_state, format!("Java {version} ({vendor})"), None);
         }
     }
 
@@ -904,11 +900,10 @@ async fn run_request(
                 },
             )
             .await?;
-            let reporter = InstallProgressReporter::new(job_id, job_state.clone());
+            let reporter =
+                InstallProgressReporter::new(job_id, job_state.clone());
             let path = crate::api::jre::download_java_from_feed_with_reporter(
-                &vendor,
-                version,
-                reporter,
+                &vendor, version, reporter,
             )
             .await?;
             let _ = path;

@@ -27,7 +27,7 @@ const messages = defineMessages({
 	welcomeBack: { id: 'app.home.welcome-back', defaultMessage: 'Welcome back!' },
 	welcome: {
 		id: 'app.home.welcome',
-		defaultMessage: 'Welcome to Axolotl Launcher!',
+		defaultMessage: 'Welcome to Ghastling Launcher!',
 	},
 	discoverModpack: {
 		id: 'app.home.discover-modpack',

@@ -4,7 +4,7 @@ import { ref } from 'vue'
 
 import { AxolotlBrandConfig } from '@/config'
 
-const DISMISSAL_KEY = 'axolotl-community-announcement-video-promotion-dismissed'
+const DISMISSAL_KEY = 'ghastling-community-announcement-video-promotion-dismissed'
 
 const { formatMessage } = useVIntl()
 const modal = ref<InstanceType<typeof NewModal>>()
@@ -17,7 +17,7 @@ const messages = defineMessages({
 	response: {
 		id: 'app.community-announcement.response',
 		defaultMessage:
-			'Since Axolotl Launcher was promoted on video platforms, we have received far more love and attention than we expected, along with many thoughtful suggestions and high-quality reports.',
+			'Since Ghastling Launcher was promoted on video platforms, we have received far more love and attention than we expected, along with many thoughtful suggestions and high-quality reports.',
 	},
 	thanks: {
 		id: 'app.community-announcement.thanks',

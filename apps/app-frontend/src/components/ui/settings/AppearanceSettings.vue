@@ -46,7 +46,7 @@ const messages = defineMessages({
 	},
 	colorThemeDescription: {
 		id: 'app.appearance-settings.color-theme.description',
-		defaultMessage: 'Select your preferred color theme for Axolotl Launcher.',
+		defaultMessage: 'Select your preferred color theme for Ghastling Launcher.',
 	},
 	accentColorTitle: {
 		id: 'app.appearance-settings.accent-color.title',

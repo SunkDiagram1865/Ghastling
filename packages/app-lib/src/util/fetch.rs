@@ -943,7 +943,10 @@ static RANGE_SPLITTING_PROTOCOL_FAILURES: LazyLock<
 fn range_splitting_authority(route: &DownloadRoute) -> Option<String> {
     let url = Url::parse(&route.url).ok()?;
     let host = url.host_str()?.to_ascii_lowercase();
-    Some(format!("{host}:{}", url.port_or_known_default().unwrap_or(0)))
+    Some(format!(
+        "{host}:{}",
+        url.port_or_known_default().unwrap_or(0)
+    ))
 }
 
 fn range_splitting_allowed(route: &DownloadRoute) -> bool {
@@ -1850,11 +1853,13 @@ const STALE_PARTIAL_DOWNLOAD_MAX_AGE: time::Duration =
 
 fn is_partial_download_file_name(name: &str) -> bool {
     name.ends_with(".part")
-        || name.rsplit_once(".segment-").is_some_and(|(prefix, index)| {
-            prefix.ends_with(".part")
-                && !index.is_empty()
-                && index.bytes().all(|byte| byte.is_ascii_digit())
-        })
+        || name
+            .rsplit_once(".segment-")
+            .is_some_and(|(prefix, index)| {
+                prefix.ends_with(".part")
+                    && !index.is_empty()
+                    && index.bytes().all(|byte| byte.is_ascii_digit())
+            })
 }
 
 /// Removes partial download files under launcher-managed directories that
@@ -1900,10 +1905,7 @@ pub fn cleanup_stale_partial_downloads(directories: Vec<PathBuf>) {
             }
         }
         if removed > 0 {
-            tracing::info!(
-                removed,
-                "Removed stale partial download files"
-            );
+            tracing::info!(removed, "Removed stale partial download files");
         }
     });
 }
@@ -2711,12 +2713,11 @@ async fn download_segment(
             }
             return Err(SegmentDownloadError::Transport);
         }
-        let content_range_matches =
-            parsed_content_range.is_some_and(|range| {
-                range.start == requested_start
-                    && range.end == requested_end
-                    && range.total.is_none_or(|total| total == total_size)
-            });
+        let content_range_matches = parsed_content_range.is_some_and(|range| {
+            range.start == requested_start
+                && range.end == requested_end
+                && range.total.is_none_or(|total| total == total_size)
+        });
         if !content_range_matches {
             return Err(SegmentDownloadError::Protocol(
                 "invalid Content-Range",
@@ -4517,7 +4518,7 @@ mod tests {
     #[tokio::test]
     async fn verifies_streaming_integrity_algorithms() {
         let file = tempfile::NamedTempFile::new().unwrap();
-        std::fs::write(file.path(), b"axolotl download").unwrap();
+        std::fs::write(file.path(), b"ghastling download").unwrap();
         let integrity = Integrity {
 			size: Some(16),
 			sha1: Some("90e438ead880c77ea2d7e726b5aa74e6d21a805f".to_string()),
@@ -4884,7 +4885,9 @@ mod tests {
         let directory = tempfile::tempdir().unwrap();
         let destination = directory.path().join("resumed.bin");
         let part_path = suffixed_path(&destination, ".part");
-        tokio::fs::write(&part_path, &data[..size / 2]).await.unwrap();
+        tokio::fs::write(&part_path, &data[..size / 2])
+            .await
+            .unwrap();
         let pool = sqlx::sqlite::SqlitePoolOptions::new()
             .connect_lazy("sqlite::memory:")
             .unwrap();
@@ -4969,7 +4972,9 @@ mod tests {
         let directory = tempfile::tempdir().unwrap();
         let destination = directory.path().join("fallback-resume.bin");
         let part_path = suffixed_path(&destination, ".part");
-        tokio::fs::write(&part_path, &data[..size / 4]).await.unwrap();
+        tokio::fs::write(&part_path, &data[..size / 4])
+            .await
+            .unwrap();
         let pool = sqlx::sqlite::SqlitePoolOptions::new()
             .connect_lazy("sqlite::memory:")
             .unwrap();

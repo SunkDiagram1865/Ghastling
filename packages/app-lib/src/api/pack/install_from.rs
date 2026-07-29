@@ -192,9 +192,8 @@ pub async fn get_instance_from_pack(
 
             // Validate ZIP structure before proceeding — fail fast on corrupt archives
             // rather than discovering the error later during extraction.
-            let file = std::fs::File::open(&path).map_err(|e| {
-                crate::ErrorKind::StdIOError(e)
-            })?;
+            let file = std::fs::File::open(&path)
+                .map_err(|e| crate::ErrorKind::StdIOError(e))?;
             ZipArchive::new(file).map_err(|e| {
                 crate::ErrorKind::InputError(format!(
                     "Invalid or corrupt modpack archive ({}): {e}",

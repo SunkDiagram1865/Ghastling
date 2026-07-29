@@ -86,7 +86,10 @@ const EXCLUDED_DIR_NAMES: &[&str] = &[
 // launchers' bundled runtimes and a bounded keyword search of likely
 // directories
 #[tracing::instrument]
-pub async fn get_all_jre(full_scan: bool, exhaustive: bool) -> Result<Vec<JavaVersion>, JREError> {
+pub async fn get_all_jre(
+    full_scan: bool,
+    exhaustive: bool,
+) -> Result<Vec<JavaVersion>, JREError> {
     let jre_paths = collect_candidate_paths(full_scan, exhaustive).await?;
 
     // Get JRE versions from potential paths concurrently
@@ -98,7 +101,10 @@ pub async fn get_all_jre(full_scan: bool, exhaustive: bool) -> Result<Vec<JavaVe
 
 // Gathers candidate paths from every source; cheap sources run inline while
 // filesystem-heavy sources run on blocking threads with bounded concurrency
-async fn collect_candidate_paths(full_scan: bool, exhaustive: bool) -> Result<HashSet<PathBuf>, JREError> {
+async fn collect_candidate_paths(
+    full_scan: bool,
+    exhaustive: bool,
+) -> Result<HashSet<PathBuf>, JREError> {
     let mut jre_paths = HashSet::new();
 
     jre_paths.extend(get_all_jre_path().await);
@@ -196,10 +202,7 @@ fn get_common_install_paths() -> HashSet<PathBuf> {
     }
 
     // Scan all subdirectories of Program Files for any Java installations
-    let program_files_dirs = [
-        r"C:\Program Files",
-        r"C:\Program Files (x86)",
-    ];
+    let program_files_dirs = [r"C:\Program Files", r"C:\Program Files (x86)"];
     for pf_dir in program_files_dirs {
         let Ok(subdirs) = std::fs::read_dir(pf_dir) else {
             continue;
@@ -228,7 +231,10 @@ fn get_common_install_paths() -> HashSet<PathBuf> {
         if let Ok(dir) = std::fs::read_dir(app_data) {
             for entry in dir.flatten() {
                 let name = entry.file_name().to_string_lossy().to_lowercase();
-                if name.contains("java") || name.contains("jdk") || name.contains("jre") {
+                if name.contains("java")
+                    || name.contains("jdk")
+                    || name.contains("jre")
+                {
                     jre_paths.insert(entry.path().join("bin"));
                 }
             }
@@ -262,7 +268,10 @@ fn get_common_install_paths() -> HashSet<PathBuf> {
 
     // User-local JavaVirtualMachines
     if let Some(home) = dirs::home_dir() {
-        let user_jvm = home.join("Library").join("Java").join("JavaVirtualMachines");
+        let user_jvm = home
+            .join("Library")
+            .join("Java")
+            .join("JavaVirtualMachines");
         if user_jvm.is_dir() {
             if let Ok(dir) = std::fs::read_dir(user_jvm) {
                 for entry in dir.flatten() {
@@ -652,17 +661,17 @@ fn bfs_exhaustive_scan(root: &Path) -> HashSet<PathBuf> {
         }
     }
 
-	found
+    found
 }
 
 pub(crate) fn is_java_install_staging_path(path: &Path) -> bool {
-	path.components().any(|component| {
-		let std::path::Component::Normal(name) = component else {
-			return false;
-		};
-		let name = name.to_string_lossy().to_ascii_lowercase();
-		name.starts_with('.') && name.ends_with(JAVA_INSTALL_STAGING_SUFFIX)
-	})
+    path.components().any(|component| {
+        let std::path::Component::Normal(name) = component else {
+            return false;
+        };
+        let name = name.to_string_lossy().to_ascii_lowercase();
+        name.starts_with('.') && name.ends_with(JAVA_INSTALL_STAGING_SUFFIX)
+    })
 }
 
 // Gets all JREs from the launcher's own auto-installed Java directory

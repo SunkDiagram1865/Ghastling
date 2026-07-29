@@ -137,7 +137,7 @@ export const onboardingMessages = defineMessages({
 	},
 	translationTitle: {
 		id: 'app.onboarding.translation.title',
-		defaultMessage: 'Translation, the Axolotl way',
+		defaultMessage: 'Translation, the Ghastling way',
 	},
 	translationDescription: {
 		id: 'app.onboarding.translation.description',
@@ -167,7 +167,7 @@ export const onboardingMessages = defineMessages({
 	updatesTitle: { id: 'app.onboarding.updates.title', defaultMessage: 'Stay in the loop' },
 	updatesDescription: {
 		id: 'app.onboarding.updates.description',
-		defaultMessage: 'Choose when Axolotl checks for updates and whether it installs them for you.',
+		defaultMessage: 'Choose when Ghastling checks for updates and whether it installs them for you.',
 	},
 	clickTab: { id: 'app.onboarding.action.click-tab', defaultMessage: 'Click this tab to continue' },
 	libraryTitle: { id: 'app.onboarding.library.title', defaultMessage: 'Your launch shelf' },
@@ -274,7 +274,7 @@ export const onboardingMessages = defineMessages({
 		defaultMessage: 'Use these tabs for content, files, screenshots, worlds, and logs. Tidy chaos.',
 	},
 	skip: { id: 'app.onboarding.action.skip', defaultMessage: 'Leave the tour' },
-	mascotAlt: { id: 'app.onboarding.mascot-alt', defaultMessage: 'Axolotl guide' },
+	mascotAlt: { id: 'app.onboarding.mascot-alt', defaultMessage: 'Ghastling guide' },
 })
 
 const step = (

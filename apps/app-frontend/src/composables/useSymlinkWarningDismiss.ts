@@ -1,7 +1,7 @@
 import type { MaybeRef } from '@vueuse/core'
 import { computed, inject, provide, ref, unref, watch } from 'vue'
 
-const STORAGE_KEY = 'axolotl:symlink-warning-dismissed'
+const STORAGE_KEY = 'ghastling:symlink-warning-dismissed'
 const PROVIDE_KEY = Symbol('symlinkWarningDismiss')
 
 function loadDismissed(): Set<string> {

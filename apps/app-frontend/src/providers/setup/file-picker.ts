@@ -5,6 +5,8 @@ import { readFile } from '@tauri-apps/plugin-fs'
 import { useTemplateRef } from 'vue'
 import type { ComponentExposed } from 'vue-component-type-helpers'
 
+import { builtInInstanceIcons } from '../../helpers/instance-icons'
+
 function getFileName(path: string, fallback: string) {
 	return path.split(/[\\/]/).pop() || fallback
 }
@@ -72,6 +74,14 @@ export function setupFilePickerProvider() {
 		},
 		pickImage,
 		pickInstanceIcon: () => instanceIconPickerModal.value?.show() ?? Promise.resolve(null),
+		async setBuiltInInstanceIcon(iconId) {
+			const icon = builtInInstanceIcons.find((i) => i.id === iconId)
+			if (!icon) return null
+			const response = await fetch(icon.url)
+			const blob = await response.blob()
+			const file = new File([blob], `${iconId}.png`, { type: blob.type })
+			return { file, previewUrl: icon.url }
+		},
 		async pickModpackFile(options) {
 			const result = await open({
 				multiple: false,

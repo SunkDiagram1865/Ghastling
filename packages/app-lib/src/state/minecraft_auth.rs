@@ -1145,7 +1145,7 @@ impl DeviceTokenPair {
 const MICROSOFT_CLIENT_ID: &str = "00000000402b5328";
 const AUTH_REPLY_URL: &str = "https://login.live.com/oauth20_desktop.srf";
 const REQUESTED_SCOPE: &str = "service::user.auth.xboxlive.com::MBI_SSL";
-pub const MINECRAFT_SERVICES_USER_AGENT: &str = "Axolotl Launcher";
+pub const MINECRAFT_SERVICES_USER_AGENT: &str = "Ghastling Launcher";
 
 pub struct RequestWithDate<T> {
     pub date: DateTime<Utc>,

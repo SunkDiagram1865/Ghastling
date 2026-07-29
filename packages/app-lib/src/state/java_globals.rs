@@ -46,13 +46,16 @@ impl JavaVersion {
         .fetch_all(exec)
         .await?;
 
-        Ok(rows.into_iter().map(|x| JavaVersion {
-            parsed_version: x.major_version as u32,
-            version: x.full_version,
-            architecture: x.architecture,
-            path: x.path,
-            distribution: x.distribution,
-        }).collect())
+        Ok(rows
+            .into_iter()
+            .map(|x| JavaVersion {
+                parsed_version: x.major_version as u32,
+                version: x.full_version,
+                architecture: x.architecture,
+                path: x.path,
+                distribution: x.distribution,
+            })
+            .collect())
     }
 
     pub async fn upsert(
@@ -87,19 +90,20 @@ impl JavaVersion {
         exec: impl sqlx::Executor<'_, Database = sqlx::Sqlite>,
     ) -> crate::Result<()> {
         sqlx::query!("DELETE FROM java_versions WHERE path = $1", path)
-            .execute(exec).await?;
-		Ok(())
-	}
+            .execute(exec)
+            .await?;
+        Ok(())
+    }
 
-	pub async fn remove(
-		major_version: u32,
-		exec: impl sqlx::Executor<'_, Database = sqlx::Sqlite>,
-	) -> crate::Result<()> {
-		let version = major_version as i32;
-		sqlx::query("DELETE FROM java_versions WHERE major_version = $1")
-			.bind(version)
-			.execute(exec)
-			.await?;
-		Ok(())
-	}
+    pub async fn remove(
+        major_version: u32,
+        exec: impl sqlx::Executor<'_, Database = sqlx::Sqlite>,
+    ) -> crate::Result<()> {
+        let version = major_version as i32;
+        sqlx::query("DELETE FROM java_versions WHERE major_version = $1")
+            .bind(version)
+            .execute(exec)
+            .await?;
+        Ok(())
+    }
 }

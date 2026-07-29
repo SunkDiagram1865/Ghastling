@@ -1283,6 +1283,12 @@
 	"app.java.none-found": {
 		"message": "未找到 Java 安装！"
 	},
+	"app.java.deep-scan": {
+		"message": "强力扫描"
+	},
+	"app.java.scanning": {
+		"message": "扫描中……"
+	},
 	"app.java.select": {
 		"message": "选择"
 	},
@@ -1845,7 +1851,7 @@
 		"message": "支持项目持续开发"
 	},
 	"app.settings.about.attribution": {
-		"message": "本程序由 Modrinth 开源项目修改而来。"
+		"message": "本程序由 Modrinth, Axolotl 开源项目修改而来。"
 	},
 	"app.settings.about.community-support": {
 		"message": "社区与支持"
@@ -1860,7 +1866,7 @@
 		"message": "复制群号"
 	},
 	"app.settings.about.developer": {
-		"message": "由 {organizationName} 的 {developerName} 开发。"
+		"message": "由 {developerName} 开发。"
 	},
 	"app.settings.about.mcmod-website": {
 		"message": "访问 MC 百科"
@@ -1896,7 +1902,13 @@
 		"message": "测试通知错误"
 	},
 	"app.settings.about.qq-group": {
-		"message": "玩家 QQ 群"
+		"message": "加入 QQ 群"
+	},
+	"app.settings.about.qq-group-desc": {
+		"message": "{groupNumber}"
+	},
+	"app.settings.about.view-releases": {
+		"message": "查看完整更新日志"
 	},
 	"app.settings.about.version": {
 		"message": "版本 {version}"
@@ -2018,6 +2030,18 @@
 	"app.settings.java.location": {
 		"message": "Java {version} 位置"
 	},
+	"app.settings.java.quick-add": {
+		"message": "快速添加"
+	},
+	"app.settings.java.custom-version": {
+		"message": "自定义版本"
+	},
+	"app.settings.java.add": {
+		"message": "添加 Java 版本"
+	},
+	"app.settings.java.version-placeholder": {
+		"message": "版本号..."
+	},
 	"app.settings.java.auto-high-performance-mode": {
 		"message": "自动为 Java 使用高性能显卡"
 	},
@@ -2062,6 +2086,12 @@
 	},
 	"app.settings.java.table.actions": {
 		"message": ""
+	},
+	"app.settings.java.download.downloading": {
+		"message": "正在下载 Java {version}..."
+	},
+	"app.settings.java.download.select-distribution": {
+		"message": "选择发行版："
 	},
 	"app.settings.java.download.select-version": {
 		"message": "选择 Java 版本："
@@ -2226,7 +2256,10 @@
 		"message": "CNB 渠道"
 	},
 	"app.settings.updates.description": {
-		"message": "选择 Axolotl 检查启动器更新的渠道。"
+		"message": "Ghastling 通过 GitHub 发布检查启动器更新。"
+	},
+	"app.settings.updates.view-all": {
+		"message": "查看完整更新日志"
 	},
 	"app.settings.updates.announcements.description": {
 		"message": "查看当前版本的更新内容和历史版本公告。"
@@ -2998,6 +3031,27 @@
 	},
 	"instance.settings.tabs.java.version": {
 		"message": "Java {version} 版"
+	},
+	"instance.settings.tabs.java.current-path": {
+		"message": "当前路径"
+	},
+	"instance.settings.tabs.java.custom-path-option": {
+		"message": "自定义路径……"
+	},
+	"instance.settings.tabs.java.optimal-label": {
+		"message": "（此实例推荐）"
+	},
+	"instance.settings.tabs.java.select-java": {
+		"message": "选择 Java 版本"
+	},
+	"instance.settings.tabs.java.table.version": {
+		"message": "版本"
+	},
+	"instance.settings.tabs.java.table.distribution": {
+		"message": "发行版"
+	},
+	"instance.settings.tabs.java.table.path": {
+		"message": "路径"
 	},
 	"instance.settings.tabs.java.auto-label": {
 		"message": "自动（推荐）"

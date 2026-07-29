@@ -55,7 +55,7 @@ export async function showLauncherLogsFolder() {
 export async function exportErrorLogs(errorMessage) {
 	const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
 	const outputPath = await save({
-		defaultPath: `Axolotl Launcher error logs ${timestamp}.zip`,
+		defaultPath: `Ghastling Launcher error logs ${timestamp}.zip`,
 		filters: [
 			{
 				name: 'ZIP archive',

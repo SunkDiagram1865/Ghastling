@@ -1,6 +1,7 @@
 {
 	"bundle": {
-		"createUpdaterArtifacts": "v1Compatible"
+		"createUpdaterArtifacts": "v1Compatible",
+		"targets": ["portable"]
 	},
 	"build": {
 		"features": ["updater"]
@@ -13,7 +14,7 @@
 	"plugins": {
 		"updater": {
 			"pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDNGNEE1MkMxOTI0MDA4NzYKUldSMkNFQ1N3VkpLUC9kcEtlZFRWak5FRXJsWUw3YllxWGh6bkg3ZEh3K1ZQa1VNZHl6Y0IvQysK",
-			"endpoints": ["https://github.com/Mystic-Stars/Axolotl/releases/latest/download/latest.json"],
+			"endpoints": ["https://github.com/SunkDiagram1865/Ghastling/releases/latest/download/latest.json"],
 			"windows": {
 				"installMode": "quiet"
 			}

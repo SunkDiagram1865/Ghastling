@@ -13,7 +13,6 @@ pub fn init<R: tauri::Runtime>() -> TauriPlugin<R> {
             jre_get_jre,
             jre_test_jre,
             jre_auto_install_java,
-
             jre_get_max_memory,
             jre_get_memory_status,
             jre_optimize_memory,
@@ -51,7 +50,10 @@ pub async fn jre_find_filtered_jres(
     force_fresh: bool,
     exhaustive: bool,
 ) -> Result<Vec<JavaVersion>> {
-    Ok(jre::find_filtered_jres(version, full_scan, force_fresh, exhaustive).await?)
+    Ok(
+        jre::find_filtered_jres(version, full_scan, force_fresh, exhaustive)
+            .await?,
+    )
 }
 
 // Validates JRE at a given path
@@ -74,7 +76,9 @@ pub async fn jre_auto_install_java(java_version: u32) -> Result<PathBuf> {
 }
 
 #[tauri::command]
-pub async fn list_java_distribution_versions(distribution: String) -> Result<Vec<u32>> {
+pub async fn list_java_distribution_versions(
+    distribution: String,
+) -> Result<Vec<u32>> {
     Ok(jre::list_java_distribution_versions(distribution).await?)
 }
 
@@ -110,16 +114,24 @@ pub async fn list_java_feed_vendors() -> Result<Vec<String>> {
 }
 
 #[tauri::command]
-pub async fn list_java_feed_versions(vendor: String) -> Result<Vec<JdkVersionInfo>> {
+pub async fn list_java_feed_versions(
+    vendor: String,
+) -> Result<Vec<JdkVersionInfo>> {
     Ok(jre::list_java_feed_versions(&vendor).await?)
 }
 
 #[tauri::command]
-pub async fn download_java_from_feed(vendor: String, jdk_version_major: u32) -> Result<PathBuf> {
+pub async fn download_java_from_feed(
+    vendor: String,
+    jdk_version_major: u32,
+) -> Result<PathBuf> {
     Ok(jre::download_java_from_feed(&vendor, jdk_version_major).await?)
 }
 
 #[tauri::command]
-pub async fn download_java(vendor: String, version: u32) -> Result<theseus::install::InstallJobSnapshot> {
+pub async fn download_java(
+    vendor: String,
+    version: u32,
+) -> Result<theseus::install::InstallJobSnapshot> {
     Ok(theseus::install::download_java(vendor, version).await?)
 }

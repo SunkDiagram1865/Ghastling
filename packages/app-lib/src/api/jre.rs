@@ -25,11 +25,11 @@ use sysinfo::{MemoryRefreshKind, RefreshKind};
 
 use crate::util::io;
 use crate::util::jre::extract_java_version;
-use xz2::read::XzDecoder;
 use crate::{
     LoadingBarType, State,
     util::jre::{self},
 };
+use xz2::read::XzDecoder;
 
 pub async fn get_java_versions() -> crate::Result<Vec<JavaVersion>> {
     let state = State::get().await?;
@@ -51,10 +51,17 @@ pub async fn list_java_distribution_versions(
                 platform, arch
             );
             let packages: Vec<AzulPackageSummary> = fetch_json(
-                Method::GET, &url, None, None, None,
-                &state.api_semaphore, &state.pool,
-            ).await?;
-            let mut versions: Vec<u32> = packages.iter()
+                Method::GET,
+                &url,
+                None,
+                None,
+                None,
+                &state.api_semaphore,
+                &state.pool,
+            )
+            .await?;
+            let mut versions: Vec<u32> = packages
+                .iter()
                 .filter_map(|p| p.java_version.first().copied())
                 .filter(|v| *v >= 8)
                 .collect();
@@ -62,7 +69,10 @@ pub async fn list_java_distribution_versions(
             versions.dedup();
             Ok(versions)
         }
-        _ => Err(crate::ErrorKind::InputError(format!("Unknown distribution: {distribution}")).into()),
+        _ => Err(crate::ErrorKind::InputError(format!(
+            "Unknown distribution: {distribution}"
+        ))
+        .into()),
     }
 }
 
@@ -143,7 +153,7 @@ pub async fn get_available_jres(
             return Ok(cached);
         }
     }
-        let jres = refresh_discovered_javas(&state, false, false).await?;
+    let jres = refresh_discovered_javas(&state, false, false).await?;
     *last_scan = Some(Instant::now());
     Ok(jres)
 }
@@ -1243,7 +1253,9 @@ async fn fetch_jdk_feed() -> crate::Result<JdkFeed> {
     {
         let cache = JDK_FEED_CACHE.lock().await;
         if let Some(ref feed) = *cache {
-            return Ok(JdkFeed { jdks: feed.jdks.clone() });
+            return Ok(JdkFeed {
+                jdks: feed.jdks.clone(),
+            });
         }
     }
 
@@ -1295,11 +1307,7 @@ pub async fn list_java_feed_vendors() -> crate::Result<Vec<String>> {
     let mut vendors: Vec<String> = feed
         .jdks
         .iter()
-        .filter(|e| {
-            e.packages
-                .iter()
-                .any(|p| p.os == os && p.arch == arch)
-        })
+        .filter(|e| e.packages.iter().any(|p| p.os == os && p.arch == arch))
         .map(|e| e.vendor.clone())
         .collect::<std::collections::BTreeSet<_>>()
         .into_iter()
@@ -1330,9 +1338,7 @@ pub async fn list_java_feed_versions(
         .iter()
         .filter(|e| {
             e.vendor == vendor
-                && e.packages
-                    .iter()
-                    .any(|p| p.os == os && p.arch == arch)
+                && e.packages.iter().any(|p| p.os == os && p.arch == arch)
         })
         .map(|e| JdkVersionInfo {
             major_version: e.jdk_version_major,
@@ -1387,7 +1393,8 @@ pub async fn download_java_from_feed_with_reporter(
     jdk_version_major: u32,
     reporter: InstallProgressReporter,
 ) -> crate::Result<PathBuf> {
-    download_java_from_feed_inner(vendor, jdk_version_major, Some(reporter)).await
+    download_java_from_feed_inner(vendor, jdk_version_major, Some(reporter))
+        .await
 }
 
 async fn download_java_from_feed_inner(
@@ -1498,39 +1505,42 @@ async fn download_java_from_feed_inner(
     // Track real download progress
     let mut download_pct = 0_f64;
     let reporter_for_progress = reporter.clone();
-    let mut progress = |current: u64, total: u64| -> Pin<Box<dyn Future<Output = crate::Result<()>> + Send>> {
-        if let Some(ref reporter) = reporter_for_progress {
-            let reporter = reporter.clone();
-            Box::pin(async move {
-                update_java_install_progress(
-                    Some(&reporter),
-                    jdk_version_major,
-                    InstallJavaStep::Downloading,
-                    Some(InstallProgress {
-                        current,
-                        total: total.max(1),
-                        secondary: None,
-                    }),
-                )
-                .await
-            })
-        } else {
-            let pct = if total > 0 {
-                (current as f64 / total as f64) * 50.0
+    let mut progress =
+        |current: u64,
+         total: u64|
+         -> Pin<Box<dyn Future<Output = crate::Result<()>> + Send>> {
+            if let Some(ref reporter) = reporter_for_progress {
+                let reporter = reporter.clone();
+                Box::pin(async move {
+                    update_java_install_progress(
+                        Some(&reporter),
+                        jdk_version_major,
+                        InstallJavaStep::Downloading,
+                        Some(InstallProgress {
+                            current,
+                            total: total.max(1),
+                            secondary: None,
+                        }),
+                    )
+                    .await
+                })
             } else {
-                0.0
-            };
-            let delta = pct - download_pct;
-            download_pct = pct;
-            let lb = loading_bar.clone();
-            Box::pin(async move {
-                if let Some(lb) = &lb {
-                    emit_loading(lb, delta, Some("Downloading..."))?;
-                }
-                Ok(())
-            })
-        }
-    };
+                let pct = if total > 0 {
+                    (current as f64 / total as f64) * 50.0
+                } else {
+                    0.0
+                };
+                let delta = pct - download_pct;
+                download_pct = pct;
+                let lb = loading_bar.clone();
+                Box::pin(async move {
+                    if let Some(lb) = &lb {
+                        emit_loading(lb, delta, Some("Downloading..."))?;
+                    }
+                    Ok(())
+                })
+            }
+        };
 
     download_to_path(
         DownloadRequest::new(&pkg.url, ResourceClass::Java)
@@ -1586,10 +1596,7 @@ async fn download_java_from_feed_inner(
     let extracted_dir = {
         let mut entries = std::fs::read_dir(&staging_root)?;
         let first = entries.next().ok_or_else(|| {
-            std::io::Error::new(
-                std::io::ErrorKind::NotFound,
-                "Empty archive",
-            )
+            std::io::Error::new(std::io::ErrorKind::NotFound, "Empty archive")
         })??;
         first.path()
     };

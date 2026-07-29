@@ -132,7 +132,7 @@ pub async fn export_error_logs(
     let archive = tokio::fs::File::create(&output_path).await?;
     let mut writer = ZipFileWriter::with_tokio(archive);
     let report = format!(
-        "Axolotl Launcher error report\nExported at: {}\n\nError:\n{}\n",
+        "Ghastling Launcher error report\nExported at: {}\n\nError:\n{}\n",
         chrono::Local::now().to_rfc3339(),
         error_message
     );
