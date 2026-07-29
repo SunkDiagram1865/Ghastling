@@ -1,4 +1,4 @@
-name: Axolotl release
+name: Ghastling release
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: axolotl-release-${{ github.ref }}
+  group: ghastling-release-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -64,7 +64,7 @@ jobs:
           release_args=(
             --draft
             --notes-file "$release_notes"
-            --title "Axolotl Launcher ${GITHUB_REF_NAME}"
+            --title "Ghastling Launcher ${GITHUB_REF_NAME}"
           )
           if [[ "${GITHUB_REF_NAME}" == *-* ]]; then
             release_args+=(--prerelease)
@@ -123,7 +123,7 @@ jobs:
           tauriScript: pnpm tauri
           args: ${{ matrix.args }}
           tagName: ${{ github.ref_name }}
-          releaseName: Axolotl Launcher ${{ github.ref_name }}
+          releaseName: Ghastling Launcher ${{ github.ref_name }}
           releaseDraft: true
           prerelease: ${{ contains(github.ref_name, '-') }}
           generateReleaseNotes: false

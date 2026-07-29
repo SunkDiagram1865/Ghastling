@@ -1,7 +1,7 @@
 # Ghastling Launcher
 开源，新一代的小乐魂启动器
 
-[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](COPYING.md)[![Release](https://github.com/SunkDiagram1865/Ghastling/actions/workflows/ghastling-release.yml/badge.svg)](https://github.com/SunkDiagram1865/Ghastling/actions/workflows/ghastling-release.yml)
+[![Release](https://github.com/SunkDiagram1865/Ghastling/actions/workflows/ghastling-release.yml/badge.svg)](https://github.com/SunkDiagram1865/Ghastling/actions/workflows/ghastling-release.yml) [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](COPYING.md)
 
 **Ghastling Launcher** 是由 **SunkDiagram1865 (cysunk)** 开发的免费开源 Minecraft 启动器
 
