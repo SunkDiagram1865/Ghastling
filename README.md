@@ -1,7 +1,7 @@
 # Ghastling Launcher
 开源，新一代的小乐魂启动器
 
-[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](COPYING.md)
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](COPYING.md)[![Release](https://github.com/SunkDiagram1865/Ghastling/actions/workflows/axolotl-release.yml/badge.svg)](https://github.com/SunkDiagram1865/Ghastling/actions/workflows/axolotl-release.yml)
 
 **Ghastling Launcher** 是由 **SunkDiagram1865 (cysunk)** 开发的免费开源 Minecraft 启动器
 
@@ -56,6 +56,14 @@ pnpm install --frozen-lockfile
 pnpm app:dev
 ```
 
+### 常用检查
+
+```powershell
+pnpm prepr:frontend:app
+cargo fmt --all --check
+cargo check --package theseus_gui --features updater
+```
+
 ### 构建缓存与磁盘空间
 
 Rust 编译产物位于 `target`，首次完整构建可能占用数 GB。Turbo 只缓存前端输出，不会缓存 `target/**`；桌面应用的 Tauri 构建任务也已明确关闭 Turbo 缓存。需要释放本地开发缓存时，可以仅删除：
@@ -66,6 +74,29 @@ Remove-Item -Recurse -Force target\debug
 ```
 
 这不会删除 `target\installer-test` 中单独生成的安装包，但下次启动开发模式时需要重新编译 Rust 依赖。
+
+
+
+## 发布新版本
+
+发布由 [`.github/workflows/ghastling-release.yml`](https://github.com/Mystic-Stars/Axolotl/blob/main/.github/workflows/ghastling-release.yml) 自动完成。版本号以 Git 标签为准，必须符合语义化版本格式：
+
+```
+git tag -a v1.2.3 -m "Axolotl Launcher 1.2.3"
+git push origin v1.2.3
+```
+
+工作流会依次完成：
+
+1. 将标签版本写入桌面应用构建配置；
+2. 在 GitHub 托管的 Windows 上构建安装包；
+3. 使用仓库 Secrets 中的 Tauri 私钥生成签名更新包；
+4. 生成并校验包含 Windows 桌面平台的 `latest.json`；
+5. 校验成功后将草稿 Release 正式发布。
+
+预发布版本使用带后缀的标签，例如 `v1.2.3-beta.1`。自动更新公钥已固化在客户端中，私钥只保存在 GitHub Actions Secrets 中，不应提交到仓库。
+
+
 
 ## 仓库范围与上游 (Modrinth APP) 和分支 (Axolotl) 同步
 
