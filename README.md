@@ -1,7 +1,7 @@
 # Ghastling Launcher
 开源，新一代的小乐魂启动器
 
-[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](COPYING.md)[![Release](https://github.com/SunkDiagram1865/Ghastling/actions/workflows/axolotl-release.yml/badge.svg)](https://github.com/SunkDiagram1865/Ghastling/actions/workflows/axolotl-release.yml)
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](COPYING.md)[![Release](https://github.com/SunkDiagram1865/Ghastling/actions/workflows/ghastling-release.yml/badge.svg)](https://github.com/SunkDiagram1865/Ghastling/actions/workflows/ghastling-release.yml)
 
 **Ghastling Launcher** 是由 **SunkDiagram1865 (cysunk)** 开发的免费开源 Minecraft 启动器
 
@@ -81,8 +81,8 @@ Remove-Item -Recurse -Force target\debug
 
 发布由 [`.github/workflows/ghastling-release.yml`](https://github.com/Mystic-Stars/Axolotl/blob/main/.github/workflows/ghastling-release.yml) 自动完成。版本号以 Git 标签为准，必须符合语义化版本格式：
 
-```
-git tag -a v1.2.3 -m "Axolotl Launcher 1.2.3"
+```powershell
+git tag -a v1.2.3 -m "Ghastling Launcher 1.2.3"
 git push origin v1.2.3
 ```
 
