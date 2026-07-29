@@ -5,6 +5,8 @@
 
 **Ghastling Launcher** 是由 **SunkDiagram1865 (cysunk)** 开发的免费开源 Minecraft 启动器
 
+**Ghastling** 是从 **Axolotl v1.5.5** 分支出来的独立项目，此后的所有更新与 **Axolotl** 无关。
+
 本项目基于以下仓库进行二次开发：
 
 - [Modrinth APP](https://github.com/modrinth/code)（GPL-3.0-only）
