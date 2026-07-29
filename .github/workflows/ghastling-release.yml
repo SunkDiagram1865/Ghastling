@@ -41,16 +41,16 @@ jobs:
 
       - name: Run release guardrails
         run: |
-          node scripts/axolotl/brand-guard.mjs
-          node scripts/axolotl/i18n-check.mjs
+          node scripts/ghastling/brand-guard.mjs
+          node scripts/ghastling/i18n-check.mjs
           cargo fmt --all --check
 
       - name: Prepare draft release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          release_notes="${RUNNER_TEMP}/axolotl-release-notes.md"
-          node scripts/axolotl/create-release-notes.mjs "${GITHUB_REF_NAME}" "$release_notes"
+          release_notes="${RUNNER_TEMP}/ghastling-release-notes.md"
+          node scripts/ghastling/create-release-notes.mjs "${GITHUB_REF_NAME}" "$release_notes"
           existing_release="$(
             gh release list --limit 100 --json tagName \
               --jq ".[] | select(.tagName == \"${GITHUB_REF_NAME}\") | .tagName"
@@ -109,7 +109,7 @@ jobs:
       - uses: ./.github/actions/replace-gradle-mirror
 
       - name: Set release version
-        run: node scripts/axolotl/set-version.mjs "${{ github.ref_name }}"
+        run: node scripts/ghastling/set-version.mjs "${{ github.ref_name }}"
 
       - name: Build and upload release assets
         uses: tauri-apps/tauri-action@1ddc7b49b13c3038297360482fcb3e058764d7c9 # v0.6.2
@@ -160,10 +160,10 @@ jobs:
           gh api "repos/${GITHUB_REPOSITORY}/releases/${release_id}" > release-check/release.json
 
       - name: Generate update manifest
-        run: node scripts/axolotl/create-update-manifest.mjs release-check/release.json release-check/signatures "${GITHUB_REF_NAME}" release-check/latest.json
+        run: node scripts/ghastling/create-update-manifest.mjs release-check/release.json release-check/signatures "${GITHUB_REF_NAME}" release-check/latest.json
 
       - name: Verify update manifest
-        run: node scripts/axolotl/verify-update-manifest.mjs release-check/latest.json "${GITHUB_REF_NAME}"
+        run: node scripts/ghastling/verify-update-manifest.mjs release-check/latest.json "${GITHUB_REF_NAME}"
 
       - name: Upload update manifest
         env:
