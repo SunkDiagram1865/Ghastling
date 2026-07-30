@@ -111,7 +111,7 @@ jobs:
       - name: Set release version
         run: node scripts/ghastling/set-version.mjs "${{ github.ref_name }}"
 
-      - name: Build and upload release assets
+      - name: Build
         uses: tauri-apps/tauri-action@1ddc7b49b13c3038297360482fcb3e058764d7c9 # v0.6.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -122,14 +122,40 @@ jobs:
           projectPath: apps/app
           tauriScript: pnpm tauri
           args: ${{ matrix.args }}
-          tagName: ${{ github.ref_name }}
-          releaseName: Ghastling Launcher ${{ github.ref_name }}
-          releaseDraft: true
-          prerelease: ${{ contains(github.ref_name, '-') }}
-          generateReleaseNotes: false
-          includeUpdaterJson: false
-          updaterJsonPreferNsis: false
           retryAttempts: 2
+
+      - name: Rename and upload release assets
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          BUNDLE_DIR="apps/app/target/release/bundle/nsis"
+
+          # 便携版 EXE（不带版本号）
+          cp "apps/app/target/release/Ghastling Launcher.exe" "Ghastling Launcher.exe"
+          gh release upload "${GITHUB_REF_NAME}" "Ghastling Launcher.exe" --clobber
+
+          # 更新包（重命名去掉 -setup）
+          ZIP_SRC=$(find "$BUNDLE_DIR" -name "*.zip" ! -name "*.sig" | head -1)
+          if [[ -z "$ZIP_SRC" ]]; then
+            echo "Error: Could not find updater zip in $BUNDLE_DIR"
+            exit 1
+          fi
+
+          SIG_SRC="${ZIP_SRC}.sig"
+          if [[ ! -f "$SIG_SRC" ]]; then
+            echo "Error: Could not find signature file $SIG_SRC"
+            exit 1
+          fi
+
+          NEW_ZIP="Ghastling Launcher_${VERSION}_x64.zip"
+          NEW_SIG="Ghastling Launcher_${VERSION}_x64.zip.sig"
+
+          cp "$ZIP_SRC" "$NEW_ZIP"
+          cp "$SIG_SRC" "$NEW_SIG"
+
+          gh release upload "${GITHUB_REF_NAME}" "$NEW_ZIP" "$NEW_SIG" --clobber
 
   verify-and-publish:
     name: Verify and publish

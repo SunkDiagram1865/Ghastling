@@ -16,29 +16,21 @@ if (!Array.isArray(assets)) {
 	throw new Error('Release metadata does not contain an assets array')
 }
 
+// Ghastling only builds for Windows
+// Updater zip is named: Ghastling Launcher_{version}_x64.zip
 const targets = [
 	{
-		platforms: ['darwin-aarch64', 'darwin-x86_64'],
-		assetSuffix: '_universal.app.tar.gz',
-	},
-	{
-		platforms: ['linux-aarch64'],
-		assetSuffix: '_aarch64.AppImage.tar.gz',
-	},
-	{
-		platforms: ['linux-x86_64'],
-		assetSuffix: '_amd64.AppImage.tar.gz',
-	},
-	{
 		platforms: ['windows-x86_64'],
-		assetSuffix: '_x64-setup.nsis.zip',
+		assetSuffix: '_x64.zip',
 	},
 ]
 
 const platforms = {}
 
 for (const target of targets) {
-	const matches = assets.filter((asset) => asset.name?.endsWith(target.assetSuffix))
+	const matches = assets.filter(
+		(asset) => asset.name?.endsWith(target.assetSuffix) && !asset.name?.endsWith('.sig'),
+	)
 	if (matches.length !== 1) {
 		throw new Error(
 			`Expected one release asset ending in ${target.assetSuffix}, found ${matches.length}`,

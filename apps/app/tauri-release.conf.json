@@ -1,6 +1,7 @@
 {
 	"bundle": {
-		"createUpdaterArtifacts": "v1Compatible"
+		"createUpdaterArtifacts": true,
+		"targets": []
 	},
 	"build": {
 		"features": ["updater"]
@@ -13,9 +14,7 @@
 	"plugins": {
 		"updater": {
 			"pubkey": "RWT8HuMQWJ+s3AI+X5yeg5GyYjPPpQZdsu9I6sGBwrmxaPX6/3Y99rEp",
-			"endpoints": [
-				"https://github.com/SunkDiagram1865/Ghastling/releases/latest/download/latest.json"
-			],
+			"endpoints": ["https://github.com/SunkDiagram1865/Ghastling/releases/latest/download/latest.json"],
 			"windows": {
 				"installMode": "quiet"
 			}
