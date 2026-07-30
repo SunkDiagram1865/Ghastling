@@ -141,9 +141,9 @@ jobs:
           cp "$EXE_SRC" "Ghastling Launcher.exe"
           gh release upload "${GITHUB_REF_NAME}" "Ghastling Launcher.exe" --clobber
 
-          # 更新包 zip + 签名 — 在 bundle/nsis 目录下
+          # 更新包 zip + 签名 — v1Compatible 生成 *.nsis.zip
           BUNDLE_DIR="target/release/bundle/nsis"
-          ZIP_SRC=$(find "$BUNDLE_DIR" -name "*.zip" ! -name "*.sig" | head -1)
+          ZIP_SRC=$(find "$BUNDLE_DIR" -name "*.nsis.zip" ! -name "*.sig" | head -1)
           if [[ -z "$ZIP_SRC" ]]; then
             echo "Error: Could not find updater zip in $BUNDLE_DIR"
             ls -la "$BUNDLE_DIR" || true
