@@ -33,11 +33,14 @@
 
 ## 下载与安装
 
-前往 [GitHub Releases](https://github.com/SunkDiagram1865/Ghastling/releases/latest) 下载适合当前系统的安装包：
+前往 [GitHub Releases](https://github.com/SunkDiagram1865/Ghastling/releases/) 下载适合当前系统的安装包：
 
-| 系统              | 便携版                 |
-| ----------------- | ---------------------- |
-| Windows 10/11 x64 | Ghastling Launcher.exe |
+| 作用                                 | 文件名称                                                   |
+| ------------------------------------ | ---------------------------------------------------------- |
+| Windows 便携版可执行文件             | Ghastling Launcher.exe                                     |
+| Tauri 用于更新的数据包               | Ghastling Launcher_<版本号>_x86_64-pc-windows-msvc.bin     |
+| 更新数据包的签名文件                 | Ghastling Launcher_<版本号>_x86_64-pc-windows-msvc.bin.sig |
+| 更新清单，包含版本号、下载链接和签名 | latest.json                                                |
 
 
 
@@ -107,6 +110,7 @@ Ghastling 的产品改动主要位于：
 - `apps/app-frontend`
 - `apps/app`
 - `packages/app-lib`
+- `scripts`
 - 上述包所需的共享 UI 与资源包
 
 Modrinth, Axolotl 网站和后端并不是 Ghastling 产品。`upstream` 远程指向 Modrinth 原仓库；上游更新应先审查影响再合并，不应使用强制推送覆盖 Ghastling 的提交历史。
