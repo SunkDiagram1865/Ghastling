@@ -31,44 +31,35 @@ if (!announcement) {
 }
 
 const categoryLabels = {
-	added: { en: 'Added', zh: '新增' },
-	changed: { en: 'Changed', zh: '变更' },
-	deprecated: { en: 'Deprecated', zh: '弃用' },
-	removed: { en: 'Removed', zh: '移除' },
-	fixed: { en: 'Fixed', zh: 'Bug 修复' },
-	security: { en: 'Security', zh: '安全修复' },
-}
-
-function renderLanguage(language) {
-	const locale = language === 'zh' ? 'zh-CN' : 'en-US'
-	const lines = [`## ${language === 'zh' ? '中文' : 'English'}`, '']
-
-	for (const type of catalogModule.ANNOUNCEMENT_CHANGE_TYPES) {
-		const changes = announcement.changes[type]
-		if (!changes?.length) continue
-
-		lines.push(`### ${categoryLabels[type][language]}`, '')
-		for (const change of changes) {
-			lines.push(`- ${change[locale]}`)
-		}
-		lines.push('')
-	}
-
-	if (announcement.notes) {
-		lines.push(`### ${language === 'zh' ? '说明' : 'Notes'}`, '', announcement.notes[locale], '')
-	}
-
-	return lines
+	added: '新增',
+	changed: '变更',
+	deprecated: '弃用',
+	removed: '移除',
+	fixed: 'Bug 修复',
+	security: '安全修复',
 }
 
 const lines = [
 	`# ${announcement.title['zh-CN']}`,
 	'',
-	`发布日期 / Published: ${announcement.publishedAt}`,
+	`发布日期：${announcement.publishedAt}`,
 	'',
-	...renderLanguage('zh'),
-	...renderLanguage('en'),
 ]
+
+for (const type of catalogModule.ANNOUNCEMENT_CHANGE_TYPES) {
+	const changes = announcement.changes[type]
+	if (!changes?.length) continue
+
+	lines.push(`## ${categoryLabels[type]}`, '')
+	for (const change of changes) {
+		lines.push(`- ${change['zh-CN']}`)
+	}
+	lines.push('')
+}
+
+if (announcement.notes) {
+	lines.push('## 说明', '', announcement.notes['zh-CN'], '')
+}
 
 await fs.writeFile(outputPath, `${lines.join('\n').replace(/\n+$/, '')}\n`)
 console.log(`Generated release notes for ${version} from the launcher announcement catalog.`)
