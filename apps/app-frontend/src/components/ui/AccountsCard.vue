@@ -46,7 +46,7 @@
 	>
 		<template #title>
 			<div class="flex gap-2 w-full min-w-0">
-				<Avatar size="36px" :src="selectedAccount ? avatarUrl : axolotlLogo" />
+				<Avatar size="36px" :src="selectedAccount ? avatarUrl : ghastlingLogo" />
 				<div class="flex flex-col items-start w-full min-w-0">
 					<span class="truncate w-full text-left">{{
 						selectedAccount ? selectedAccount.profile.name : formatMessage(messages.selectAccount)
@@ -293,7 +293,7 @@ import { useQueryClient } from '@tanstack/vue-query'
 import type { Ref } from 'vue'
 import { computed, nextTick, onUnmounted, ref, watch } from 'vue'
 
-import axolotlLogo from '@/assets/axolotl.png'
+import ghastlingLogo from '@/assets/ghastling.png'
 import steveSkinTexture from '@/assets/skins/steve.png?inline'
 import ModalWrapper from '@/components/ui/modal/ModalWrapper.vue'
 import { useNetworkStatus } from '@/composables/useNetworkStatus'
@@ -569,7 +569,7 @@ const avatarUrl = computed(() => {
 			return cachedUrl
 		}
 	}
-	return selectedAccount.value ? defaultSteveHeadUrl : axolotlLogo
+	return selectedAccount.value ? defaultSteveHeadUrl : ghastlingLogo
 })
 
 function getAccountAvatarUrl(account: MinecraftCredential) {

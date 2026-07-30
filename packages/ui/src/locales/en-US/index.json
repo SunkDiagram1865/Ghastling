@@ -6315,10 +6315,10 @@
 		"message": "Copy files"
 	},
 	"drop.symlink_method.copy_desc": {
-		"message": "Copy to Axolotl directory"
+		"message": "Copy to Ghastling directory"
 	},
 	"drop.symlink_method.copy_detail": {
-		"message": "Instance files will be copied to Axolotl\\"
+		"message": "Instance files will be copied to Ghastling\\"
 	},
 	"drop.symlink_method.symlink_title": {
 		"message": "Symbolic link"
@@ -6327,7 +6327,7 @@
 		"message": "Reference original location"
 	},
 	"drop.symlink_method.symlink_detail": {
-		"message": "Instance files stay in their original location. Axolotl references them via a symbolic link. Saves disk space."
+		"message": "Instance files stay in their original location. Ghastling references them via a symbolic link. Saves disk space."
 	},
 	"drop.symlink_method.requires_admin": {
 		"message": "Administrator permission required"

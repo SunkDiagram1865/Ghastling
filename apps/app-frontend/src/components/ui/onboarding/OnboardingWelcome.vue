@@ -2,7 +2,7 @@
 import { RightArrowIcon } from '@modrinth/assets'
 import { ButtonStyled, useVIntl } from '@modrinth/ui'
 
-import AxolotlLogo from '@/components/ui/AxolotlLogo.vue'
+import GhastlingLogo from '@/components/ui/GhastlingLogo.vue'
 
 import { onboardingMessages, type OnboardingStep } from './onboardingConfig'
 
@@ -13,7 +13,6 @@ defineProps<{
 defineEmits<{
 	start: []
 	skip: []
-	browse: []
 }>()
 
 const { formatMessage } = useVIntl()
@@ -24,10 +23,12 @@ const { formatMessage } = useVIntl()
 		<div class="onboarding-welcome-brand-stage">
 			<div class="onboarding-welcome-brand">
 				<div class="onboarding-welcome-logo">
-					<AxolotlLogo icon-only />
+					<GhastlingLogo icon-only />
 				</div>
 				<div class="onboarding-welcome-wordmark" aria-label="Ghastling Launcher">
-					<span class="onboarding-welcome-wordmark-core" data-wordmark="Ghastling"> Ghastling </span>
+					<span class="onboarding-welcome-wordmark-core" data-wordmark="Ghastling">
+						Ghastling
+					</span>
 					<span class="onboarding-welcome-wordmark-suffix" data-wordmark="Launcher">
 						Launcher
 					</span>
@@ -44,7 +45,7 @@ const { formatMessage } = useVIntl()
 				</div>
 				<div class="onboarding-welcome-actions">
 					<ButtonStyled color="brand">
-						<button @click="$emit('browse')">
+						<button @click="$emit('start')">
 							{{ formatMessage(step.action) }}
 							<RightArrowIcon />
 						</button>
@@ -111,7 +112,7 @@ const { formatMessage } = useVIntl()
 	color: var(--color-contrast);
 	font-size: 3.5rem;
 	font-weight: 800;
-	line-height: 1;
+	line-height: 1.5;
 	letter-spacing: 0;
 	white-space: nowrap;
 	animation: onboarding-welcome-wordmark-reveal 1050ms 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -260,7 +261,7 @@ const { formatMessage } = useVIntl()
 		max-width: 0;
 	}
 	to {
-		max-width: 50rem;
+		max-width: 42rem;
 	}
 }
 
@@ -320,7 +321,7 @@ const { formatMessage } = useVIntl()
 	}
 
 	.onboarding-welcome-wordmark {
-		max-width: 50rem;
+		max-width: 42rem;
 	}
 
 	.onboarding-welcome-logo,
@@ -349,7 +350,7 @@ const { formatMessage } = useVIntl()
 		flex-direction: column;
 		align-items: flex-start;
 		gap: 0.1rem;
-		font-size: 2rem;
+		font-size: 2.5rem;
 	}
 
 	.onboarding-welcome-panel-inner {
@@ -376,7 +377,7 @@ const { formatMessage } = useVIntl()
 
 @media (max-width: 480px) {
 	.onboarding-welcome-wordmark {
-		font-size: 1.5rem;
+		font-size: 1.875rem;
 	}
 
 	.onboarding-welcome-secondary-action > span {
@@ -386,7 +387,7 @@ const { formatMessage } = useVIntl()
 
 @media (min-width: 701px) and (max-width: 1000px) {
 	.onboarding-welcome-wordmark {
-		font-size: 2.75rem;
+		font-size: 3.5rem;
 	}
 }
 
@@ -401,7 +402,7 @@ const { formatMessage } = useVIntl()
 	}
 
 	.onboarding-welcome-wordmark {
-		font-size: 2rem;
+		font-size: 2.5rem;
 	}
 
 	.onboarding-welcome-panel-inner {

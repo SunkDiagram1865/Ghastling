@@ -197,7 +197,7 @@ fn build_resource_pack(
     let metadata = json!({
         "pack": {
             "pack_format": pack_format,
-            "description": "Axolotl Launcher offline skin"
+            "description": "Ghastling Launcher offline skin"
         }
     });
 

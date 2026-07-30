@@ -18,51 +18,51 @@ type GitHubRelease = {
 	tag_name: string
 }
 
-const GITHUB_RELEASES_URL = 'https://api.github.com/repos/Mystic-Stars/Axolotl/releases'
+const GITHUB_RELEASES_URL = 'https://api.github.com/repos/SunkDiagram1865/Ghastling/releases'
 
 const { formatMessage, locale } = useVIntl()
 
 const messages = defineMessages({
 	seoTitle: {
-		id: 'axolotl-site.changelog.seo.title',
-		defaultMessage: 'Changelog - Axolotl Launcher',
+		id: 'ghastling-site.changelog.seo.title',
+		defaultMessage: 'Changelog - Ghastling Launcher',
 	},
 	seoDescription: {
-		id: 'axolotl-site.changelog.seo.description',
-		defaultMessage: 'See what changed in each public Axolotl Launcher release.',
+		id: 'ghastling-site.changelog.seo.description',
+		defaultMessage: 'See what changed in each public Ghastling Launcher release.',
 	},
-	eyebrow: { id: 'axolotl-site.changelog.eyebrow', defaultMessage: 'Release history' },
-	title: { id: 'axolotl-site.changelog.title', defaultMessage: 'Changelog' },
+	eyebrow: { id: 'ghastling-site.changelog.eyebrow', defaultMessage: 'Release history' },
+	title: { id: 'ghastling-site.changelog.title', defaultMessage: 'Changelog' },
 	description: {
-		id: 'axolotl-site.changelog.description',
+		id: 'ghastling-site.changelog.description',
 		defaultMessage: 'Browse features, changes, and fixes in every public release.',
 	},
 	loading: {
-		id: 'axolotl-site.changelog.loading',
+		id: 'ghastling-site.changelog.loading',
 		defaultMessage: 'Checking published releases…',
 	},
 	errorTitle: {
-		id: 'axolotl-site.changelog.error.title',
+		id: 'ghastling-site.changelog.error.title',
 		defaultMessage: 'Changelog is temporarily unavailable',
 	},
 	errorDescription: {
-		id: 'axolotl-site.changelog.error.description',
+		id: 'ghastling-site.changelog.error.description',
 		defaultMessage: 'Try again shortly, or visit GitHub to browse releases.',
 	},
-	retry: { id: 'axolotl-site.changelog.retry', defaultMessage: 'Retry' },
+	retry: { id: 'ghastling-site.changelog.retry', defaultMessage: 'Retry' },
 	empty: {
-		id: 'axolotl-site.changelog.empty',
+		id: 'ghastling-site.changelog.empty',
 		defaultMessage: 'No public release notes are available yet.',
 	},
-	added: { id: 'axolotl-site.changelog.category.added', defaultMessage: 'Added' },
-	changed: { id: 'axolotl-site.changelog.category.changed', defaultMessage: 'Changed' },
+	added: { id: 'ghastling-site.changelog.category.added', defaultMessage: 'Added' },
+	changed: { id: 'ghastling-site.changelog.category.changed', defaultMessage: 'Changed' },
 	deprecated: {
-		id: 'axolotl-site.changelog.category.deprecated',
+		id: 'ghastling-site.changelog.category.deprecated',
 		defaultMessage: 'Deprecated',
 	},
-	removed: { id: 'axolotl-site.changelog.category.removed', defaultMessage: 'Removed' },
-	fixed: { id: 'axolotl-site.changelog.category.fixed', defaultMessage: 'Fixed' },
-	security: { id: 'axolotl-site.changelog.category.security', defaultMessage: 'Security' },
+	removed: { id: 'ghastling-site.changelog.category.removed', defaultMessage: 'Removed' },
+	fixed: { id: 'ghastling-site.changelog.category.fixed', defaultMessage: 'Fixed' },
+	security: { id: 'ghastling-site.changelog.category.security', defaultMessage: 'Security' },
 })
 
 const {
@@ -113,12 +113,12 @@ useSeoMeta({
 	ogTitle: () => seoTitle.value,
 	ogDescription: () => seoDescription.value,
 	ogType: 'website',
-	ogUrl: 'https://www.axlmc.org/changelog',
+	ogUrl: 'https://sunkdiagram1865.github.io/Ghastling/changelog',
 	robots: 'index, follow',
 })
 
 useHead({
-	link: [{ rel: 'canonical', href: 'https://www.axlmc.org/changelog' }],
+	link: [{ rel: 'canonical', href: 'https://sunkdiagram1865.github.io/Ghastling/changelog' }],
 })
 </script>
 
@@ -193,7 +193,11 @@ useHead({
 
 		<div class="changelog-footer">
 			<HistoryIcon aria-hidden="true" />
-			<a href="https://github.com/Mystic-Stars/Axolotl/releases" target="_blank" rel="noopener">
+			<a
+				href="https://github.com/SunkDiagram1865/Ghastling/releases"
+				target="_blank"
+				rel="noopener"
+			>
 				GitHub Releases
 			</a>
 		</div>

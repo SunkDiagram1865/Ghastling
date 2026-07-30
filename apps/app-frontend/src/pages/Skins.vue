@@ -1088,7 +1088,11 @@ await loadSkins()
 				:active-index="skinListTab === 'saved' ? 0 : 1"
 				:links="skinListTabLinks"
 				mode="local"
-				@tab-click="(index: number) => { skinListTab = index === 0 ? 'saved' : 'default' }"
+				@tab-click="
+					(index: number) => {
+						skinListTab = index === 0 ? 'saved' : 'default'
+					}
+				"
 			/>
 			<VirtualSkinSectionList
 				ref="skinSectionList"
@@ -1122,7 +1126,7 @@ await loadSkins()
 			class="relative mx-auto flex w-full max-w-xl flex-col gap-5 rounded-lg bg-bg-raised p-7 shadow-lg"
 		>
 			<img
-				src="@/assets/axolotl.png"
+				src="@/assets/ghastling.png"
 				:alt="formatMessage(messages.excitedRinthbotAlt)"
 				class="absolute -top-32 right-8 h-36 w-36 object-contain md:right-20"
 			/>

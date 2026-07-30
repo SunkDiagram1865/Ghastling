@@ -156,7 +156,7 @@ async fn set_restart_after_pending_update(
 // if Tauri app is called with arguments, then those arguments will be treated as commands
 // ie: deep links or filepaths for .mrpacks
 fn main() {
-    // Initialize portable mode first (checks .Axolotl folder and sets THESEUS_CONFIG_DIR)
+    // Initialize portable mode first (checks .Ghastling folder and sets THESEUS_CONFIG_DIR)
     // SAFETY: Called at the start of main() before any threads or tokio runtime are spawned
     let _portable = unsafe { portable::init_portable_mode() };
 
@@ -213,7 +213,7 @@ fn main() {
 
     let _log_guard = theseus::start_logger(&tauri_context.config().identifier);
 
-    tracing::info!("Initialized tracing subscriber. Loading Axolotl Launcher!");
+    tracing::info!("Initialized tracing subscriber. Loading Ghastling Launcher!");
 
     let mut builder = tauri::Builder::default();
 
@@ -481,7 +481,7 @@ fn main() {
                     DialogBuilder::message()
                         .set_level(MessageLevel::Error)
                         .set_title("Initialization error")
-                        .set_text("Your Microsoft Edge WebView2 installation is corrupt.\n\nMicrosoft Edge WebView2 is required to run Axolotl Launcher.\n\nRepair or reinstall the Microsoft Edge WebView2 Runtime, then start Axolotl again.")
+                        .set_text("Your Microsoft Edge WebView2 installation is corrupt.\n\nMicrosoft Edge WebView2 is required to run Ghastling Launcher.\n\nRepair or reinstall the Microsoft Edge WebView2 Runtime, then start Ghastling again.")
                         .alert()
                         .show()
                         .unwrap();

@@ -1,6 +1,10 @@
 import { AbstractFeature, type RequestContext } from '@modrinth/api-client'
 
-import { AxolotlBrandConfig, getOfficialLabrinthBaseUrl, MODRINTH_MIRROR_BASE_URL } from '@/config'
+import {
+	GhastlingBrandConfig,
+	getOfficialLabrinthBaseUrl,
+	MODRINTH_MIRROR_BASE_URL,
+} from '@/config'
 
 const SENSITIVE_HEADERS = new Set([
 	'authorization',
@@ -113,7 +117,7 @@ function canUseMirror(context: RequestContext, path: string) {
 	return (
 		(context.options.method ?? 'GET') === 'GET' &&
 		!hasSensitiveHeaders(context.options.headers) &&
-		(!AxolotlBrandConfig.capabilities.privateModrinthServices ||
+		(!GhastlingBrandConfig.capabilities.privateModrinthServices ||
 			context.options.skipAuth === true) &&
 		isPublicLabrinthPath(path)
 	)

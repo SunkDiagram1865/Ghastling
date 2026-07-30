@@ -22,6 +22,15 @@ export const loaderMessages: Record<string, { id: string; defaultMessage: string
 	},
 }
 
+/** Maps loader IDs to built-in instance icon IDs */
+export const loaderIconMap: Record<string, string> = {
+	vanilla: 'grass-block',
+	fabric: 'fabric',
+	forge: 'anvil',
+	neoforge: 'neoforge',
+	quilt: 'quilt',
+}
+
 export const formatLoaderLabel = (
 	item: string,
 	formatMessage?: (msg: { id: string; defaultMessage: string }) => string,

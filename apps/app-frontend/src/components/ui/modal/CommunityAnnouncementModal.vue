@@ -2,7 +2,7 @@
 import { ButtonStyled, commonMessages, defineMessages, NewModal, useVIntl } from '@modrinth/ui'
 import { ref } from 'vue'
 
-import { AxolotlBrandConfig } from '@/config'
+import { GhastlingBrandConfig } from '@/config'
 
 const DISMISSAL_KEY = 'ghastling-community-announcement-video-promotion-dismissed'
 
@@ -34,7 +34,7 @@ const messages = defineMessages({
 	},
 	feedbackSuffix: {
 		id: 'app.community-announcement.feedback-suffix',
-		defaultMessage: '. We look forward to improving Axolotl Launcher together!',
+		defaultMessage: '. We look forward to improving Ghastling Launcher together!',
 	},
 })
 
@@ -71,10 +71,10 @@ defineExpose({ showIfNeeded })
 			</p>
 			<p class="m-0 leading-relaxed">
 				{{ formatMessage(messages.feedbackPrefix)
-				}}<span class="font-semibold text-contrast">{{ AxolotlBrandConfig.qqGroupNumber }}</span
+				}}<span class="font-semibold text-contrast">{{ GhastlingBrandConfig.qqGroupNumber }}</span
 				>{{ formatMessage(messages.feedbackMiddle)
 				}}<a
-					:href="AxolotlBrandConfig.supportUrl"
+					:href="GhastlingBrandConfig.supportUrl"
 					target="_blank"
 					rel="noopener noreferrer"
 					class="font-medium text-brand hover:underline"

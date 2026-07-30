@@ -176,7 +176,12 @@ import PaperChannelBadge from '../../../base/PaperChannelBadge.vue'
 import StyledInput from '../../../base/StyledInput.vue'
 import type { LoaderVersionEntry, LoaderVersionType } from '../creation-flow-context'
 import { injectCreationFlowContext } from '../creation-flow-context'
-import { formatLoaderLabel, type GameVersionType, isVersionTypeMatch } from '../shared'
+import {
+	formatLoaderLabel,
+	loaderIconMap,
+	type GameVersionType,
+	isVersionTypeMatch,
+} from '../shared'
 
 const localizedFormatLoaderLabel = (item: string) => formatLoaderLabel(item, formatMessage)
 
@@ -391,6 +396,19 @@ const isPaperLike = computed(
 
 // Icon upload handling
 const filePicker = injectFilePicker()
+
+// When loader changes, auto-set the corresponding built-in icon
+watch(selectedLoader, async (loader) => {
+	if (!loader || ctx.flowType !== 'instance') return
+	const iconId = loaderIconMap[loader]
+	if (!iconId) return
+	const picked = await filePicker.setBuiltInInstanceIcon?.(iconId)
+	if (picked) {
+		ctx.instanceIcon.value = picked.file
+		ctx.instanceIconUrl.value = picked.previewUrl
+		ctx.instanceIconPath.value = picked.path ?? null
+	}
+})
 
 async function triggerIconInput() {
 	const picked = await (filePicker.pickInstanceIcon?.() ?? filePicker.pickImage())

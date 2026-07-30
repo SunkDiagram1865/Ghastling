@@ -2,7 +2,7 @@
 	<Transition name="splash-fade" @after-leave="onAfterLeave">
 		<div v-if="!doneLoading" class="splash-screen dark">
 			<div class="app-logo-wrapper" data-tauri-drag-region>
-				<img class="app-logo" src="@/assets/axolotl.png" alt="Ghastling Launcher" />
+				<img class="app-logo" src="@/assets/ghastling.png" alt="Ghastling Launcher" />
 				<ProgressBar class="loading-bar" :progress="Math.min(loadingProgress, 100)" />
 				<span v-if="message">{{ message }}</span>
 			</div>
@@ -125,7 +125,7 @@ loading_listener(async (e) => {
 	height: min(18rem, 45vh);
 	width: min(18rem, 45vw);
 	object-fit: contain;
-	filter: drop-shadow(0 0 2rem rgba(255, 77, 157, 0.35));
+	filter: drop-shadow(0 0 2rem rgba(57, 197, 187, 0.35));
 }
 
 .loading-bar {
@@ -137,7 +137,7 @@ loading_listener(async (e) => {
 	height: 100vh;
 	width: 100vw;
 	background:
-		linear-gradient(180deg, rgba(255, 77, 157, 0.24) 0%, rgba(48, 16, 40, 0.56) 97.29%),
+		linear-gradient(180deg, rgba(57, 197, 187, 0.24) 0%, rgba(102, 204, 255, 0.1) 97.29%),
 		linear-gradient(0deg, rgba(22, 18, 28, 0.68), rgba(22, 18, 28, 0.68));
 	z-index: 9997;
 }

@@ -33,10 +33,6 @@ fn update_endpoints(source: &str) -> Result<Vec<Url>> {
         "github" | "official" => vec![
             "https://github.com/SunkDiagram1865/Ghastling/releases/latest/download/latest.json",
         ],
-        "cnb" => vec![
-            "https://cnb.cool/ghs/Ghastling/-/git/raw/update/latest.json",
-            "https://github.com/SunkDiagram1865/Ghastling/releases/latest/download/latest.json",
-        ],
         _ => {
             return Err(theseus::Error::from(theseus::ErrorKind::OtherError(
                 format!("Unknown update source: {source}"),
@@ -106,18 +102,10 @@ async fn get_portable_update(update: &Update, source: &str) -> Result<Update> {
     let (portable_url, portable_sig_url) = match source {
         "github" | "official" => (
             format!(
-                "https://github.com/SunkDiagram1865/Ghastling/releases/download/v{version}/Ghastling_portable_{version}_x64.bin"
+                "https://github.com/SunkDiagram1865/Ghastling/releases/download/v{version}/Ghastling Launcher.bin"
             ),
             format!(
-                "https://github.com/SunkDiagram1865/Ghastling/releases/download/v{version}/Ghastling_portable_{version}_x64.bin.sig"
-            ),
-        ),
-        "cnb" => (
-            format!(
-                "https://cnb.cool/ghs/Ghastling/-/releases/download/v{version}/Ghastling_portable_{version}_x64.bin"
-            ),
-            format!(
-                "https://cnb.cool/ghs/Ghastling/-/releases/download/v{version}/Ghastling_portable_{version}_x64.bin.sig"
+                "https://github.com/SunkDiagram1865/Ghastling/releases/download/v{version}/Ghastling Launcher.bin.sig"
             ),
         ),
         _ => {

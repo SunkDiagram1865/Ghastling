@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import AxolotlFooter from '~/components/ui/AxolotlFooter.vue'
-import AxolotlHeader from '~/components/ui/AxolotlHeader.vue'
+import GhastlingFooter from '~/components/ui/GhastlingFooter.vue'
+import GhastlingHeader from '~/components/ui/GhastlingHeader.vue'
 import SiteSettingsModal from '~/components/ui/SiteSettingsModal.vue'
 import UpdateRescueBanner from '~/components/ui/UpdateRescueBanner.vue'
 
@@ -10,11 +10,11 @@ const settingsOpen = ref(false)
 <template>
 	<div class="site-layout">
 		<UpdateRescueBanner />
-		<AxolotlHeader @open-settings="settingsOpen = true" />
+		<GhastlingHeader @open-settings="settingsOpen = true" />
 		<main id="main">
 			<slot />
 		</main>
-		<AxolotlFooter />
+		<GhastlingFooter />
 		<SiteSettingsModal v-model="settingsOpen" />
 	</div>
 </template>

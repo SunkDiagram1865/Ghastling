@@ -3,7 +3,7 @@ import { ButtonStyled, commonMessages, defineMessages, NewModal, useVIntl } from
 import { computed, ref } from 'vue'
 
 import { getAnnouncementByVersion } from '@/announcements/catalog'
-import { AxolotlBrandConfig } from '@/config'
+import { GhastlingBrandConfig } from '@/config'
 
 import UpdateAnnouncementContent from './UpdateAnnouncementContent.vue'
 
@@ -52,7 +52,7 @@ defineExpose({ show, close })
 		<UpdateAnnouncementContent
 			:announcement="announcement"
 			:version="version"
-			:external-url="announcement?.externalUrl ?? AxolotlBrandConfig.website"
+			:external-url="announcement?.externalUrl ?? GhastlingBrandConfig.website"
 		/>
 
 		<template #actions>

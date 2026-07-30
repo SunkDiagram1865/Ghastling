@@ -76,6 +76,18 @@ const messages = defineMessages({
 		id: 'app.appearance-settings.accent-color.purple',
 		defaultMessage: 'Purple',
 	},
+	accentColorMikugreen: {
+		id: 'app.appearance-settings.accent-color.mikugreen',
+		defaultMessage: 'mikugreen',
+	},
+	accentColorTianyiblue: {
+		id: 'app.appearance-settings.accent-color.tianyiblue',
+		defaultMessage: 'tianyiblue',
+	},
+	accentColorGhastlinggray: {
+		id: 'app.appearance-settings.accent-color.ghastlinggray',
+		defaultMessage: 'ghastlinggray',
+	},
 	accentColorCustom: {
 		id: 'app.appearance-settings.accent-color.custom',
 		defaultMessage: 'Custom',
@@ -293,11 +305,14 @@ const accentColorOptions: Array<{
 	color: string
 	label: MessageDescriptor
 }> = [
+	{ value: 'mikugreen', color: 'var(--color-mikugreen)', label: messages.accentColorMikugreen },
+	{ value: 'tianyiblue', color: 'var(--color-tianyiblue)', label: messages.accentColorTianyiblue },
+	{
+		value: 'ghastlinggray',
+		color: 'var(--color-ghastlinggray)',
+		label: messages.accentColorGhastlinggray,
+	},
 	{ value: 'pink', color: 'var(--color-pink)', label: messages.accentColorPink },
-	{ value: 'orange', color: 'var(--color-orange)', label: messages.accentColorOrange },
-	{ value: 'green', color: 'var(--color-green)', label: messages.accentColorGreen },
-	{ value: 'blue', color: 'var(--color-blue)', label: messages.accentColorBlue },
-	{ value: 'purple', color: 'var(--color-purple)', label: messages.accentColorPurple },
 ]
 
 const CUSTOM_ACCENT_PALETTE = [
@@ -451,7 +466,7 @@ watch(
 		<p class="m-0 mt-1">{{ formatMessage(messages.accentColorDescription) }}</p>
 
 		<div
-			class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6"
+			class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5"
 			role="radiogroup"
 			:aria-label="formatMessage(messages.accentColorTitle)"
 		>
@@ -461,7 +476,7 @@ watch(
 				type="button"
 				role="radio"
 				:aria-checked="settings.accent_color === accentColor.value"
-				class="flex min-w-0 items-center gap-2 rounded-xl border border-solid px-3 py-2.5 font-semibold transition-all active:scale-[0.97]"
+				class="flex min-w-0 items-center gap-2 rounded-xl border border-solid px-2 py-2.5 font-semibold transition-all active:scale-[0.97]"
 				:class="
 					settings.accent_color === accentColor.value
 						? 'border-brand bg-brand-highlight text-brand'
@@ -488,7 +503,7 @@ watch(
 				type="button"
 				role="radio"
 				:aria-checked="isCustomAccent"
-				class="flex min-w-0 items-center gap-2 rounded-xl border border-solid px-3 py-2.5 font-semibold transition-all active:scale-[0.97]"
+				class="flex min-w-0 items-center gap-2 rounded-xl border border-solid px-2 py-2.5 font-semibold transition-all active:scale-[0.97]"
 				:class="
 					isCustomAccent
 						? 'border-brand bg-brand-highlight text-brand'

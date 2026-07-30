@@ -17,7 +17,7 @@ import {
 } from '@modrinth/ui'
 import { computed, ref } from 'vue'
 
-import { AxolotlBrandConfig } from '@/config'
+import { GhastlingBrandConfig } from '@/config'
 import { login as login_flow, set_default_user } from '@/helpers/auth.js'
 import i18n from '@/i18n.config'
 import { handleSevereError } from '@/store/error.js'
@@ -200,7 +200,7 @@ async function copyToClipboard(text: string) {
 			<!-- Action buttons -->
 			<div class="flex items-center gap-2">
 				<ButtonStyled>
-					<a :href="AxolotlBrandConfig.supportUrl" class="!w-full" @click="modal?.hide()">
+					<a :href="GhastlingBrandConfig.supportUrl" class="!w-full" @click="modal?.hide()">
 						<MessagesSquareIcon /> {{ formatMessage(messages.contactSupport) }}
 					</a>
 				</ButtonStyled>

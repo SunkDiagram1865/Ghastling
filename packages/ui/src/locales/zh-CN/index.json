@@ -5439,7 +5439,7 @@
 		"defaultMessage": "搜索结果"
 	},
 	"settings.language.description": {
-		"defaultMessage": "选择你偏好的{platform}语言。翻译工作由志愿者在 <crowdin-link>Crowdin</crowdin-link> 上完成。"
+		"defaultMessage": "选择你偏好的{platform}语言。"
 	},
 	"settings.language.languages.search-field.placeholder": {
 		"defaultMessage": "搜索语言..."
@@ -6336,10 +6336,10 @@
 		"message": "复制文件"
 	},
 	"drop.symlink_method.copy_desc": {
-		"message": "复制到 Axolotl 目录"
+		"message": "复制到 Ghastling 目录"
 	},
 	"drop.symlink_method.copy_detail": {
-		"message": "实例文件将被复制到 Axolotl"
+		"message": "实例文件将被复制到 Ghastling"
 	},
 	"drop.symlink_method.symlink_title": {
 		"message": "符号链接"
@@ -6348,7 +6348,7 @@
 		"message": "引用原始位置"
 	},
 	"drop.symlink_method.symlink_detail": {
-		"message": "实例文件保留在原始位置，Axolotl 通过符号链接引用。节省磁盘空间。"
+		"message": "实例文件保留在原始位置，Ghastling 通过符号链接引用。节省磁盘空间。"
 	},
 	"drop.symlink_method.requires_admin": {
 		"message": "需要管理员权限"

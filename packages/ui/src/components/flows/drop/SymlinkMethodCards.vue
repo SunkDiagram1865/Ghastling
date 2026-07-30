@@ -92,11 +92,12 @@ const messages = defineMessages({
 	},
 	copyDesc: {
 		id: 'drop.symlink_method.copy_desc',
-		defaultMessage: 'Copy to Axolotl directory',
+		defaultMessage: 'Copy to Ghastling directory',
 	},
 	copyDetail: {
 		id: 'drop.symlink_method.copy_detail',
-		defaultMessage: 'Instance files will be copied to Axolotl\'s data directory. This is the default option with the best compatibility.',
+		defaultMessage:
+			"Instance files will be copied to Ghastling's data directory. This is the default option with the best compatibility.",
 	},
 	symlinkTitle: {
 		id: 'drop.symlink_method.symlink_title',
@@ -108,7 +109,8 @@ const messages = defineMessages({
 	},
 	symlinkDetail: {
 		id: 'drop.symlink_method.symlink_detail',
-		defaultMessage: 'Instance files stay in their original location. Axolotl references them via a symbolic link. Saves disk space.',
+		defaultMessage:
+			'Instance files stay in their original location. Ghastling references them via a symbolic link. Saves disk space.',
 	},
 	requiresAdmin: {
 		id: 'drop.symlink_method.requires_admin',
@@ -177,7 +179,10 @@ function onModalHide() {
 	emit('cancel')
 }
 
-function show(options: { instanceNames: string[]; symlinkCapable: 'supported' | 'requires_admin' | 'unsupported' }) {
+function show(options: {
+	instanceNames: string[]
+	symlinkCapable: 'supported' | 'requires_admin' | 'unsupported'
+}) {
 	internalInstanceNames.value = options.instanceNames
 	internalSymlinkCapable.value = options.symlinkCapable
 	selected.value = null

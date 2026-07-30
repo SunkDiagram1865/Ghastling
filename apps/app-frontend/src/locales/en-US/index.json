@@ -180,7 +180,7 @@
 		"message": "Advanced rendering"
 	},
 	"app.appearance-settings.color-theme.description": {
-		"message": "Select your preferred color theme for Axolotl Launcher."
+		"message": "Select your preferred color theme for Ghastling Launcher."
 	},
 	"app.appearance-settings.color-theme.title": {
 		"message": "Color theme"
@@ -387,10 +387,10 @@
 		"message": "If you have more ideas or suggestions, please join the player QQ group: "
 	},
 	"app.community-announcement.feedback-suffix": {
-		"message": ". We look forward to improving Axolotl Launcher together!"
+		"message": ". We look forward to improving Ghastling Launcher together!"
 	},
 	"app.community-announcement.response": {
-		"message": "Since Axolotl Launcher was promoted on video platforms, we have received far more love and attention than we expected, along with many thoughtful suggestions and high-quality reports."
+		"message": "Since Ghastling Launcher was promoted on video platforms, we have received far more love and attention than we expected, along with many thoughtful suggestions and high-quality reports."
 	},
 	"app.community-announcement.thanks": {
 		"message": "I have done my best to personally reply to every comment on the videos. Thank you sincerely for all your support!"
@@ -669,7 +669,7 @@
 		"message": "Debug information"
 	},
 	"app.error.directory-description": {
-		"message": "Axolotl Launcher cannot migrate to the selected directory. Contact support for help or cancel the directory change."
+		"message": "Ghastling Launcher cannot migrate to the selected directory. Contact support for help or cancel the directory change."
 	},
 	"app.error.directory-title": {
 		"message": "Could not change app directory"
@@ -687,7 +687,7 @@
 		"message": "The connection to Microsoft, Xbox, or Minecraft services was rejected. These services may be blocked by your hosts file. See our support article for steps to fix the issue."
 	},
 	"app.error.loader-description": {
-		"message": "Axolotl Launcher could not find a loader version for this instance."
+		"message": "Ghastling Launcher could not find a loader version for this instance."
 	},
 	"app.error.loader-fix": {
 		"message": "Repair the instance using the button below."
@@ -705,7 +705,7 @@
 		"message": "Sign in to Minecraft"
 	},
 	"app.error.network-description": {
-		"message": "Axolotl Launcher had trouble connecting to Microsoft services. This is often caused by a poor connection. Try again, and use our support article if the issue persists."
+		"message": "Ghastling Launcher had trouble connecting to Microsoft services. This is often caused by a poor connection. Try again, and use our support article if the issue persists."
 	},
 	"app.error.network-issues": {
 		"message": "Network issues"
@@ -726,7 +726,7 @@
 		"message": "Using PC Game Pass, coming from Bedrock, or just bought the game?"
 	},
 	"app.error.permissions-description": {
-		"message": "Axolotl Launcher cannot write to the selected directory. Adjust its permissions and try again, or cancel the directory change."
+		"message": "Ghastling Launcher cannot write to the selected directory. Adjust its permissions and try again, or cancel the directory change."
 	},
 	"app.error.permissions-title": {
 		"message": "Change directory permissions"
@@ -744,7 +744,7 @@
 		"message": "Not enough space"
 	},
 	"app.error.state-description": {
-		"message": "Axolotl Launcher failed to load correctly. A file may be corrupted or an essential file may be missing."
+		"message": "Ghastling Launcher failed to load correctly. A file may be corrupted or an essential file may be missing."
 	},
 	"app.error.state-fix-internet": {
 		"message": "Check your internet connection, then restart the app."
@@ -756,7 +756,7 @@
 		"message": "Download and install the app again."
 	},
 	"app.error.state-title": {
-		"message": "Error initializing Axolotl Launcher"
+		"message": "Error initializing Ghastling Launcher"
 	},
 	"app.error.support-article": {
 		"message": "Support article"
@@ -828,7 +828,7 @@
 		"message": "Jump back in"
 	},
 	"app.home.welcome": {
-		"message": "Welcome to Axolotl Launcher!"
+		"message": "Welcome to Ghastling Launcher!"
 	},
 	"app.home.welcome-back": {
 		"message": "Welcome back!"
@@ -1749,7 +1749,7 @@
 		"message": "Your launch shelf"
 	},
 	"app.onboarding.mascot-alt": {
-		"message": "Axolotl guide"
+		"message": "Ghastling guide"
 	},
 	"app.onboarding.recent.description": {
 		"message": "Recently played instances and worlds stay here, ready for a quick return."
@@ -1785,10 +1785,10 @@
 		"message": "Translate Modrinth project titles, summaries, and descriptions while you browse. Keep the original, show both, or make the translation the main character."
 	},
 	"app.onboarding.translation.title": {
-		"message": "Translation, the Axolotl way"
+		"message": "Translation, the Ghastling way"
 	},
 	"app.onboarding.updates.description": {
-		"message": "Choose when Axolotl checks for updates and whether it installs them for you."
+		"message": "Choose when Ghastling checks for updates and whether it installs them for you."
 	},
 	"app.onboarding.updates.title": {
 		"message": "Stay in the loop"
@@ -2148,7 +2148,7 @@
 		"message": "App cache"
 	},
 	"app.settings.resources.app-cache-description": {
-		"message": "Axolotl Launcher caches data to speed up loading. Purging it forces the app to reload data and may temporarily slow the app down."
+		"message": "Ghastling Launcher caches data to speed up loading. Purging it forces the app to reload data and may temporarily slow the app down."
 	},
 	"app.settings.resources.app-directory": {
 		"message": "App directory"
@@ -2286,7 +2286,7 @@
 		"message": "CNB"
 	},
 	"app.settings.updates.description": {
-		"message": "Choose where Axolotl checks for launcher updates."
+		"message": "Choose where Ghastling checks for launcher updates."
 	},
 	"app.settings.updates.disabled": {
 		"message": "Updates are disabled in this build."
@@ -2310,7 +2310,7 @@
 		"message": "Update source"
 	},
 	"app.settings.updates.up-to-date": {
-		"message": "Axolotl is up to date."
+		"message": "Ghastling is up to date."
 	},
 	"app.skins.add-button": {
 		"message": "Add skin"
@@ -2457,10 +2457,10 @@
 		"message": "Sign In"
 	},
 	"app.skins.sign-in.description": {
-		"message": "Please sign into your Minecraft account to use the skin management features of Axolotl Launcher."
+		"message": "Please sign into your Minecraft account to use the skin management features of Ghastling Launcher."
 	},
 	"app.skins.sign-in.rinthbot-alt": {
-		"message": "Axolotl Launcher"
+		"message": "Ghastling Launcher"
 	},
 	"app.skins.sign-in.title": {
 		"message": "Please sign in"
@@ -2679,19 +2679,19 @@
 		"message": "This version does not have a bundled announcement yet. Visit the website for the full changelog."
 	},
 	"app.update-announcement.unknown-title": {
-		"message": "Axolotl Launcher was updated"
+		"message": "Ghastling Launcher was updated"
 	},
 	"app.update-announcement.version": {
 		"message": "Version {version}"
 	},
 	"app.update-popup.body.download-complete": {
-		"message": "Axolotl Launcher v{version} has finished downloading. Reload to update now, or automatically when you close Axolotl Launcher."
+		"message": "Ghastling Launcher v{version} has finished downloading. Reload to update now, or automatically when you close Ghastling Launcher."
 	},
 	"app.update-popup.body.linux": {
-		"message": "Axolotl Launcher v{version} is available. Use your package manager to update for the latest features and fixes!"
+		"message": "Ghastling Launcher v{version} is available. Use your package manager to update for the latest features and fixes!"
 	},
 	"app.update-popup.body.metered": {
-		"message": "Axolotl Launcher v{version} is available now! Since you're on a metered network, we didn't automatically download it."
+		"message": "Ghastling Launcher v{version} is available now! Since you're on a metered network, we didn't automatically download it."
 	},
 	"app.update-popup.changelog": {
 		"message": "Changelog"
@@ -3453,7 +3453,7 @@
 		"message": "Back to Library"
 	},
 	"drop.help.title": {
-		"message": "What can I drop into Axolotl?"
+		"message": "What can I drop into Ghastling?"
 	},
 	"drop.help.instances-title": {
 		"message": "Launcher Instances"

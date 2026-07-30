@@ -8,7 +8,7 @@ import {
 	getAnnouncements,
 	getLocalizedAnnouncementText,
 } from '@/announcements/catalog'
-import { AxolotlBrandConfig } from '@/config'
+import { GhastlingBrandConfig } from '@/config'
 import i18n from '@/i18n.config'
 
 import UpdateAnnouncementContent from './UpdateAnnouncementContent.vue'
@@ -61,7 +61,7 @@ const historyAnnouncements = computed(() =>
 			<UpdateAnnouncementContent
 				:announcement="currentAnnouncement"
 				:version="currentVersion"
-				:external-url="currentAnnouncement?.externalUrl ?? AxolotlBrandConfig.website"
+				:external-url="currentAnnouncement?.externalUrl ?? GhastlingBrandConfig.website"
 			/>
 		</div>
 

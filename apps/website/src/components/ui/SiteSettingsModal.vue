@@ -31,94 +31,94 @@ const changingLocale = ref(false)
 const activeTab = ref<SettingsTab>('appearance')
 
 const messages = defineMessages({
-	title: { id: 'axolotl-settings.title', defaultMessage: 'Display settings' },
+	title: { id: 'ghastling-settings.title', defaultMessage: 'Display settings' },
 	description: {
-		id: 'axolotl-settings.description',
-		defaultMessage: 'Customize how Axolotl looks and reads on this device.',
+		id: 'ghastling-settings.description',
+		defaultMessage: 'Customize how Ghastling looks and reads on this device.',
 	},
-	close: { id: 'axolotl-settings.close', defaultMessage: 'Close settings' },
-	appearanceTitle: { id: 'axolotl-settings.appearance.title', defaultMessage: 'Appearance' },
-	languageTitle: { id: 'axolotl-settings.language.title', defaultMessage: 'Language' },
+	close: { id: 'ghastling-settings.close', defaultMessage: 'Close settings' },
+	appearanceTitle: { id: 'ghastling-settings.appearance.title', defaultMessage: 'Appearance' },
+	languageTitle: { id: 'ghastling-settings.language.title', defaultMessage: 'Language' },
 	languageDescription: {
-		id: 'axolotl-settings.language.description',
+		id: 'ghastling-settings.language.description',
 		defaultMessage: 'Choose the language used by this website.',
 	},
-	downloadsTitle: { id: 'axolotl-settings.downloads.title', defaultMessage: 'Downloads' },
+	downloadsTitle: { id: 'ghastling-settings.downloads.title', defaultMessage: 'Downloads' },
 	downloadsDescription: {
-		id: 'axolotl-settings.downloads.description',
-		defaultMessage: 'Choose where Axolotl Launcher installers are downloaded from.',
+		id: 'ghastling-settings.downloads.description',
+		defaultMessage: 'Choose where Ghastling Launcher installers are downloaded from.',
 	},
 	downloadSourceTitle: {
-		id: 'axolotl-settings.download-source.title',
+		id: 'ghastling-settings.download-source.title',
 		defaultMessage: 'Download source',
 	},
 	downloadSourceDescription: {
-		id: 'axolotl-settings.download-source.description',
+		id: 'ghastling-settings.download-source.description',
 		defaultMessage: 'Automatic selection uses CNB in mainland China and GitHub elsewhere.',
 	},
 	downloadSourceAuto: {
-		id: 'axolotl-settings.download-source.auto',
+		id: 'ghastling-settings.download-source.auto',
 		defaultMessage: 'Automatic',
 	},
 	downloadSourceAutoDescription: {
-		id: 'axolotl-settings.download-source.auto.description',
+		id: 'ghastling-settings.download-source.auto.description',
 		defaultMessage: 'Choose a source from your browser language and timezone.',
 	},
 	downloadSourceCnb: {
-		id: 'axolotl-settings.download-source.cnb',
+		id: 'ghastling-settings.download-source.cnb',
 		defaultMessage: 'CNB',
 	},
 	downloadSourceCnbDescription: {
-		id: 'axolotl-settings.download-source.cnb.description',
+		id: 'ghastling-settings.download-source.cnb.description',
 		defaultMessage: 'Recommended for visitors in mainland China.',
 	},
 	downloadSourceGithub: {
-		id: 'axolotl-settings.download-source.github',
+		id: 'ghastling-settings.download-source.github',
 		defaultMessage: 'GitHub',
 	},
 	downloadSourceGithubDescription: {
-		id: 'axolotl-settings.download-source.github.description',
+		id: 'ghastling-settings.download-source.github.description',
 		defaultMessage: 'Download from the official GitHub release.',
 	},
 	currentDownloadSource: {
-		id: 'axolotl-settings.download-source.current',
+		id: 'ghastling-settings.download-source.current',
 		defaultMessage: 'Current source: {source}',
 	},
-	themeTitle: { id: 'axolotl-settings.theme.title', defaultMessage: 'Color theme' },
+	themeTitle: { id: 'ghastling-settings.theme.title', defaultMessage: 'Color theme' },
 	themeDescription: {
-		id: 'axolotl-settings.theme.description',
-		defaultMessage: 'Select your preferred color theme for Axolotl on this device.',
+		id: 'ghastling-settings.theme.description',
+		defaultMessage: 'Select your preferred color theme for Ghastling on this device.',
 	},
-	interfaceTitle: { id: 'axolotl-settings.interface.title', defaultMessage: 'Interface' },
+	interfaceTitle: { id: 'ghastling-settings.interface.title', defaultMessage: 'Interface' },
 	interfaceDescription: {
-		id: 'axolotl-settings.interface.description',
+		id: 'ghastling-settings.interface.description',
 		defaultMessage: 'Enable or disable visual behavior on this device.',
 	},
 	advancedRenderingTitle: {
-		id: 'axolotl-settings.advanced-rendering.title',
+		id: 'ghastling-settings.advanced-rendering.title',
 		defaultMessage: 'Advanced rendering',
 	},
 	advancedRenderingDescription: {
-		id: 'axolotl-settings.advanced-rendering.description',
+		id: 'ghastling-settings.advanced-rendering.description',
 		defaultMessage: 'Use blur, gradients, and enhanced background effects.',
 	},
 	reduceMotionTitle: {
-		id: 'axolotl-settings.reduce-motion.title',
+		id: 'ghastling-settings.reduce-motion.title',
 		defaultMessage: 'Reduce motion',
 	},
 	reduceMotionDescription: {
-		id: 'axolotl-settings.reduce-motion.description',
+		id: 'ghastling-settings.reduce-motion.description',
 		defaultMessage: 'Disable decorative movement and transition effects.',
 	},
 	externalLinksTitle: {
-		id: 'axolotl-settings.external-links.title',
+		id: 'ghastling-settings.external-links.title',
 		defaultMessage: 'Open external links in new tab',
 	},
 	externalLinksDescription: {
-		id: 'axolotl-settings.external-links.description',
+		id: 'ghastling-settings.external-links.description',
 		defaultMessage: 'Keep the download page open when visiting another website.',
 	},
-	done: { id: 'axolotl-settings.done', defaultMessage: 'Done' },
+	done: { id: 'ghastling-settings.done', defaultMessage: 'Done' },
 })
 
 const downloadSourceOptions = computed<
@@ -156,7 +156,7 @@ function applyTheme() {
 	document.documentElement.classList.remove('light-mode', 'dark-mode', 'oled-mode')
 	document.documentElement.classList.add(`${resolvedTheme}-mode`, 'accent-pink')
 	document.documentElement.style.colorScheme = resolvedTheme === 'light' ? 'light' : 'dark'
-	localStorage.setItem('axolotl-theme', preferredTheme.value)
+	localStorage.setItem('ghastling-theme', preferredTheme.value)
 }
 
 function updateColorTheme(theme: Theme) {
@@ -178,9 +178,9 @@ function applyRenderingPreferences() {
 	if (!import.meta.client) return
 	document.documentElement.classList.toggle('reduced-effects', !advancedRendering.value)
 	document.documentElement.classList.toggle('reduced-motion', reduceMotion.value)
-	localStorage.setItem('axolotl-advanced-rendering', String(advancedRendering.value))
-	localStorage.setItem('axolotl-reduce-motion', String(reduceMotion.value))
-	localStorage.setItem('axolotl-external-links-new-tab', String(externalLinksNewTab.value))
+	localStorage.setItem('ghastling-advanced-rendering', String(advancedRendering.value))
+	localStorage.setItem('ghastling-reduce-motion', String(reduceMotion.value))
+	localStorage.setItem('ghastling-external-links-new-tab', String(externalLinksNewTab.value))
 }
 
 function handleSystemTheme(event: MediaQueryListEvent) {
@@ -215,10 +215,10 @@ watch([advancedRendering, reduceMotion, externalLinksNewTab], applyRenderingPref
 onMounted(() => {
 	systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)')
 	systemTheme.value = systemThemeQuery.matches ? 'dark' : 'light'
-	preferredTheme.value = (localStorage.getItem('axolotl-theme') as Theme | null) ?? 'system'
-	advancedRendering.value = localStorage.getItem('axolotl-advanced-rendering') !== 'false'
-	reduceMotion.value = localStorage.getItem('axolotl-reduce-motion') === 'true'
-	externalLinksNewTab.value = localStorage.getItem('axolotl-external-links-new-tab') !== 'false'
+	preferredTheme.value = (localStorage.getItem('ghastling-theme') as Theme | null) ?? 'system'
+	advancedRendering.value = localStorage.getItem('ghastling-advanced-rendering') !== 'false'
+	reduceMotion.value = localStorage.getItem('ghastling-reduce-motion') === 'true'
+	externalLinksNewTab.value = localStorage.getItem('ghastling-external-links-new-tab') !== 'false'
 	applyTheme()
 	applyRenderingPreferences()
 	systemThemeQuery.addEventListener('change', handleSystemTheme)
@@ -283,9 +283,9 @@ onBeforeUnmount(() => {
 							</nav>
 
 							<div class="settings-brand">
-								<img src="/axolotl.png" alt="" />
+								<img src="/ghastling.png" alt="" />
 								<div>
-									<strong>Axolotl Launcher</strong>
+									<strong>Ghastling Launcher</strong>
 									<span>Website 2026</span>
 								</div>
 							</div>

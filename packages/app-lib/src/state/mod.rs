@@ -100,7 +100,7 @@ pub struct State {
     // because creating the state object is fallible (e.g. database missing),
     // but we rely on the app identifier to create the state (data dir).
     //
-    // /// App identifier string (like com.modrinth.AxolotlLauncher)
+    // /// App identifier string (like com.modrinth.GhastlingLauncher)
     // pub app_identifier: String,
     /// Friends socket
     pub friends_socket: FriendsSocket,
@@ -210,7 +210,7 @@ impl State {
                 tracing::error!("Error running discord RPC: {e}");
             }
 
-            // Axolotl does not connect to Modrinth's private friends socket.
+            // Ghastling does not connect to Modrinth's private friends socket.
         });
 
         Ok(())

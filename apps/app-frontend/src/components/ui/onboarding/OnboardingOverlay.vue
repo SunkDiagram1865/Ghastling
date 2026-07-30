@@ -15,7 +15,6 @@ const emit = defineEmits<{
 	complete: []
 	skip: []
 	requestCloseSettings: []
-	browse: []
 }>()
 
 const {
@@ -73,7 +72,6 @@ const {
 				:step="step"
 				@start="handleManualClick"
 				@skip="emit('skip')"
-				@browse="emit('browse')"
 			/>
 			<OnboardingDialogue
 				v-else

@@ -1,13 +1,13 @@
 use std::sync::atomic::{AtomicBool, Ordering};
 
-const PORTABLE_DIR_NAME: &str = ".Axolotl";
+const PORTABLE_DIR_NAME: &str = "com.cysunk.ghestling";
 
 static PORTABLE_MODE: AtomicBool = AtomicBool::new(false);
 
 /// 在启动时初始化便携模式
-/// 检查 `.Axolotl` 文件夹是否存在且可写
-/// 如果存在且可写，将 `THESEUS_CONFIG_DIR` 环境变量设置为该路径
-/// 返回 `true` 如果便携模式已启用，否则返回 `false`
+/// 自动创建 `com.cysunk.ghestling` 文件夹（如果不存在）
+/// 将 `THESEUS_CONFIG_DIR` 环境变量设置为该路径
+/// 默认始终使用便携模式，数据存储在可执行文件所在目录
 ///
 /// 必须在 main() 开头、任何其他线程（包括 tokio runtime）启动之前调用。
 /// 此函数内部会调用 `std::env::set_var`，该函数在 Rust 中不是线程安全的。
@@ -23,9 +23,18 @@ pub unsafe fn init_portable_mode() -> bool {
 
     let portable_dir = app_dir.join(PORTABLE_DIR_NAME);
 
+    // 自动创建目录（如果不存在）
     if !portable_dir.is_dir() {
-        return false;
+        if let Err(e) = std::fs::create_dir_all(&portable_dir) {
+            tracing::warn!(
+                "Failed to create portable directory {}: {}",
+                portable_dir.display(),
+                e
+            );
+            return false;
+        }
     }
+
     if !try_write_test(&portable_dir) {
         return false;
     }

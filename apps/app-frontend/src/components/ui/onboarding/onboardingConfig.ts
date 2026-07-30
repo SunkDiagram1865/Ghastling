@@ -167,7 +167,8 @@ export const onboardingMessages = defineMessages({
 	updatesTitle: { id: 'app.onboarding.updates.title', defaultMessage: 'Stay in the loop' },
 	updatesDescription: {
 		id: 'app.onboarding.updates.description',
-		defaultMessage: 'Choose when Ghastling checks for updates and whether it installs them for you.',
+		defaultMessage:
+			'Choose when Ghastling checks for updates and whether it installs them for you.',
 	},
 	clickTab: { id: 'app.onboarding.action.click-tab', defaultMessage: 'Click this tab to continue' },
 	libraryTitle: { id: 'app.onboarding.library.title', defaultMessage: 'Your launch shelf' },

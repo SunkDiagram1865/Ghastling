@@ -58,7 +58,7 @@ pub async fn login<R: Runtime>(
             },
         )?),
     )
-    .title("Sign into Axolotl Launcher")
+    .title("Sign into Ghastling Launcher")
     .always_on_top(true)
     .center()
     .build()?;

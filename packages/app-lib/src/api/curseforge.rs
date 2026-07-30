@@ -3044,7 +3044,7 @@ fn push_query<T: ToString>(
 }
 
 fn api_key() -> Option<String> {
-    std::env::var("GHASTLING_CURSEFORGE_API_KEY")
+    std::env::var("AXOLOTL_CURSEFORGE_API_KEY")
         .ok()
         .or_else(|| option_env!("CURSEFORGE_API_KEY").map(str::to_string))
         .map(|key| key.trim().to_string())
@@ -3053,7 +3053,7 @@ fn api_key() -> Option<String> {
 
 fn api_base_url() -> String {
     #[cfg(debug_assertions)]
-    if let Ok(value) = std::env::var("GHASTLING_CURSEFORGE_API_BASE_URL")
+    if let Ok(value) = std::env::var("AXOLOTL_CURSEFORGE_API_BASE_URL")
         && value.starts_with("http://127.0.0.1:")
     {
         return value.trim_end_matches('/').to_string();

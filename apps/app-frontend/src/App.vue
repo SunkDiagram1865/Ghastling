@@ -63,7 +63,7 @@ import { getAnnouncementByVersion } from '@/announcements/catalog'
 import AccountsCard from '@/components/ui/AccountsCard.vue'
 import UpdateAnnouncementModal from '@/components/ui/announcement/UpdateAnnouncementModal.vue'
 import AppActionBar from '@/components/ui/AppActionBar.vue'
-import AxolotlLogo from '@/components/ui/AxolotlLogo.vue'
+import GhastlingLogo from '@/components/ui/GhastlingLogo.vue'
 import Breadcrumbs from '@/components/ui/Breadcrumbs.vue'
 import ErrorModal from '@/components/ui/ErrorModal.vue'
 import AddServerToInstanceModal from '@/components/ui/install_flow/AddServerToInstanceModal.vue'
@@ -87,7 +87,7 @@ import WindowControls from '@/components/ui/WindowControls.vue'
 import { useCheckDisableMouseover } from '@/composables/macCssFix.js'
 import { minecraftLaunchErrorKey } from '@/composables/useMinecraftLaunchError'
 import { useNetworkStatus } from '@/composables/useNetworkStatus'
-import { AxolotlBrandConfig, config, getOfficialLabrinthBaseUrl } from '@/config'
+import { GhastlingBrandConfig, config, getOfficialLabrinthBaseUrl } from '@/config'
 import { debugAnalytics, initAnalytics, trackEvent } from '@/helpers/analytics'
 import { check_reachable } from '@/helpers/auth.js'
 import { get_user, get_version } from '@/helpers/cache.js'
@@ -203,10 +203,10 @@ const { addPopupNotification } = popupNotificationManager
 
 const appVersion = getVersion()
 const tauriApiClient = new TauriModrinthClient({
-	userAgent: async () => AxolotlBrandConfig.userAgent(await appVersion, await getOsType()),
+	userAgent: async () => GhastlingBrandConfig.userAgent(await appVersion, await getOsType()),
 	labrinthBaseUrl: config.labrinthBaseUrl,
 	features: [
-		...(AxolotlBrandConfig.capabilities.privateModrinthServices
+		...(GhastlingBrandConfig.capabilities.privateModrinthServices
 			? [
 					new AuthFeature({
 						token: async () => (await getCreds())?.session,
@@ -637,7 +637,7 @@ async function setupApp() {
 	const version = await getVersion()
 	pendingUpdateAnnouncementVersion.value = pending_update_toast_for_version
 	if (!onboarded && route.path !== '/') await router.replace('/')
-	showOnboarding.value = false
+	showOnboarding.value = !onboarded
 	onboardingSettings.value = initialSettings
 
 	nativeDecorations.value = native_decorations
@@ -743,11 +743,6 @@ async function finishOnboarding() {
 
 async function skipOnboarding() {
 	await finishOnboarding()
-}
-
-async function browseOnboarding() {
-	await finishOnboarding()
-	await router.push('/browse')
 }
 
 function closeOnboardingSettings() {
@@ -1777,7 +1772,7 @@ watch(incompatibilityWarningModal, (modal) => {
 })
 
 setupAuthProvider(credentials, async (_redirectPath) => {
-	if (AxolotlBrandConfig.capabilities.privateModrinthServices) await signIn()
+	if (GhastlingBrandConfig.capabilities.privateModrinthServices) await signIn()
 })
 
 async function validateSession(sessionToken) {
@@ -1794,7 +1789,7 @@ async function validateSession(sessionToken) {
 }
 
 async function fetchCredentials() {
-	if (!AxolotlBrandConfig.capabilities.privateModrinthServices) {
+	if (!GhastlingBrandConfig.capabilities.privateModrinthServices) {
 		credentials.value = null
 		return
 	}
@@ -2077,7 +2072,7 @@ function showDelayedUpdatePopup() {
 	markAppUpdatePopupShown(update.version, stage)
 }
 
-let lastUpdateSource = 'cnb'
+let lastUpdateSource = 'github'
 
 async function performUpdateCheck() {
 	const source = getUpdateSource()
@@ -2231,7 +2226,7 @@ setAppUpdateActions({
 		if (version && getAnnouncementByVersion(version)) {
 			updateAnnouncementModal.value?.show(version)
 		} else {
-			openUrl(AxolotlBrandConfig.website)
+			openUrl(GhastlingBrandConfig.website)
 		}
 	},
 })
@@ -2435,7 +2430,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				<SettingsIcon />
 			</NavButton>
 			<OverflowMenu
-				v-if="AxolotlBrandConfig.capabilities.privateModrinthServices && credentials?.user"
+				v-if="GhastlingBrandConfig.capabilities.privateModrinthServices && credentials?.user"
 				v-tooltip.right="`Modrinth account`"
 				data-onboarding-id="account-entry"
 				class="w-12 h-12 text-primary rounded-full flex items-center justify-center text-2xl transition-all bg-transparent hover:bg-button-bg hover:text-contrast border-0 cursor-pointer"
@@ -2467,7 +2462,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				<template #sign-out> <LogOutIcon /> Sign out </template>
 			</OverflowMenu>
 			<NavButton
-				v-else-if="AxolotlBrandConfig.capabilities.privateModrinthServices"
+				v-else-if="GhastlingBrandConfig.capabilities.privateModrinthServices"
 				v-tooltip.right="'Sign in to a Modrinth account'"
 				data-onboarding-id="account-entry"
 				:to="() => signIn()"
@@ -2477,7 +2472,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		</div>
 		<div data-tauri-drag-region class="app-grid-statusbar bg-bg-raised h-[--top-bar-height] flex">
 			<div data-tauri-drag-region class="flex min-w-0 flex-1 overflow-hidden p-3">
-				<AxolotlLogo class="h-full w-auto shrink-0 pointer-events-none" />
+				<GhastlingLogo class="h-full w-auto shrink-0 pointer-events-none" />
 				<div data-tauri-drag-region class="flex shrink-0 items-center gap-1 ml-3">
 					<button
 						class="cursor-pointer p-0 m-0 text-contrast border-none outline-none bg-button-bg rounded-full flex items-center justify-center w-6 h-6 hover:brightness-75 transition-all"
@@ -2722,7 +2717,6 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		:mode="onboardingMode"
 		@complete="finishOnboarding"
 		@skip="skipOnboarding"
-		@browse="browseOnboarding"
 		@request-close-settings="closeOnboardingSettings"
 	/>
 </template>

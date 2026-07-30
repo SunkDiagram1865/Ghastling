@@ -6234,10 +6234,10 @@
 		"message": "複製檔案"
 	},
 	"drop.symlink_method.copy_desc": {
-		"message": "複製到 Axolotl 目錄"
+		"message": "複製到 Ghastling 目錄"
 	},
 	"drop.symlink_method.copy_detail": {
-		"message": "實例檔案將被複製到 Axolotl"
+		"message": "實例檔案將被複製到 Ghastling"
 	},
 	"drop.symlink_method.symlink_title": {
 		"message": "符號連結"
@@ -6246,7 +6246,7 @@
 		"message": "引用原始位置"
 	},
 	"drop.symlink_method.symlink_detail": {
-		"message": "實例檔案保留在原始位置，Axolotl 透過符號連結引用。節省磁碟空間。"
+		"message": "實例檔案保留在原始位置，Ghastling 透過符號連結引用。節省磁碟空間。"
 	},
 	"drop.symlink_method.requires_admin": {
 		"message": "需要管理員權限"

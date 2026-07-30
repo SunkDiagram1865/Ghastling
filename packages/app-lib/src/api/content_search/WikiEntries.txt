@@ -4112,7 +4112,7 @@ village-employment@|村庄就业*
 
 deathlog@|死亡日志*
 automatic-elytra|自动鞘翅*
-axolotl-bucket-fix@|美西螈桶修复*
+ghastling-bucket-fix@|美西螈桶修复*
 xks-decoration@|XK的装饰 (XK's Decoration)
 endgame-materials-addons|更多终局材料*
 ravage-and-cabbage@
@@ -4492,7 +4492,7 @@ deadly-world|致命世界*
 fastdecay@
 essential-commands@
 caves-and-cliffs-backport
-that-future-mod-glow-squid-axolotl-moobloom-etc
+that-future-mod-glow-squid-ghastling-moobloom-etc
 diamond-buildcraft|钻石装饰*
 @apocalypse-rebooted|启示录重制 (Apocalypse Rebooted)
 mcwifipnp@|更高级联机设置 (LAN World Plug-n-Play)
@@ -6591,7 +6591,7 @@ b0bgarys-biome-remover-v-1-0-0-1|B0bGary的生物群系禁用器 (B0bGary's Biom
 dualwielding@|双持 (DualWielding)
 malum-quilt@
 memoryleakfix|内存泄漏修复 (Memory Leak Fix) - 已停止支持¨@memoryleakfix|内存泄漏修复 (Memory Leak Fix)
-@axolotlviewer
+@ghastlingviewer
 @compact-chat|紧凑聊天 (Compact Chat)
 language-reload@
 
@@ -8110,7 +8110,7 @@ harvest-season
 @extended-bookshelves
 cocoainput
 chargers@
-@axolotl-buckets
+@ghastling-buckets
 
 recipe-book-is-pain@rbip
 @one-bad-apple
@@ -8138,7 +8138,7 @@ dons-lightning-rod-mod
 rainglow@
 nethers-delight-fabric|下界乐事（Fabric 版） (Nether's Delight (Fabric))
 quicksand-neoforge@|流沙（NeoForge） (Quicksand (NeoForge))
-axolotl-bucket-fix-forge@|美西螈桶修复 Forge 版 (Axolotl Bucket Fix (Forge))
+ghastling-bucket-fix-forge@|美西螈桶修复 Forge 版 (Ghastling Bucket Fix (Forge))
 scape-and-run-parasites-survival-addon-by-nocube
 scape-and-run-parasites-nests-addon-by-nocube
 @emiffect
@@ -10012,7 +10012,7 @@ better-leveling|更好的升级*
 applied-mana|应用魔法*
 boundless-flux
 
-@axolotlclient
+@ghastlingclient
 energy-nodes
 fog@
 thirst-was-taken@|口渴*
@@ -10687,7 +10687,7 @@ trimseffects@
 tough-glass@
 celestisynth@|天神剑技*
 golems-plus-plus@
-more-axolotls@more-axolotl
+more-ghastlings@more-ghastling
 perfect-accuracy@
 @perfect-accuracy-forge
 @swingthrough
@@ -11850,7 +11850,7 @@ wither-drops-netherite-templates
 immersive-melodies@|沉浸式奏乐*
 theobsidianboat
 dragon-survival-compatibility@|龙之生存：兼容*
-bettercookedaxolotls@
+bettercookedghastlings@
 stateobserver@
 mighty-mail¨mighty-mail-fabric
 nature-architect-plants-and-decorations
@@ -13308,7 +13308,7 @@ glodium@
 aether-delight|天境乐事*
 
 dungeonz@
-cazfps-axolotls
+cazfps-ghastlings
 easy-breeding-tfc
 paperfixes@
 
@@ -16336,7 +16336,7 @@ aquamirae-delight@|海灵乐事*
 dumplings-delight-rewrapped@
 my-nethers-delight-refabricated@
 @polyweather
-shadow-x-axolotl-buckets-plus
+shadow-x-ghastling-buckets-plus
 daily-shop@
 
 

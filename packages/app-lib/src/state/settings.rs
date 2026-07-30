@@ -584,6 +584,9 @@ fn legacy_download_source(enabled: bool) -> DownloadSourceMode {
 /// [`AccentColor::Pink`], keeping older builds forward-compatible.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AccentColor {
+    Mikugreen,
+    Tianyiblue,
+    Ghastlinggray,
     Pink,
     Orange,
     Green,
@@ -595,6 +598,9 @@ pub enum AccentColor {
 impl AccentColor {
     pub fn as_str(&self) -> &str {
         match self {
+            AccentColor::Mikugreen => "mikugreen",
+            AccentColor::Tianyiblue => "tianyiblue",
+            AccentColor::Ghastlinggray => "ghastlinggray",
             AccentColor::Pink => "pink",
             AccentColor::Orange => "orange",
             AccentColor::Green => "green",
@@ -612,6 +618,9 @@ impl AccentColor {
 
     pub fn from_string(string: &str) -> AccentColor {
         match string {
+            "mikugreen" => AccentColor::Mikugreen,
+            "tianyiblue" => AccentColor::Tianyiblue,
+            "ghastlinggray" => AccentColor::Ghastlinggray,
             "orange" => AccentColor::Orange,
             "green" => AccentColor::Green,
             "blue" => AccentColor::Blue,

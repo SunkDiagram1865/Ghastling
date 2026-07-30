@@ -6,16 +6,16 @@ const { formatMessage } = useVIntl()
 
 const messages = defineMessages({
 	title: {
-		id: 'axolotl-site.update-rescue.title',
+		id: 'ghastling-site.update-rescue.title',
 		defaultMessage: 'Unable to check for updates through CNB on v1.2.2?',
 	},
 	description: {
-		id: 'axolotl-site.update-rescue.description',
+		id: 'ghastling-site.update-rescue.description',
 		defaultMessage:
 			'Open Settings → Updates, switch the channel to GitHub, and check again manually. After upgrading to v1.2.3, you can continue using the CNB channel normally.',
 	},
 	action: {
-		id: 'axolotl-site.update-rescue.action',
+		id: 'ghastling-site.update-rescue.action',
 		defaultMessage: 'View the latest release',
 	},
 })
@@ -30,7 +30,7 @@ const messages = defineMessages({
 				<span>{{ formatMessage(messages.description) }}</span>
 			</div>
 			<a
-				href="https://github.com/Mystic-Stars/Axolotl/releases/latest"
+				href="https://github.com/SunkDiagram1865/Ghastling/releases/latest"
 				target="_blank"
 				rel="noopener"
 			>

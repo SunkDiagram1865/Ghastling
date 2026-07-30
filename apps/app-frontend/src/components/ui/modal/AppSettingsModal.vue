@@ -33,7 +33,7 @@ import LanguageSettings from '@/components/ui/settings/LanguageSettings.vue'
 import ResourceManagementSettings from '@/components/ui/settings/ResourceManagementSettings.vue'
 import TranslationSettings from '@/components/ui/settings/TranslationSettings.vue'
 import UpdateSettings from '@/components/ui/settings/UpdateSettings.vue'
-import { AxolotlBrandConfig } from '@/config'
+import { GhastlingBrandConfig } from '@/config'
 import { get, set } from '@/helpers/settings.ts'
 import { injectAppUpdateDownloadProgress } from '@/providers/download-progress.ts'
 import { useTheming } from '@/store/state'
@@ -211,10 +211,10 @@ const messages = defineMessages({
 						}"
 						@click="devModeCount"
 					>
-						<img class="h-9 w-9 object-contain" src="@/assets/axolotl.png" alt="" />
+						<img class="h-9 w-9 object-contain" src="@/assets/ghastling.png" alt="" />
 					</button>
 					<div class="max-w-[200px]">
-						<p class="m-0">{{ AxolotlBrandConfig.productName }} {{ version }}</p>
+						<p class="m-0">{{ GhastlingBrandConfig.productName }} {{ version }}</p>
 						<p class="m-0">
 							<span v-if="osPlatform === 'macos'">macOS</span>
 							<span v-else class="capitalize">{{ osPlatform }}</span>

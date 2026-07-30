@@ -26,6 +26,8 @@ export interface FilePickerProvider {
 	pickImage: () => Promise<PickedFile | null>
 	/** Pick an uploaded or bundled instance icon when the platform provides a dedicated picker */
 	pickInstanceIcon?: () => Promise<PickedFile | null>
+	/** Set a built-in instance icon by its ID (e.g. 'grass-block', 'anvil') */
+	setBuiltInInstanceIcon?: (iconId: string) => Promise<PickedFile | null>
 	/** Pick one or more generic files */
 	pickFiles?: (options?: { multiple?: boolean }) => Promise<PickedFile[]>
 	/** Pick a folder (directory) — returns path only, no file content */

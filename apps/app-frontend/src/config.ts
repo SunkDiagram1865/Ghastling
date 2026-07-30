@@ -1,18 +1,17 @@
 const trimTrailingSlash = (url: string) => url.replace(/\/$/, '')
 
-export const AxolotlBrandConfig = Object.freeze({
+export const GhastlingBrandConfig = Object.freeze({
 	productName: 'Ghastling Launcher',
 	shortProductName: 'Ghastling',
-	organizationName: 'SunkDiagram1865',
-	shortOrganizationName: 'Sunk',
+	organizationName: 'Coffeepop Studio',
+	shortOrganizationName: 'GHS',
 	developerName: 'SunkDiagram1865',
-	website: 'https://github.com/SunkDiagram1865/Ghastling',
-	sourceUrl: 'https://github.com/SunkDiagram1865/Ghastling',
+	website: 'https://sunkdiagram1865.github.io/Ghastling/',
+	sourceUrl: 'https://www.ghs.red',
 	supportUrl: 'https://github.com/SunkDiagram1865/Ghastling/issues',
-	releaseUrl: 'https://github.com/SunkDiagram1865/Ghastling/releases',
 	qqGroupNumber: '208375315',
-	sponsorUrl: 'https://qm.qq.com/q/L1aiQTdReY',
-	bundleIdentifier: 'red.ghs.ghastling',
+	sponsorUrl: 'https://afdian.com/a/cysunk',
+	bundleIdentifier: 'com.cysunk.ghastling',
 	deepLinkScheme: 'ghastling',
 	userAgent: (version: string, os: string) => `garbage-human-studio/ghastling/${version} (${os})`,
 	capabilities: Object.freeze({

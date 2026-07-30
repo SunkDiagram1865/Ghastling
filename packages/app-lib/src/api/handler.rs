@@ -13,7 +13,7 @@ use urlencoding::decode;
 /// Handles external functions (such as through URL deep linkage)
 /// Link is extracted value (link) in somewhat URL format, such as
 /// subdomain1/subdomain2
-/// (Does not include axolotl://)
+/// (Does not include ghastling://)
 pub async fn handle_url(sublink: &str) -> crate::Result<CommandPayload> {
     Ok(match sublink.split_once('/') {
         // /mod/{id}   -    Installs a mod of mod id

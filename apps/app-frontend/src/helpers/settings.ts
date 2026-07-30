@@ -32,7 +32,7 @@ Memorysettings {
 
 */
 
-export type UpdateSource = 'cnb' | 'github'
+export type UpdateSource = 'github'
 export type DownloadSourceMode = 'auto' | 'official_only' | 'mirror_preferred'
 
 const UPDATE_SOURCE_STORAGE_KEY = 'ghastling-update-source'

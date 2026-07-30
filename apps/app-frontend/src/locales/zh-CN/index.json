@@ -165,10 +165,19 @@
 		"message": "橙色"
 	},
 	"app.appearance-settings.accent-color.pink": {
-		"message": "粉色"
+		"message": "美西螈粉"
 	},
 	"app.appearance-settings.accent-color.purple": {
 		"message": "紫色"
+	},
+	"app.appearance-settings.accent-color.mikugreen": {
+		"message": "初音绿"
+	},
+	"app.appearance-settings.accent-color.tianyiblue": {
+		"message": "天依蓝"
+	},
+	"app.appearance-settings.accent-color.ghastlinggray": {
+		"message": "乐魂灰"
 	},
 	"app.appearance-settings.accent-color.title": {
 		"message": "强调色"
@@ -180,7 +189,7 @@
 		"message": "高级渲染"
 	},
 	"app.appearance-settings.color-theme.description": {
-		"message": "为 Axolotl Launcher 选择偏好的色彩主题。"
+		"message": "为 Ghastling Launcher 选择偏好的色彩主题。"
 	},
 	"app.appearance-settings.color-theme.title": {
 		"message": "色彩主题"
@@ -387,10 +396,10 @@
 		"message": "如果您还有更多、更好的想法与建议，欢迎加入玩家交流 QQ 群："
 	},
 	"app.community-announcement.feedback-suffix": {
-		"message": " 中向我们提出。期待与大家共同完善 Axolotl Launcher！"
+		"message": " 中向我们提出。期待与大家共同完善 Ghastling Launcher！"
 	},
 	"app.community-announcement.response": {
-		"message": "自 Axolotl Launcher 在视频平台宣传以来，我们收获了远超预期的喜爱与关注，同时也收到了许多高质量的反馈与建议。"
+		"message": "自 Ghastling Launcher 在视频平台宣传以来，我们收获了远超预期的喜爱与关注，同时也收到了许多高质量的反馈与建议。"
 	},
 	"app.community-announcement.thanks": {
 		"message": "对于视频评论区里的留言，我都已尽可能地逐一回复。承蒙各位厚爱，在此表达最诚挚的感谢！"
@@ -669,7 +678,7 @@
 		"message": "调试信息"
 	},
 	"app.error.directory-description": {
-		"message": "Axolotl Launcher 无法迁移到所选目录。请联系支持获取帮助，或取消目录更改。"
+		"message": "Ghastling Launcher 无法迁移到所选目录。请联系支持获取帮助，或取消目录更改。"
 	},
 	"app.error.directory-title": {
 		"message": "无法更改应用目录"
@@ -687,7 +696,7 @@
 		"message": "与 Microsoft、Xbox 或 Minecraft 服务的连接被拒绝。这些服务可能被 hosts 文件阻止，请参考支持文章进行修复。"
 	},
 	"app.error.loader-description": {
-		"message": "Axolotl Launcher 无法找到此实例所需的加载器版本。"
+		"message": "Ghastling Launcher 无法找到此实例所需的加载器版本。"
 	},
 	"app.error.loader-fix": {
 		"message": "请使用下方按钮修复此实例。"
@@ -705,7 +714,7 @@
 		"message": "登录 Minecraft"
 	},
 	"app.error.network-description": {
-		"message": "Axolotl Launcher 连接 Microsoft 服务时遇到问题，这通常是网络连接不佳造成的。请重试；如果问题持续存在，请参考支持文章。"
+		"message": "Ghastling Launcher 连接 Microsoft 服务时遇到问题，这通常是网络连接不佳造成的。请重试；如果问题持续存在，请参考支持文章。"
 	},
 	"app.error.network-issues": {
 		"message": "网络问题"
@@ -726,7 +735,7 @@
 		"message": "正在使用 PC Game Pass、从基岩版转来，或刚刚购买游戏？"
 	},
 	"app.error.permissions-description": {
-		"message": "Axolotl Launcher 无法写入所选目录。请调整目录权限后重试，或取消目录更改。"
+		"message": "Ghastling Launcher 无法写入所选目录。请调整目录权限后重试，或取消目录更改。"
 	},
 	"app.error.permissions-title": {
 		"message": "更改目录权限"
@@ -744,7 +753,7 @@
 		"message": "空间不足"
 	},
 	"app.error.state-description": {
-		"message": "Axolotl Launcher 未能正确加载，可能有文件损坏或缺少必要文件。"
+		"message": "Ghastling Launcher 未能正确加载，可能有文件损坏或缺少必要文件。"
 	},
 	"app.error.state-fix-internet": {
 		"message": "检查网络连接，然后重启应用。"
@@ -756,7 +765,7 @@
 		"message": "重新下载并安装应用。"
 	},
 	"app.error.state-title": {
-		"message": "Axolotl Launcher 初始化失败"
+		"message": "Ghastling Launcher 初始化失败"
 	},
 	"app.error.support-article": {
 		"message": "支持文章"
@@ -828,7 +837,7 @@
 		"message": "继续游玩"
 	},
 	"app.home.welcome": {
-		"message": "欢迎使用 Axolotl Launcher！"
+		"message": "欢迎使用 Ghastling Launcher！"
 	},
 	"app.home.welcome-back": {
 		"message": "欢迎回来！"
@@ -1752,10 +1761,10 @@
 		"message": "浏览时直接翻译 Modrinth 项目的标题、摘要和介绍。保留原文、双语同屏，或者让译文站 C 位，都由你决定。"
 	},
 	"app.onboarding.translation.title": {
-		"message": "翻译，是 Axolotl 的拿手活"
+		"message": "翻译，是 Ghastling 的拿手活"
 	},
 	"app.onboarding.updates.description": {
-		"message": "决定 Axolotl 何时检查更新，以及是否替你安装。"
+		"message": "决定 Ghastling 何时检查更新，以及是否替你安装。"
 	},
 	"app.onboarding.updates.title": {
 		"message": "保持在线"
@@ -1851,7 +1860,7 @@
 		"message": "支持项目持续开发"
 	},
 	"app.settings.about.attribution": {
-		"message": "本程序由 Modrinth, Axolotl 开源项目修改而来。"
+		"message": "本程序由 Axolotl 开源项目修改而来。"
 	},
 	"app.settings.about.community-support": {
 		"message": "社区与支持"
@@ -1866,7 +1875,7 @@
 		"message": "复制群号"
 	},
 	"app.settings.about.developer": {
-		"message": "由 {developerName} 开发。"
+		"message": "由 {organizationName} 的 {developerName} 开发。"
 	},
 	"app.settings.about.mcmod-website": {
 		"message": "访问 MC 百科"
@@ -1902,13 +1911,7 @@
 		"message": "测试通知错误"
 	},
 	"app.settings.about.qq-group": {
-		"message": "加入 QQ 群"
-	},
-	"app.settings.about.qq-group-desc": {
-		"message": "{groupNumber}"
-	},
-	"app.settings.about.view-releases": {
-		"message": "查看完整更新日志"
+		"message": "玩家 QQ 群"
 	},
 	"app.settings.about.version": {
 		"message": "版本 {version}"
@@ -2151,7 +2154,7 @@
 		"message": "应用缓存"
 	},
 	"app.settings.resources.app-cache-description": {
-		"message": "Axolotl Launcher 会缓存数据以加快加载速度。清除缓存会强制应用重新加载数据，并可能暂时降低速度。"
+		"message": "Ghastling Launcher 会缓存数据以加快加载速度。清除缓存会强制应用重新加载数据，并可能暂时降低速度。"
 	},
 	"app.settings.resources.app-directory": {
 		"message": "应用目录"
@@ -2256,10 +2259,7 @@
 		"message": "CNB 渠道"
 	},
 	"app.settings.updates.description": {
-		"message": "Ghastling 通过 GitHub 发布检查启动器更新。"
-	},
-	"app.settings.updates.view-all": {
-		"message": "查看完整更新日志"
+		"message": "选择 Ghastling 检查启动器更新的渠道。"
 	},
 	"app.settings.updates.announcements.description": {
 		"message": "查看当前版本的更新内容和历史版本公告。"
@@ -2295,7 +2295,7 @@
 		"message": "更新渠道"
 	},
 	"app.settings.updates.up-to-date": {
-		"message": "Axolotl 已是最新版本。"
+		"message": "Ghastling 已是最新版本。"
 	},
 	"app.settings.tabs.about": {
 		"message": "关于"
@@ -2475,10 +2475,10 @@
 		"message": "登录"
 	},
 	"app.skins.sign-in.description": {
-		"message": "请登录您的 Minecraft 账号，以便使用 Axolotl Launcher 的皮肤管理功能。"
+		"message": "请登录您的 Minecraft 账号，以便使用 Ghastling Launcher 的皮肤管理功能。"
 	},
 	"app.skins.sign-in.rinthbot-alt": {
-		"message": "Axolotl Launcher"
+		"message": "Ghastling Launcher"
 	},
 	"app.skins.sign-in.title": {
 		"message": "请登录"
@@ -2649,19 +2649,19 @@
 		"message": "此版本暂未内置更新公告，请前往官网查看完整更新日志。"
 	},
 	"app.update-announcement.unknown-title": {
-		"message": "Axolotl Launcher 已更新"
+		"message": "Ghastling Launcher 已更新"
 	},
 	"app.update-announcement.version": {
 		"message": "版本 {version}"
 	},
 	"app.update-popup.body.download-complete": {
-		"message": "Axolotl Launcher v{version} 更新已下载完成！立即重启更新，或退出时自动安装。"
+		"message": "Ghastling Launcher v{version} 更新已下载完成！立即重启更新，或退出时自动安装。"
 	},
 	"app.update-popup.body.linux": {
-		"message": "Axolotl Launcher v{version} 现已发布。请使用你的软件包管理器进行更新，获取最新功能与修复！"
+		"message": "Ghastling Launcher v{version} 现已发布。请使用你的软件包管理器进行更新，获取最新功能与修复！"
 	},
 	"app.update-popup.body.metered": {
-		"message": "Axolotl Launcher v{version} 现已发布！由于你正在使用按流量计费的网络，该更新未自动下载。"
+		"message": "Ghastling Launcher v{version} 现已发布！由于你正在使用按流量计费的网络，该更新未自动下载。"
 	},
 	"app.update-popup.changelog": {
 		"message": "更新日志"
@@ -3336,7 +3336,7 @@
 		"message": "取消"
 	},
 	"drop.help.title": {
-		"message": "我可以拖入什么到 Axolotl？"
+		"message": "我可以拖入什么到 Ghastling？"
 	},
 	"drop.help.instances-title": {
 		"message": "启动器实例"
