@@ -35,7 +35,7 @@
 
 前往 [GitHub Releases](https://github.com/SunkDiagram1865/Ghastling/releases/latest) 下载适合当前系统的安装包：
 
-| 系统              | 安装包                 |
+| 系统              | 便携版                 |
 | ----------------- | ---------------------- |
 | Windows 10/11 x64 | Ghastling Launcher.exe |
 
@@ -81,11 +81,11 @@ Remove-Item -Recurse -Force target\debug
 
 ## 发布新版本
 
-发布由 [`.github/workflows/ghastling-release.yml`](https://github.com/Mystic-Stars/Axolotl/blob/main/.github/workflows/ghastling-release.yml) 自动完成。版本号以 Git 标签为准，必须符合语义化版本格式：
+发布由 [`.github/workflows/ghastling-release.yml`](https://github.com/SunkDiagram1865/Ghastling/blob/main/.github/workflows/ghastling-release.yml) 自动完成。版本号以 Git 标签为准，必须符合语义化版本格式：
 
 ```powershell
-git tag -a v1.2.3 -m "Ghastling Launcher 1.2.3"
-git push origin v1.2.3
+git tag -a v1.2 -m "Ghastling Launcher 1.2"
+git push origin v1.2
 ```
 
 工作流会依次完成：
