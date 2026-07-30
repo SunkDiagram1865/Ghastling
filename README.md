@@ -33,14 +33,14 @@
 
 ## 下载与安装
 
-前往 [GitHub Releases](https://github.com/SunkDiagram1865/Ghastling/releases/) 下载适合当前系统的安装包：
+前往 [GitHub Releases](https://github.com/SunkDiagram1865/Ghastling/releases/) 下载 `Ghastling Launcher.exe`：
 
-| 作用                                 | 文件名称                                                   |
-| ------------------------------------ | ---------------------------------------------------------- |
-| Windows 便携版可执行文件             | Ghastling Launcher.exe                                     |
-| Tauri 用于更新的数据包               | Ghastling Launcher_<版本号>_x86_64-pc-windows-msvc.bin     |
-| 更新数据包的签名文件                 | Ghastling Launcher_<版本号>_x86_64-pc-windows-msvc.bin.sig |
-| 更新清单，包含版本号、下载链接和签名 | latest.json                                                |
+| 作用                                 | 文件名称                             |
+| ------------------------------------ | ------------------------------------ |
+| Windows 便携版可执行文件             | Ghastling Launcher.exe               |
+| Tauri 用于更新的数据包               | Ghastling Launcher_x.x.x_x64.zip     |
+| 更新数据包的签名文件                 | Ghastling Launcher_x.x.x_x64.zip.sig |
+| 更新清单，包含版本号、下载链接和签名 | latest.json                          |
 
 
 
