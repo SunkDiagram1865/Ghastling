@@ -87,8 +87,8 @@ Remove-Item -Recurse -Force target\debug
 发布由 [`.github/workflows/ghastling-release.yml`](https://github.com/SunkDiagram1865/Ghastling/blob/main/.github/workflows/ghastling-release.yml) 自动完成。版本号以 Git 标签为准，必须符合语义化版本格式：
 
 ```powershell
-git tag -a v1.2 -m "Ghastling Launcher 1.2"
-git push origin v1.2
+git tag -a v1.23 -m "Ghastling Launcher 1.2.3"
+git push origin v1.2.3
 ```
 
 工作流会依次完成：
