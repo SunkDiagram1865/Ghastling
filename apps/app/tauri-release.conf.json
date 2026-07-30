@@ -1,7 +1,7 @@
 {
 	"bundle": {
 		"createUpdaterArtifacts": true,
-		"targets": []
+		"targets": ["nsis"]
 	},
 	"build": {
 		"features": ["updater"]

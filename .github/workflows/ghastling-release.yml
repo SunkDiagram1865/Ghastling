@@ -130,16 +130,23 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          BUNDLE_DIR="apps/app/target/release/bundle/nsis"
 
-          # 便携版 EXE（不带版本号）
-          cp "apps/app/target/release/Ghastling Launcher.exe" "Ghastling Launcher.exe"
+          # 便携版 EXE（不带版本号）— workspace target 在仓库根目录
+          EXE_SRC=$(find target/release -maxdepth 1 -name "Ghastling Launcher.exe" | head -1)
+          if [[ -z "$EXE_SRC" ]]; then
+            echo "Error: Could not find Ghastling Launcher.exe in target/release/"
+            ls -la target/release/ || true
+            exit 1
+          fi
+          cp "$EXE_SRC" "Ghastling Launcher.exe"
           gh release upload "${GITHUB_REF_NAME}" "Ghastling Launcher.exe" --clobber
 
-          # 更新包（重命名去掉 -setup）
+          # 更新包 zip + 签名 — 在 bundle/nsis 目录下
+          BUNDLE_DIR="target/release/bundle/nsis"
           ZIP_SRC=$(find "$BUNDLE_DIR" -name "*.zip" ! -name "*.sig" | head -1)
           if [[ -z "$ZIP_SRC" ]]; then
             echo "Error: Could not find updater zip in $BUNDLE_DIR"
+            ls -la "$BUNDLE_DIR" || true
             exit 1
           fi
 
