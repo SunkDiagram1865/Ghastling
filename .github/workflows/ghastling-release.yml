@@ -139,11 +139,7 @@ jobs:
             exit 1
           fi
 
-          # 2. 上传便携版 EXE（不带版本号）
-          cp "$EXE_SRC" "Ghastling Launcher.exe"
-          gh release upload "${GITHUB_REF_NAME}" "Ghastling Launcher.exe" --clobber
-
-          # 3. 打包更新 zip（zip 内只有 Ghastling Launcher.exe）
+          # 2. 打包更新 zip（zip 内只有 Ghastling Launcher.exe）
           ZIP_NAME="Ghastling_${VERSION}_x64.zip"
           mkdir -p updater-stage
           cp "$EXE_SRC" "updater-stage/Ghastling Launcher.exe"
@@ -155,12 +151,12 @@ jobs:
           fi
           cd ..
 
-          # 4. 写入私钥临时文件（base64 解码）
+          # 3. 写入私钥临时文件（base64 解码）
           KEY_TMP="$(mktemp /tmp/ghastling-sign-key.XXXXXX)"
           SIG_TMP="${KEY_TMP}.sig"
           printf '%s' "$TAURI_SIGNING_PRIVATE_KEY" | base64 -d > "$KEY_TMP"
 
-          # 5. 下载 minisign 并签名（签名密码通过环境变量）
+          # 4. 下载 minisign 并签名（签名密码通过环境变量）
           if ! command -v minisign >/dev/null 2>&1; then
             MINISIGN_VER="0.11"
             curl -fsSL -o /tmp/minisign.zip \
@@ -176,10 +172,10 @@ jobs:
             || minisign -S -s "$KEY_TMP" -W -c "Ghastling ${VERSION} updater zip" \
                 -m "${ZIP_NAME}" -x "${SIG_NAME}"
 
-          # 6. 上传 zip + sig
+          # 5. 上传 zip + sig
           gh release upload "${GITHUB_REF_NAME}" "${ZIP_NAME}" "${SIG_NAME}" --clobber
 
-          # 7. 清理
+          # 6. 清理
           rm -f "$KEY_TMP" "$SIG_TMP"
           rm -rf updater-stage /tmp/minisign-bin /tmp/minisign.zip /tmp/ghastling-sign-key.*
 
