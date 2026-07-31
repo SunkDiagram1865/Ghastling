@@ -116,53 +116,72 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           projectPath: apps/app
           tauriScript: pnpm tauri
           args: ${{ matrix.args }}
           retryAttempts: 2
 
-      - name: Rename and upload release assets
+      - name: Package updater zip and sign
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
 
-          # 便携版 EXE（不带版本号）— workspace target 在仓库根目录
+          # 1. 找到便携版 EXE
           EXE_SRC=$(find target/release -maxdepth 1 -name "Ghastling Launcher.exe" | head -1)
           if [[ -z "$EXE_SRC" ]]; then
             echo "Error: Could not find Ghastling Launcher.exe in target/release/"
             ls -la target/release/ || true
             exit 1
           fi
+
+          # 2. 上传便携版 EXE（不带版本号）
           cp "$EXE_SRC" "Ghastling Launcher.exe"
           gh release upload "${GITHUB_REF_NAME}" "Ghastling Launcher.exe" --clobber
 
-          # 更新包 zip + 签名 — v1Compatible 生成 *.nsis.zip
-          BUNDLE_DIR="target/release/bundle/nsis"
-          ZIP_SRC=$(find "$BUNDLE_DIR" -name "*.nsis.zip" ! -name "*.sig" | head -1)
-          if [[ -z "$ZIP_SRC" ]]; then
-            echo "Error: Could not find updater zip in $BUNDLE_DIR"
-            ls -la "$BUNDLE_DIR" || true
-            exit 1
+          # 3. 打包更新 zip（zip 内只有 Ghastling Launcher.exe）
+          ZIP_NAME="Ghastling_${VERSION}_x64.zip"
+          mkdir -p updater-stage
+          cp "$EXE_SRC" "updater-stage/Ghastling Launcher.exe"
+          cd updater-stage
+          if command -v zip >/dev/null 2>&1; then
+            zip -9 "../${ZIP_NAME}" "Ghastling Launcher.exe"
+          else
+            powershell -NoProfile -Command "Compress-Archive -Path 'Ghastling Launcher.exe' -DestinationPath '../${ZIP_NAME}' -Force"
+          fi
+          cd ..
+
+          # 4. 写入私钥临时文件（base64 解码）
+          KEY_TMP="$(mktemp /tmp/ghastling-sign-key.XXXXXX)"
+          SIG_TMP="${KEY_TMP}.sig"
+          printf '%s' "$TAURI_SIGNING_PRIVATE_KEY" | base64 -d > "$KEY_TMP"
+
+          # 5. 下载 minisign 并签名（签名密码通过环境变量）
+          if ! command -v minisign >/dev/null 2>&1; then
+            MINISIGN_VER="0.11"
+            curl -fsSL -o /tmp/minisign.zip \
+              "https://github.com/jedisct1/minisign/releases/download/${MINISIGN_VER}/minisign-${MINISIGN_VER}-win64.zip"
+            unzip -jo /tmp/minisign.zip -d /tmp/minisign-bin
+            export PATH="/tmp/minisign-bin:$PATH"
           fi
 
-          SIG_SRC="${ZIP_SRC}.sig"
-          if [[ ! -f "$SIG_SRC" ]]; then
-            echo "Error: Could not find signature file $SIG_SRC"
-            exit 1
-          fi
+          SIG_NAME="${ZIP_NAME}.sig"
+          echo "$TAURI_SIGNING_PRIVATE_KEY_PASSWORD" \
+            | minisign -S -s "$KEY_TMP" -c "Ghastling ${VERSION} updater zip" \
+                -m "${ZIP_NAME}" -x "${SIG_NAME}" 2>/dev/null \
+            || minisign -S -s "$KEY_TMP" -W -c "Ghastling ${VERSION} updater zip" \
+                -m "${ZIP_NAME}" -x "${SIG_NAME}"
 
-          NEW_ZIP="Ghastling Launcher_${VERSION}_x64.zip"
-          NEW_SIG="Ghastling Launcher_${VERSION}_x64.zip.sig"
+          # 6. 上传 zip + sig
+          gh release upload "${GITHUB_REF_NAME}" "${ZIP_NAME}" "${SIG_NAME}" --clobber
 
-          cp "$ZIP_SRC" "$NEW_ZIP"
-          cp "$SIG_SRC" "$NEW_SIG"
-
-          gh release upload "${GITHUB_REF_NAME}" "$NEW_ZIP" "$NEW_SIG" --clobber
+          # 7. 清理
+          rm -f "$KEY_TMP" "$SIG_TMP"
+          rm -rf updater-stage /tmp/minisign-bin /tmp/minisign.zip /tmp/ghastling-sign-key.*
 
   verify-and-publish:
     name: Verify and publish

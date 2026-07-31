@@ -17,23 +17,21 @@ if (!Array.isArray(assets)) {
 }
 
 // Ghastling only builds for Windows
-// Updater zip is named: Ghastling Launcher_{version}_x64.zip
+// Updater zip is named: Ghastling_{version}_x64.zip
 const targets = [
 	{
 		platforms: ['windows-x86_64'],
-		assetSuffix: '_x64.zip',
+		assetMatch: /^Ghastling_[\d.]+_x64\.zip$/,
 	},
 ]
 
 const platforms = {}
 
 for (const target of targets) {
-	const matches = assets.filter(
-		(asset) => asset.name?.endsWith(target.assetSuffix) && !asset.name?.endsWith('.sig'),
-	)
+	const matches = assets.filter((asset) => target.assetMatch?.test(asset.name ?? ''))
 	if (matches.length !== 1) {
 		throw new Error(
-			`Expected one release asset ending in ${target.assetSuffix}, found ${matches.length}`,
+			`Expected one release asset matching ${target.assetMatch}, found ${matches.length}`,
 		)
 	}
 
