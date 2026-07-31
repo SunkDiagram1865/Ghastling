@@ -1,7 +1,7 @@
 <template>
 	<span class="wordmark">
-		<img src="/ghastling.png" alt="" />
-		<span>Ghastling</span>
+		<img src="/axolotl.png" alt="" />
+		<span>Axolotl</span>
 	</span>
 </template>
 

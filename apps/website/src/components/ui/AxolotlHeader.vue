@@ -7,7 +7,7 @@ import XIcon from '@modrinth/assets/icons/x.svg?component'
 import ButtonStyled from '@modrinth/ui/src/components/base/ButtonStyled.vue'
 import { defineMessages, useVIntl } from '@modrinth/ui/src/composables/i18n.ts'
 
-import GhastlingWordmark from '~/components/brand/GhastlingWordmark.vue'
+import AxolotlWordmark from '~/components/brand/AxolotlWordmark.vue'
 
 const emit = defineEmits<{
 	openSettings: []
@@ -17,20 +17,20 @@ const mobileMenuOpen = ref(false)
 const { formatMessage } = useVIntl()
 
 const messages = defineMessages({
-	home: { id: 'ghastling-site.navigation.home', defaultMessage: 'Ghastling Launcher home' },
-	primary: { id: 'ghastling-site.navigation.primary', defaultMessage: 'Primary navigation' },
-	mobile: { id: 'ghastling-site.navigation.mobile', defaultMessage: 'Mobile navigation' },
-	features: { id: 'ghastling-site.navigation.features', defaultMessage: 'Features' },
-	faq: { id: 'ghastling-site.navigation.faq', defaultMessage: 'FAQ' },
-	changelog: { id: 'ghastling-site.navigation.changelog', defaultMessage: 'Changelog' },
-	openSource: { id: 'ghastling-site.navigation.open-source', defaultMessage: 'Open source' },
-	download: { id: 'ghastling-site.navigation.download', defaultMessage: 'Download' },
+	home: { id: 'axolotl-site.navigation.home', defaultMessage: 'Axolotl Launcher home' },
+	primary: { id: 'axolotl-site.navigation.primary', defaultMessage: 'Primary navigation' },
+	mobile: { id: 'axolotl-site.navigation.mobile', defaultMessage: 'Mobile navigation' },
+	features: { id: 'axolotl-site.navigation.features', defaultMessage: 'Features' },
+	faq: { id: 'axolotl-site.navigation.faq', defaultMessage: 'FAQ' },
+	changelog: { id: 'axolotl-site.navigation.changelog', defaultMessage: 'Changelog' },
+	openSource: { id: 'axolotl-site.navigation.open-source', defaultMessage: 'Open source' },
+	download: { id: 'axolotl-site.navigation.download', defaultMessage: 'Download' },
 	openSettings: {
-		id: 'ghastling-site.navigation.open-settings',
+		id: 'axolotl-site.navigation.open-settings',
 		defaultMessage: 'Open display settings',
 	},
-	openMenu: { id: 'ghastling-site.navigation.open-menu', defaultMessage: 'Open navigation' },
-	closeMenu: { id: 'ghastling-site.navigation.close-menu', defaultMessage: 'Close navigation' },
+	openMenu: { id: 'axolotl-site.navigation.open-menu', defaultMessage: 'Open navigation' },
+	closeMenu: { id: 'axolotl-site.navigation.close-menu', defaultMessage: 'Close navigation' },
 })
 
 function openSettings() {
@@ -47,7 +47,7 @@ function openSettings() {
 				:aria-label="formatMessage(messages.home)"
 				class="brand-link button-animation"
 			>
-				<GhastlingWordmark />
+				<AxolotlWordmark />
 			</NuxtLink>
 
 			<nav class="desktop-navigation" :aria-label="formatMessage(messages.primary)">

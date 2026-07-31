@@ -1,35 +1,35 @@
 <script setup lang="ts">
 import { defineMessages, useVIntl } from '@modrinth/ui/src/composables/i18n.ts'
 
-import GhastlingWordmark from '~/components/brand/GhastlingWordmark.vue'
+import AxolotlWordmark from '~/components/brand/AxolotlWordmark.vue'
 
 const { formatMessage } = useVIntl()
 
 const messages = defineMessages({
-	home: { id: 'ghastling-site.navigation.home', defaultMessage: 'Ghastling Launcher home' },
-	features: { id: 'ghastling-site.navigation.features', defaultMessage: 'Features' },
-	faq: { id: 'ghastling-site.navigation.faq', defaultMessage: 'FAQ' },
-	downloads: { id: 'ghastling-site.footer.downloads', defaultMessage: 'Downloads' },
-	changelog: { id: 'ghastling-site.footer.release-history', defaultMessage: 'Changelog' },
-	sourceCode: { id: 'ghastling-site.footer.source-code', defaultMessage: 'GitHub' },
+	home: { id: 'axolotl-site.navigation.home', defaultMessage: 'Axolotl Launcher home' },
+	features: { id: 'axolotl-site.navigation.features', defaultMessage: 'Features' },
+	faq: { id: 'axolotl-site.navigation.faq', defaultMessage: 'FAQ' },
+	downloads: { id: 'axolotl-site.footer.downloads', defaultMessage: 'Downloads' },
+	changelog: { id: 'axolotl-site.footer.release-history', defaultMessage: 'Changelog' },
+	sourceCode: { id: 'axolotl-site.footer.source-code', defaultMessage: 'GitHub' },
 	description: {
-		id: 'ghastling-site.footer.description',
+		id: 'axolotl-site.footer.description',
 		defaultMessage: 'A free and open-source Minecraft launcher for Windows, macOS, and Linux.',
 	},
 	qqGroup: {
-		id: 'ghastling-site.footer.qq-group',
+		id: 'axolotl-site.footer.qq-group',
 		defaultMessage: 'Official QQ group',
 	},
 	openSourcePrefix: {
-		id: 'ghastling-site.footer.open-source-prefix',
-		defaultMessage: 'Ghastling is',
+		id: 'axolotl-site.footer.open-source-prefix',
+		defaultMessage: 'Axolotl is',
 	},
 	openSourceLink: {
-		id: 'ghastling-site.footer.open-source-link',
+		id: 'axolotl-site.footer.open-source-link',
 		defaultMessage: 'open source',
 	},
 	disclaimer: {
-		id: 'ghastling-site.footer.minecraft-disclaimer',
+		id: 'axolotl-site.footer.minecraft-disclaimer',
 		defaultMessage:
 			'NOT AN OFFICIAL MINECRAFT SERVICE. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.',
 	},
@@ -42,12 +42,12 @@ const messages = defineMessages({
 			<div class="footer-main">
 				<div class="footer-brand">
 					<NuxtLink to="/" :aria-label="formatMessage(messages.home)" class="button-animation">
-						<GhastlingWordmark />
+						<AxolotlWordmark />
 					</NuxtLink>
 					<p>{{ formatMessage(messages.description) }}</p>
 					<div class="qq-group">
 						<span>{{ formatMessage(messages.qqGroup) }}</span>
-						<strong>208375315</strong>
+						<strong>955605306</strong>
 					</div>
 				</div>
 
@@ -63,7 +63,7 @@ const messages = defineMessages({
 			</div>
 
 			<div class="footer-bottom">
-				<p>© {{ new Date().getFullYear() }} Coffeepop Studio</p>
+				<p>© {{ new Date().getFullYear() }} Garbage Human Studio</p>
 				<p class="open-source">
 					{{ formatMessage(messages.openSourcePrefix) }}
 					<a href="https://github.com/SunkDiagram1865/Ghastling" target="_blank" rel="noopener">

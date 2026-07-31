@@ -34,8 +34,8 @@ const downloadMac = ref<HTMLAnchorElement | null>(null)
 const downloadSection = ref<HTMLElement | null>(null)
 
 const { resolvedSource } = useDownloadSource()
-const CNB_RELEASE_BASE_URL = 'https://cnb.cool/ghastling/Ghastling/-/releases/download'
-const CNB_RELEASES_URL = 'https://cnb.cool/ghastling/Ghastling/-/releases'
+const CNB_RELEASE_BASE_URL = 'https://cnb.cool/axlmc/Axolotl/-/releases/download'
+const CNB_RELEASES_URL = 'https://cnb.cool/axlmc/Axolotl/-/releases'
 const GITHUB_RELEASES_URL = 'https://github.com/SunkDiagram1865/Ghastling/releases/latest'
 const releasePageUrl = computed(() =>
 	resolvedSource.value === 'cnb' ? CNB_RELEASES_URL : GITHUB_RELEASES_URL,
@@ -251,129 +251,129 @@ const { formatMessage, locale } = useVIntl()
 
 const messages = defineMessages({
 	openSourceBadge: {
-		id: 'ghastling-marketing.hero.open-source',
+		id: 'axolotl-marketing.hero.open-source',
 		defaultMessage: 'Open source',
 	},
 	oneLauncher: {
-		id: 'ghastling-marketing.demo.one-launcher',
+		id: 'axolotl-marketing.demo.one-launcher',
 		defaultMessage: 'One launcher. Every world.',
 	},
 	everythingTogether: {
-		id: 'ghastling-marketing.demo.everything-together',
+		id: 'axolotl-marketing.demo.everything-together',
 		defaultMessage: 'Profiles, mods, saves, and settings stay together.',
 	},
 	includedMods: {
-		id: 'ghastling-marketing.demo.included-mods',
+		id: 'axolotl-marketing.demo.included-mods',
 		defaultMessage: 'Included mods',
 	},
-	downloadGhastling: {
-		id: 'ghastling-marketing.hero.download',
-		defaultMessage: 'Meet Ghastling Launcher',
+	downloadAxolotl: {
+		id: 'axolotl-marketing.hero.download',
+		defaultMessage: 'Meet Axolotl Launcher',
 	},
-	downloadGhastlingForOs: {
-		id: 'ghastling-marketing.hero.download-for-os',
-		defaultMessage: 'Ghastling Launcher for {os}',
+	downloadAxolotlForOs: {
+		id: 'axolotl-marketing.hero.download-for-os',
+		defaultMessage: 'Axolotl Launcher for {os}',
 	},
 	description: {
 		id: 'app-marketing.hero.description',
 		defaultMessage:
-			'Built on the Modrinth ecosystem, Ghastling gives you a cleaner, ad-free way to discover, translate, and play Minecraft your way.',
+			'Built on the Modrinth ecosystem, Axolotl gives you a cleaner, ad-free way to discover, translate, and play Minecraft your way.',
 	},
 	heroScreenshotAlt: {
-		id: 'ghastling-marketing.hero.screenshot-alt',
-		defaultMessage: 'Ghastling Launcher home screen.',
+		id: 'axolotl-marketing.hero.screenshot-alt',
+		defaultMessage: 'Axolotl Launcher home screen.',
 	},
 	builtOnModrinth: {
-		id: 'ghastling-marketing.highlights.eyebrow',
+		id: 'axolotl-marketing.highlights.eyebrow',
 		defaultMessage: 'Built on the Modrinth ecosystem',
 	},
 	highlightsTitle: {
-		id: 'ghastling-marketing.highlights.title',
+		id: 'axolotl-marketing.highlights.title',
 		defaultMessage: 'A different kind of launcher, built on Modrinth.',
 	},
 	highlightsDescription: {
-		id: 'ghastling-marketing.highlights.description',
+		id: 'axolotl-marketing.highlights.description',
 		defaultMessage:
 			'Explore trusted Minecraft content through Modrinth, then make the launcher truly yours with thoughtful features built around players.',
 	},
 	modrinthNative: {
-		id: 'ghastling-marketing.highlights.modrinth.title',
+		id: 'axolotl-marketing.highlights.modrinth.title',
 		defaultMessage: 'Modrinth, at the center',
 	},
 	modrinthNativeDescription: {
-		id: 'ghastling-marketing.highlights.modrinth.description',
+		id: 'axolotl-marketing.highlights.modrinth.description',
 		defaultMessage:
 			'Discover mods, modpacks, resource packs, shaders, and more from the Modrinth ecosystem without leaving your launcher.',
 	},
 	adFree: {
-		id: 'ghastling-marketing.highlights.ad-free.title',
+		id: 'axolotl-marketing.highlights.ad-free.title',
 		defaultMessage: 'No ads. No distractions.',
 	},
 	adFreeDescription: {
-		id: 'ghastling-marketing.highlights.ad-free.description',
+		id: 'axolotl-marketing.highlights.ad-free.description',
 		defaultMessage:
 			'A focused launcher experience with every screen reserved for your worlds, not advertising.',
 	},
 	localized: {
-		id: 'ghastling-marketing.highlights.localized.title',
+		id: 'axolotl-marketing.highlights.localized.title',
 		defaultMessage: 'Localized for real players',
 	},
 	localizedDescription: {
-		id: 'ghastling-marketing.highlights.localized.description',
+		id: 'axolotl-marketing.highlights.localized.description',
 		defaultMessage:
-			'Nearly every part of Ghastling is localized, with a complete Chinese experience and English ready whenever you need it.',
+			'Nearly every part of Axolotl is localized, with a complete Chinese experience and English ready whenever you need it.',
 	},
 	offlineAccounts: {
-		id: 'ghastling-marketing.showcase.offline.title',
+		id: 'axolotl-marketing.showcase.offline.title',
 		defaultMessage: 'Start with an offline account',
 	},
 	offlineAccountsDescription: {
-		id: 'ghastling-marketing.showcase.offline.description',
+		id: 'axolotl-marketing.showcase.offline.description',
 		defaultMessage:
 			'Create a local Minecraft identity in seconds. No premium account is needed to get started.',
 	},
-	offlineLabel: { id: 'ghastling-marketing.showcase.offline.label', defaultMessage: 'Offline' },
+	offlineLabel: { id: 'axolotl-marketing.showcase.offline.label', defaultMessage: 'Offline' },
 	themes: {
-		id: 'ghastling-marketing.showcase.themes.title',
+		id: 'axolotl-marketing.showcase.themes.title',
 		defaultMessage: 'A color theme for every setup',
 	},
 	themesDescription: {
-		id: 'ghastling-marketing.showcase.themes.description',
+		id: 'axolotl-marketing.showcase.themes.description',
 		defaultMessage:
 			'Switch between light, dark, OLED, and system modes—then choose an accent color that feels like yours.',
 	},
 	personalizeLabel: {
-		id: 'ghastling-marketing.showcase.themes.label',
+		id: 'axolotl-marketing.showcase.themes.label',
 		defaultMessage: 'Personalize',
 	},
 	translation: {
-		id: 'ghastling-marketing.showcase.translation.title',
+		id: 'axolotl-marketing.showcase.translation.title',
 		defaultMessage: 'Translate Modrinth as you explore',
 	},
 	translationDescription: {
-		id: 'ghastling-marketing.showcase.translation.description',
+		id: 'axolotl-marketing.showcase.translation.description',
 		defaultMessage:
 			'Translate project titles, summaries, and descriptions into the language you use, while keeping the original within reach.',
 	},
 	translateLabel: {
-		id: 'ghastling-marketing.showcase.translation.label',
+		id: 'axolotl-marketing.showcase.translation.label',
 		defaultMessage: 'Translate',
 	},
 	offlineScreenshotAlt: {
-		id: 'ghastling-marketing.showcase.offline.alt',
-		defaultMessage: 'Ghastling Launcher offline account dialog.',
+		id: 'axolotl-marketing.showcase.offline.alt',
+		defaultMessage: 'Axolotl Launcher offline account dialog.',
 	},
 	themesScreenshotAlt: {
-		id: 'ghastling-marketing.showcase.themes.alt',
-		defaultMessage: 'Ghastling Launcher theme customization settings.',
+		id: 'axolotl-marketing.showcase.themes.alt',
+		defaultMessage: 'Axolotl Launcher theme customization settings.',
 	},
 	translationScreenshotAlt: {
-		id: 'ghastling-marketing.showcase.translation.alt',
-		defaultMessage: 'Ghastling Launcher Modrinth translation settings.',
+		id: 'axolotl-marketing.showcase.translation.alt',
+		defaultMessage: 'Axolotl Launcher Modrinth translation settings.',
 	},
-	downloadGhastlingButton: {
-		id: 'ghastling-marketing.hero.download-button',
-		defaultMessage: 'Download Ghastling',
+	downloadAxolotlButton: {
+		id: 'axolotl-marketing.hero.download-button',
+		defaultMessage: 'Download Axolotl',
 	},
 	moreDownloadOptions: {
 		id: 'app-marketing.hero.more-download-options',
@@ -418,7 +418,7 @@ const messages = defineMessages({
 	modManagementDescription: {
 		id: 'app-marketing.features.mod-management.description',
 		defaultMessage:
-			'Ghastling keeps every mod, version, and instance organized. Install, remove, and update content without losing your place.',
+			'Axolotl keeps every mod, version, and instance organized. Install, remove, and update content without losing your place.',
 	},
 	playWithFavoriteMods: {
 		id: 'app-marketing.features.play.title',
@@ -466,9 +466,9 @@ const messages = defineMessages({
 		id: 'app-marketing.features.performance.ram',
 		defaultMessage: 'RAM',
 	},
-	ghastlingApp: {
-		id: 'ghastling-marketing.features.performance.ghastling-app',
-		defaultMessage: 'Ghastling Launcher',
+	axolotlApp: {
+		id: 'axolotl-marketing.features.performance.axolotl-app',
+		defaultMessage: 'Axolotl Launcher',
 	},
 	small: {
 		id: 'app-marketing.features.performance.small',
@@ -505,7 +505,7 @@ const messages = defineMessages({
 	performantDescription: {
 		id: 'app-marketing.features.performance.description',
 		defaultMessage:
-			'Ghastling stays out of your way with a responsive interface and a lightweight desktop core.',
+			'Axolotl stays out of your way with a responsive interface and a lightweight desktop core.',
 	},
 	websiteIntegration: {
 		id: 'app-marketing.features.website.title',
@@ -532,7 +532,7 @@ const messages = defineMessages({
 	openSourceDescription: {
 		id: 'app-marketing.features.open-source.description',
 		defaultMessage:
-			'Ghastling is fully open source. Inspect the code, follow development, or contribute on <github-link>GitHub</github-link>.',
+			'Axolotl is fully open source. Inspect the code, follow development, or contribute on <github-link>GitHub</github-link>.',
 	},
 	offlineMode: {
 		id: 'app-marketing.features.offline.title',
@@ -554,9 +554,9 @@ const messages = defineMessages({
 		id: 'app-marketing.download.options-title',
 		defaultMessage: 'Download options',
 	},
-	downloadGhastlingTitle: {
-		id: 'ghastling-marketing.download.title',
-		defaultMessage: 'Download Ghastling Launcher',
+	downloadAxolotlTitle: {
+		id: 'axolotl-marketing.download.title',
+		defaultMessage: 'Download Axolotl Launcher',
 	},
 	downloadDescription: {
 		id: 'app-marketing.download.description',
@@ -576,11 +576,11 @@ const messages = defineMessages({
 		defaultMessage: 'Linux',
 	},
 	downloadInstaller: {
-		id: 'ghastling-marketing.download.installer',
+		id: 'axolotl-marketing.download.installer',
 		defaultMessage: 'Download installer',
 	},
 	downloadAppImage: {
-		id: 'ghastling-marketing.download.appimage',
+		id: 'axolotl-marketing.download.appimage',
 		defaultMessage: 'Download the AppImage',
 	},
 	showOtherPackages: {
@@ -606,7 +606,7 @@ const messages = defineMessages({
 	downloadTerms: {
 		id: 'app-marketing.download.terms',
 		defaultMessage:
-			'Ghastling is free software released under <terms-link>GPL-3.0</terms-link>. Read the <privacy-link>project documentation</privacy-link> before installing.',
+			'Axolotl is free software released under <terms-link>GPL-3.0</terms-link>. Read the <privacy-link>project documentation</privacy-link> before installing.',
 	},
 	linuxDisclaimer: {
 		id: 'app-marketing.download.linux-disclaimer',
@@ -614,78 +614,78 @@ const messages = defineMessages({
 			'Linux packages are published with every release. Check the <issues-link>release page</issues-link> for architecture details or <prism-link>report an issue</prism-link> if your distribution needs extra setup.',
 	},
 	seoTitle: {
-		id: 'ghastling-site.seo.title',
-		defaultMessage: 'Ghastling Launcher - Free Open-Source Minecraft Launcher',
+		id: 'axolotl-site.seo.title',
+		defaultMessage: 'Axolotl Launcher - Free Open-Source Minecraft Launcher',
 	},
 	seoDescription: {
-		id: 'ghastling-site.seo.description',
+		id: 'axolotl-site.seo.description',
 		defaultMessage:
-			'Download Ghastling Launcher, a free, open-source and ad-free Minecraft launcher for Windows, macOS, and Linux with Modrinth integration, content translation, and offline accounts.',
+			'Download Axolotl Launcher, a free, open-source and ad-free Minecraft launcher for Windows, macOS, and Linux with Modrinth integration, content translation, and offline accounts.',
 	},
 	socialImageAlt: {
-		id: 'ghastling-site.seo.social-image-alt',
-		defaultMessage: 'Ghastling Launcher showing a Minecraft instance and its installed content.',
+		id: 'axolotl-site.seo.social-image-alt',
+		defaultMessage: 'Axolotl Launcher showing a Minecraft instance and its installed content.',
 	},
 	faqEyebrow: {
-		id: 'ghastling-site.faq.eyebrow',
+		id: 'axolotl-site.faq.eyebrow',
 		defaultMessage: 'Frequently asked questions',
 	},
 	faqTitle: {
-		id: 'ghastling-site.faq.title',
-		defaultMessage: 'Everything you need to know about Ghastling',
+		id: 'axolotl-site.faq.title',
+		defaultMessage: 'Everything you need to know about Axolotl',
 	},
 	faqDescription: {
-		id: 'ghastling-site.faq.description',
+		id: 'axolotl-site.faq.description',
 		defaultMessage: 'Learn about supported platforms, accounts, content, and downloads.',
 	},
 	faqPlatformsQuestion: {
-		id: 'ghastling-site.faq.platforms.question',
-		defaultMessage: 'Which operating systems does Ghastling Launcher support?',
+		id: 'axolotl-site.faq.platforms.question',
+		defaultMessage: 'Which operating systems does Axolotl Launcher support?',
 	},
 	faqPlatformsAnswer: {
-		id: 'ghastling-site.faq.platforms.answer',
+		id: 'axolotl-site.faq.platforms.answer',
 		defaultMessage:
-			'Ghastling Launcher supports Windows 10 and 11 on x64, macOS on Intel and Apple Silicon, and Linux x64 through AppImage, DEB, and RPM packages.',
+			'Axolotl Launcher supports Windows 10 and 11 on x64, macOS on Intel and Apple Silicon, and Linux x64 through AppImage, DEB, and RPM packages.',
 	},
 	faqFreeQuestion: {
-		id: 'ghastling-site.faq.free.question',
-		defaultMessage: 'Is Ghastling Launcher free and open source?',
+		id: 'axolotl-site.faq.free.question',
+		defaultMessage: 'Is Axolotl Launcher free and open source?',
 	},
 	faqFreeAnswer: {
-		id: 'ghastling-site.faq.free.answer',
+		id: 'axolotl-site.faq.free.answer',
 		defaultMessage:
-			'Yes. Ghastling Launcher is free software released under GPL-3.0. Its source code and release history are publicly available on GitHub.',
+			'Yes. Axolotl Launcher is free software released under GPL-3.0. Its source code and release history are publicly available on GitHub.',
 	},
 	faqAccountsQuestion: {
-		id: 'ghastling-site.faq.accounts.question',
+		id: 'axolotl-site.faq.accounts.question',
 		defaultMessage: 'Can I use Microsoft and offline Minecraft accounts?',
 	},
 	faqAccountsAnswer: {
-		id: 'ghastling-site.faq.accounts.answer',
+		id: 'axolotl-site.faq.accounts.answer',
 		defaultMessage:
-			'Yes. Ghastling supports Microsoft Minecraft accounts and local offline accounts, so you can choose the account type that fits how you play.',
+			'Yes. Axolotl supports Microsoft Minecraft accounts and local offline accounts, so you can choose the account type that fits how you play.',
 	},
 	faqContentQuestion: {
-		id: 'ghastling-site.faq.content.question',
-		defaultMessage: 'Where does Ghastling get mods and other Minecraft content?',
+		id: 'axolotl-site.faq.content.question',
+		defaultMessage: 'Where does Axolotl get mods and other Minecraft content?',
 	},
 	faqContentAnswer: {
-		id: 'ghastling-site.faq.content.answer',
+		id: 'axolotl-site.faq.content.answer',
 		defaultMessage:
-			'Ghastling uses the public Modrinth API to help you discover and manage mods, modpacks, resource packs, shaders, and other community content inside the launcher.',
+			'Axolotl uses the public Modrinth API to help you discover and manage mods, modpacks, resource packs, shaders, and other community content inside the launcher.',
 	},
 	faqDownloadQuestion: {
-		id: 'ghastling-site.faq.download.question',
-		defaultMessage: 'Where should I download Ghastling Launcher?',
+		id: 'axolotl-site.faq.download.question',
+		defaultMessage: 'Where should I download Axolotl Launcher?',
 	},
 	faqDownloadAnswer: {
-		id: 'ghastling-site.faq.download.answer',
+		id: 'axolotl-site.faq.download.answer',
 		defaultMessage:
 			'Use the download section on this official website. Automatic mode selects CNB for mainland China and GitHub elsewhere; you can change the source in website settings.',
 	},
 	appScreenshotAlt: {
 		id: 'app-marketing.hero.app-screenshot-alt',
-		defaultMessage: `Ghastling Launcher instance content preview.`,
+		defaultMessage: `Axolotl Launcher instance content preview.`,
 	},
 	gdlauncherAlt: {
 		id: 'app-marketing.features.importing.gdlauncher-alt',
@@ -737,7 +737,7 @@ const structuredData = computed(() => ({
 			'@type': 'WebSite',
 			'@id': `${canonicalUrl}#website`,
 			url: canonicalUrl,
-			name: 'Ghastling Launcher',
+			name: 'Axolotl Launcher',
 			description: description.value,
 			inLanguage: locale.value,
 			publisher: { '@id': `${canonicalUrl}#organization` },
@@ -745,11 +745,11 @@ const structuredData = computed(() => ({
 		{
 			'@type': 'Organization',
 			'@id': `${canonicalUrl}#organization`,
-			name: 'SunkDiagram1865',
+			name: 'Mystic Stars',
 			url: canonicalUrl,
 			logo: {
 				'@type': 'ImageObject',
-				url: `${siteUrl}/ghastling.png`,
+				url: `${siteUrl}/axolotl.png`,
 				width: 256,
 				height: 256,
 			},
@@ -758,7 +758,7 @@ const structuredData = computed(() => ({
 		{
 			'@type': 'SoftwareApplication',
 			'@id': `${canonicalUrl}#software`,
-			name: 'Ghastling Launcher',
+			name: 'Axolotl Launcher',
 			description: description.value,
 			url: canonicalUrl,
 			downloadUrl: `${canonicalUrl}#download`,
@@ -792,15 +792,15 @@ useSeoMeta({
 	title: () => title.value,
 	description: () => description.value,
 	robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
-	author: 'SunkDiagram1865',
-	applicationName: 'Ghastling Launcher',
+	author: 'Mystic Stars',
+	applicationName: 'Axolotl Launcher',
 	themeColor: '#ff82b2',
 	colorScheme: 'dark light',
 	ogTitle: () => title.value,
 	ogDescription: () => description.value,
 	ogType: 'website',
 	ogUrl: canonicalUrl,
-	ogSiteName: 'Ghastling Launcher',
+	ogSiteName: 'Axolotl Launcher',
 	ogLocale: () => locale.value.replace('-', '_'),
 	ogLocaleAlternate: () => (locale.value === 'zh-CN' ? 'en_US' : 'zh_CN'),
 	ogImage: socialImageUrl,
@@ -818,7 +818,7 @@ useHead(() => ({
 	link: [{ rel: 'canonical', href: canonicalUrl }],
 	script: [
 		{
-			key: 'ghastling-structured-data',
+			key: 'axolotl-structured-data',
 			type: 'application/ld+json',
 			innerHTML: JSON.stringify(structuredData.value).replace(/</g, '\\u003c'),
 		},
@@ -837,8 +837,8 @@ useHead(() => ({
 			<h1 class="main-header max-w-[60rem]">
 				{{
 					os
-						? formatMessage(messages.downloadGhastlingForOs, { os: osName })
-						: formatMessage(messages.downloadGhastling)
+						? formatMessage(messages.downloadAxolotlForOs, { os: osName })
+						: formatMessage(messages.downloadAxolotl)
 				}}
 			</h1>
 			<p class="main-subheader">
@@ -850,7 +850,7 @@ useHead(() => ({
 						<LinuxIcon v-if="os === 'Linux'" />
 						<WindowsIcon v-else-if="os === 'Windows'" />
 						<AppleIcon v-else-if="os === 'Mac'" />
-						{{ formatMessage(messages.downloadGhastlingButton) }}
+						{{ formatMessage(messages.downloadAxolotlButton) }}
 					</button>
 				</ButtonStyled>
 				<ButtonStyled type="outlined" size="large">
@@ -871,10 +871,10 @@ useHead(() => ({
 			/>
 			<div class="bottom-transition" />
 		</div>
-		<section class="ghastling-highlights" aria-labelledby="ghastling-highlights-title">
+		<section class="axolotl-highlights" aria-labelledby="axolotl-highlights-title">
 			<div class="highlights-intro">
 				<span class="section-eyebrow">{{ formatMessage(messages.builtOnModrinth) }}</span>
-				<h2 id="ghastling-highlights-title">{{ formatMessage(messages.highlightsTitle) }}</h2>
+				<h2 id="axolotl-highlights-title">{{ formatMessage(messages.highlightsTitle) }}</h2>
 				<p>{{ formatMessage(messages.highlightsDescription) }}</p>
 			</div>
 
@@ -1027,7 +1027,7 @@ useHead(() => ({
 					</p>
 				</div>
 				<div class="feature gradient-border website">
-					<img class="website-logo" src="/ghastling.png" alt="" aria-hidden="true" />
+					<img class="website-logo" src="/axolotl.png" alt="" aria-hidden="true" />
 					<div class="projects-showcase">
 						<div v-for="(row, index) in rows" :key="index" class="row">
 							<div v-for="n in 2" :key="n" class="row__content" :class="{ offset: index % 2 }">
@@ -1115,11 +1115,7 @@ useHead(() => ({
 					<div class="description">
 						<IntlFormatted :message-id="messages.openSourceDescription">
 							<template #github-link="{ children }">
-								<a
-									href="https://github.com/SunkDiagram1865/Ghastling"
-									rel="noopener"
-									target="_blank"
-								>
+								<a href="https://github.com/SunkDiagram1865/Ghastling" rel="noopener" target="_blank">
 									<component :is="() => children" />
 								</a>
 							</template>
@@ -1310,7 +1306,7 @@ useHead(() => ({
 			<div class="section-badge">{{ formatMessage(messages.downloadOptions) }}</div>
 			<div class="section-subheader">
 				<div class="section-subheader-title">
-					{{ formatMessage(messages.downloadGhastlingTitle) }}
+					{{ formatMessage(messages.downloadAxolotlTitle) }}
 				</div>
 				<div class="section-subheader-description">
 					{{ formatMessage(messages.downloadDescription) }}
@@ -1429,11 +1425,7 @@ useHead(() => ({
 						</a>
 					</template>
 					<template #privacy-link="{ children }">
-						<a
-							href="https://github.com/SunkDiagram1865/Ghastling#readme"
-							target="_blank"
-							rel="noopener"
-						>
+						<a href="https://github.com/SunkDiagram1865/Ghastling#readme" target="_blank" rel="noopener">
 							<component :is="() => children" />
 						</a>
 					</template>
@@ -1587,7 +1579,7 @@ useHead(() => ({
 	}
 }
 
-.ghastling-highlights {
+.axolotl-highlights {
 	position: relative;
 	padding: 1rem 1.5rem;
 	background: var(--landing-transition-gradient-end);
@@ -1761,7 +1753,7 @@ useHead(() => ({
 	display: block;
 }
 
-:global(html.light-mode) .ghastling-highlights {
+:global(html.light-mode) .axolotl-highlights {
 	background: #f8f7f8;
 }
 
@@ -2135,7 +2127,7 @@ useHead(() => ({
 				border-radius: var(--radius-sm);
 				background-color: var(--color-button-bg);
 
-				&.ghastling {
+				&.axolotl {
 					background-color: var(--color-brand) !important;
 					border: 1px solid var(--color-accent-contrast) !important;
 
@@ -2710,7 +2702,7 @@ useHead(() => ({
 }
 
 @media screen and (max-width: 746px) {
-	.ghastling-highlights {
+	.axolotl-highlights {
 		padding: 0 1rem 1rem;
 	}
 

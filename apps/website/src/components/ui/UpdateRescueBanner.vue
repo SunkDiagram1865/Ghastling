@@ -6,16 +6,16 @@ const { formatMessage } = useVIntl()
 
 const messages = defineMessages({
 	title: {
-		id: 'ghastling-site.update-rescue.title',
+		id: 'axolotl-site.update-rescue.title',
 		defaultMessage: 'Unable to check for updates through CNB on v1.2.2?',
 	},
 	description: {
-		id: 'ghastling-site.update-rescue.description',
+		id: 'axolotl-site.update-rescue.description',
 		defaultMessage:
 			'Open Settings → Updates, switch the channel to GitHub, and check again manually. After upgrading to v1.2.3, you can continue using the CNB channel normally.',
 	},
 	action: {
-		id: 'ghastling-site.update-rescue.action',
+		id: 'axolotl-site.update-rescue.action',
 		defaultMessage: 'View the latest release',
 	},
 })
