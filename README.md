@@ -33,13 +33,13 @@
 
 ## 下载与安装
 
-前往 [GitHub Releases](https://github.com/SunkDiagram1865/Ghastling/releases/) 下载 `Ghastling Launcher_x.x.x_x64.zip`：
+前往 [GitHub Releases](https://github.com/SunkDiagram1865/Ghastling/releases/) 下载 `Ghastling_x.x.x_x64.zip`：
 
-| 作用                                 | 文件名称                    |
-| ------------------------------------ | --------------------------- |
-| Tauri 用于更新的数据包               | Ghastling_x.x.x_x64.zip     |
-| 更新数据包的签名文件                 | Ghastling_x.x.x_x64.zip.sig |
-| 更新清单，包含版本号、下载链接和签名 | latest.json                 |
+| 作用                                 | 文件名称                    | 下载    |
+| ------------------------------------ | --------------------------- | ------- |
+| Tauri 用于更新的数据包               | Ghastling_x.x.x_x64.zip     | **`√`** |
+| 更新数据包的签名文件                 | Ghastling_x.x.x_x64.zip.sig | **×**   |
+| 更新清单，包含版本号、下载链接和签名 | latest.json                 | **×**   |
 
 
 
@@ -56,7 +56,7 @@
 
 ```powershell
 corepack enable
-pnpm install --frozen-lockfile
+pnpm install
 pnpm app:dev
 ```
 
@@ -104,15 +104,16 @@ git push origin v1.2.3
 
 ## 仓库范围与上游 (Modrinth APP) 和分支 (Axolotl) 同步
 
-Ghastling 的产品改动主要位于：
+Ghastling 的产品改动文件位于：
 
+- `.github/workflows`
 - `apps/app-frontend`
 - `apps/app`
 - `packages/app-lib`
 - `scripts`
 - 上述包所需的共享 UI 与资源包
 
-Modrinth, Axolotl 网站和后端并不是 Ghastling 产品。`upstream` 远程指向 Modrinth 原仓库；上游更新应先审查影响再合并，不应使用强制推送覆盖 Ghastling 的提交历史。
+Modrinth 网站和后端并不是 Ghastling 产品。`upstream` 远程指向 Modrinth 原仓库；上游更新应先审查影响再合并，不应使用强制推送覆盖 Ghastling 的提交历史。
 
 
 
