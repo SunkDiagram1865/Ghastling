@@ -61,7 +61,7 @@ function openSettings() {
 					<NuxtLink to="/changelog">{{ formatMessage(messages.changelog) }}</NuxtLink>
 				</ButtonStyled>
 				<ButtonStyled type="transparent">
-					<a href="https://github.com/SunkDiagram1865/Ghastling" target="_blank" rel="noopener">
+					<a href="https://github.com/Mystic-Stars/Axolotl" target="_blank" rel="noopener">
 						<GithubIcon aria-hidden="true" />
 						{{ formatMessage(messages.openSource) }}
 					</a>
@@ -109,7 +109,7 @@ function openSettings() {
 					{{ formatMessage(messages.changelog) }}
 				</NuxtLink>
 				<a
-					href="https://github.com/SunkDiagram1865/Ghastling"
+					href="https://github.com/Mystic-Stars/Axolotl"
 					target="_blank"
 					rel="noopener"
 					@click="mobileMenuOpen = false"

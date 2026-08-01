@@ -56,7 +56,7 @@ const messages = defineMessages({
 					<NuxtLink to="/#faq">{{ formatMessage(messages.faq) }}</NuxtLink>
 					<a href="#download">{{ formatMessage(messages.downloads) }}</a>
 					<NuxtLink to="/changelog">{{ formatMessage(messages.changelog) }}</NuxtLink>
-					<a href="https://github.com/SunkDiagram1865/Ghastling" target="_blank" rel="noopener">
+					<a href="https://github.com/Mystic-Stars/Axolotl" target="_blank" rel="noopener">
 						{{ formatMessage(messages.sourceCode) }}
 					</a>
 				</nav>
@@ -66,7 +66,7 @@ const messages = defineMessages({
 				<p>© {{ new Date().getFullYear() }} Garbage Human Studio</p>
 				<p class="open-source">
 					{{ formatMessage(messages.openSourcePrefix) }}
-					<a href="https://github.com/SunkDiagram1865/Ghastling" target="_blank" rel="noopener">
+					<a href="https://github.com/Mystic-Stars/Axolotl" target="_blank" rel="noopener">
 						{{ formatMessage(messages.openSourceLink) }} </a
 					>.
 				</p>
