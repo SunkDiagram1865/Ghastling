@@ -45,10 +45,8 @@ fn create_announcer_socket() -> std::io::Result<Socket> {
     let socket = Socket::new(Domain::IPV4, Type::DGRAM, Some(Protocol::UDP))?;
     socket.set_multicast_loop_v4(true)?;
     socket.set_multicast_ttl_v4(4)?;
-    socket.bind(&SockAddr::from(SocketAddrV4::new(
-        Ipv4Addr::UNSPECIFIED,
-        0,
-    )))?;
+    socket
+        .bind(&SockAddr::from(SocketAddrV4::new(Ipv4Addr::UNSPECIFIED, 0)))?;
     Ok(socket)
 }
 
@@ -61,9 +59,11 @@ async fn run(port: u16) {
         }
     };
 
-    let target = SockAddr::from(SocketAddrV4::new(Ipv4Addr::new(224, 0, 2, 60), 4445));
+    let target =
+        SockAddr::from(SocketAddrV4::new(Ipv4Addr::new(224, 0, 2, 60), 4445));
     let message = format!("[MOTD]Ghastling Multiplayer[/MOTD][AD]{port}[/AD]");
-    let mut interval = tokio::time::interval(std::time::Duration::from_millis(1500));
+    let mut interval =
+        tokio::time::interval(std::time::Duration::from_millis(1500));
     interval.set_missed_tick_behavior(tokio::time::MissedTickBehavior::Skip);
 
     loop {
