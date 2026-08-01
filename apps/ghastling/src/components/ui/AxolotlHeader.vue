@@ -8,10 +8,13 @@ import ButtonStyled from '@modrinth/ui/src/components/base/ButtonStyled.vue'
 import { defineMessages, useVIntl } from '@modrinth/ui/src/composables/i18n.ts'
 
 import AxolotlWordmark from '~/components/brand/AxolotlWordmark.vue'
+import { useLatestRelease } from '~/composables/use-latest-release'
 
 const emit = defineEmits<{
 	openSettings: []
 }>()
+
+const { downloadUrl: latestDownloadUrl } = useLatestRelease()
 
 const mobileMenuOpen = ref(false)
 const { formatMessage } = useVIntl()
@@ -97,17 +100,13 @@ function openSettings() {
 			</nav>
 
 			<div class="header-actions">
-				<ButtonStyled color="brand" color-fill="background">
-					<a
-						href="https://github.com/SunkDiagram1865/Ghastling/releases/latest/download/Ghastling%20Launcher.exe"
-						target="_blank"
-						rel="noopener"
-					>
-						<DownloadIcon aria-hidden="true" />
-						{{ formatMessage(messages.download) }}
-					</a>
-				</ButtonStyled>
-				<ButtonStyled circular type="transparent">
+			<ButtonStyled color="brand" color-fill="background">
+				<a :href="latestDownloadUrl" target="_blank" rel="noopener">
+					<DownloadIcon aria-hidden="true" />
+					{{ formatMessage(messages.download) }}
+				</a>
+			</ButtonStyled>
+			<ButtonStyled circular type="transparent">
 					<button :aria-label="formatMessage(messages.openSettings)" @click="openSettings">
 						<SettingsIcon aria-hidden="true" />
 					</button>

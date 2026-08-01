@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { DownloadIcon } from '@modrinth/assets'
 import CompassIcon from '@modrinth/assets/icons/compass.svg?component'
 import EyeOffIcon from '@modrinth/assets/icons/eye-off.svg?component'
@@ -10,6 +10,9 @@ import ButtonStyled from '@modrinth/ui/src/components/base/ButtonStyled.vue'
 import Checkbox from '@modrinth/ui/src/components/base/Checkbox.vue'
 import IntlFormatted from '@modrinth/ui/src/components/base/IntlFormatted.vue'
 import { defineMessages, useVIntl } from '@modrinth/ui/src/composables/i18n.ts'
+import { useLatestRelease } from '~/composables/use-latest-release'
+
+const { downloadUrl: latestDownloadUrl } = useLatestRelease()
 
 const modManagementData = [
 	{
@@ -604,14 +607,14 @@ useHead(() => ({
 			</p>
 
 			<a
-				class="hero-download"
-				href="https://github.com/SunkDiagram1865/Ghastling/releases/latest/download/Ghastling%20Launcher.exe"
-				target="_blank"
-				rel="noopener"
-			>
-				<DownloadIcon aria-hidden="true" />
-				{{ formatMessage(messages.heroDownload) }}
-			</a>
+			class="hero-download"
+			:href="latestDownloadUrl"
+			target="_blank"
+			rel="noopener"
+		>
+			<DownloadIcon aria-hidden="true" />
+			{{ formatMessage(messages.heroDownload) }}
+		</a>
 
 			<img
 				class="hero-screenshot"
