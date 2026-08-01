@@ -81,7 +81,9 @@ Remove-Item -Recurse -Force target\debug
 
 
 
-## 发布新版本
+## 新版本更新
+
+### 发布新版本
 
 发布由 [`.github/workflows/ghastling-release.yml`](https://github.com/SunkDiagram1865/Ghastling/blob/main/.github/workflows/ghastling-release.yml) 自动完成。版本号以 Git 标签为准，必须符合语义化版本格式：
 
@@ -99,6 +101,21 @@ git push origin v1.2.3
 5. 校验成功后将草稿 Release 正式发布。
 
 预发布版本使用带后缀的标签，例如 `v1.2.3-beta.1`。自动更新公钥已固化在客户端中，私钥只保存在 GitHub Actions Secrets 中，不应提交到仓库。
+
+### 修改版本号
+
+修改由 [`scripts/ghastling/set-version.mjs`](https://github.com/SunkDiagram1865/Ghastling/blob/main/scripts/ghastling/set-version.mjs) 自动完成。会一次性同步三个文件，必须符合语义化版本格式：
+
+```powershell
+node scripts/ghastling/set-version.mjs v1.2.3
+```
+
+脚本会：
+
+1. 校验标签格式（必须形如 `v1.2.3` 或 `v1.2.3-beta.1`）
+2. 去掉 `v` 前缀，写入 `apps/app-frontend/package.json`
+3. 用正则替换 `apps/app/Cargo.toml` 和 `packages/app-lib/Cargo.toml` 里的 `version = "..."`
+4. 三个文件统一为新版本号
 
 
 
