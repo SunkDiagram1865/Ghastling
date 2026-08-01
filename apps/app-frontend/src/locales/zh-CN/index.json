@@ -2052,7 +2052,7 @@
 		"message": "复制群号"
 	},
 	"app.settings.about.developer": {
-		"message": "由 {developerName} 开发。"
+		"message": "由 {organizationName} 的 {developerName} 开发。"
 	},
 	"app.settings.about.mcmod-website": {
 		"message": "访问 MC 百科"
@@ -2440,6 +2440,9 @@
 	},
 	"app.settings.updates.checking": {
 		"message": "正在检查更新……"
+	},
+	"app.settings.updates.cnb": {
+		"message": "CNB 渠道"
 	},
 	"app.settings.updates.description": {
 		"message": "选择 Ghastling 检查启动器更新的渠道。"
