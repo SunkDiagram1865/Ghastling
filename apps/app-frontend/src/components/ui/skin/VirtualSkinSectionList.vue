@@ -19,6 +19,7 @@ import type { RenderResult } from '@/helpers/rendering/batch-skin-renderer.ts'
 import type { Skin } from '@/helpers/skins.ts'
 
 type SkinSectionKind = 'saved' | 'default'
+type SkinListTab = 'skins' | 'capes'
 type SkinLikeTextButtonExpose = {
 	getRootElement: () => HTMLElement | null | undefined
 }
@@ -84,7 +85,7 @@ const props = defineProps<{
 	isSkinActive: (skin: Skin) => boolean
 	isAddSkinButtonDragActive: boolean
 	readOnly?: boolean
-	activeTab?: 'saved' | 'default'
+	activeTab?: SkinListTab
 }>()
 
 const emit = defineEmits<{
@@ -142,27 +143,7 @@ const cardHeight = computed(
 )
 
 const sections = computed<SkinSection[]>(() => {
-	if (props.activeTab === 'saved') {
-		return [
-			{
-				key: 'saved-skins',
-				title: formatMessage(messages.savedSkinsSection),
-				kind: 'saved',
-				skins: props.savedSkins,
-			},
-		]
-	}
-
-	if (props.activeTab === 'default') {
-		return props.defaultSkinSections.map((section) => ({
-			key: defaultSkinSectionKey(section.title),
-			title: section.title,
-			kind: 'default' as const,
-			infoTooltip: section.infoTooltip,
-			skins: section.skins,
-		}))
-	}
-
+	// 'skins' 标签页同时显示已保存皮肤和官方皮肤
 	return [
 		{
 			key: 'saved-skins',
@@ -567,19 +548,7 @@ defineExpose({ getAddSkinButtonElement })
 						:disabled="readOnly"
 						:is-dragging="isDraggingSavedSkin"
 						@select="emit('select', skin)"
-					>
-						<template #overlay-buttons>
-							<ButtonStyled color="brand">
-								<button
-									:aria-label="formatMessage(messages.editSkinButton)"
-									class="pointer-events-auto"
-									@click.stop="(event: MouseEvent) => emit('edit', skin, event)"
-								>
-									<EditIcon /> {{ formatMessage(commonMessages.editButton) }}
-								</button>
-							</ButtonStyled>
-						</template>
-					</SkinButton>
+					/>
 				</div>
 			</Accordion>
 		</div>

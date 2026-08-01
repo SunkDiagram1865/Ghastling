@@ -320,6 +320,7 @@ const messages = defineMessages({
 						<InstanceIcon
 							:icon-path="icon"
 							:instance-id="instance.id"
+							:loader="instance.loader"
 							size="108px"
 							class="transition-[filter] group-hover:brightness-75"
 							no-shadow

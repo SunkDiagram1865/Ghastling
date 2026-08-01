@@ -126,7 +126,7 @@ export const DEFAULT_THEME_STORE: ThemeStore = {
 	transparentBackground: false,
 	transparentBackgroundOpacity: 55,
 	transparentBackgroundBlur: false,
-	sidebarInstanceCount: 0,
+	sidebarInstanceCount: 51,
 
 	devMode: false,
 	featureFlags: DEFAULT_FEATURE_FLAGS,

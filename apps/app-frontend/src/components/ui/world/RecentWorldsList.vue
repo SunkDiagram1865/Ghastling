@@ -338,6 +338,7 @@ onUnmounted(() => {
 					:instance-id="item.instance.id"
 					:instance-name="item.instance.name"
 					:instance-icon="item.instance.icon_path"
+					:instance-loader="item.instance.loader"
 					@refresh="
 						() =>
 							item.world.type === 'server'

@@ -15,6 +15,7 @@ pub mod process;
 pub mod settings;
 pub mod shortcuts;
 pub mod tags;
+pub mod terracotta;
 pub mod translation;
 pub mod utils;
 

@@ -18,10 +18,10 @@ const fullInstanceList = ref([])
 const instanceCount = computed(() => themeStore.sidebarInstanceCount)
 
 const recentInstances = computed(() => {
-	if (instanceCount.value > 0) {
-		return fullInstanceList.value.slice(0, instanceCount.value)
+	if (instanceCount.value > 50) {
+		return fullInstanceList.value
 	}
-	return fullInstanceList.value
+	return fullInstanceList.value.slice(0, instanceCount.value)
 })
 
 const getInstances = async () => {
@@ -67,6 +67,7 @@ onUnmounted(() => {
 			<InstanceIcon
 				:icon-path="instance.icon_path"
 				:instance-id="instance.id"
+				:loader="instance.loader"
 				size="28px"
 				:class="`transition-all ${instance.install_stage !== 'installed' ? `brightness-[0.25] scale-[0.85]` : `group-hover:brightness-75`}`"
 			/>

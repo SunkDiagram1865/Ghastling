@@ -1,7 +1,7 @@
 [package]
 name = "theseus"
 # The actual version is set by the theseus-build workflow on tagging
-version = "0.0.1"
+version = "0.0.2"
 edition.workspace = true
 
 [dependencies]
@@ -78,6 +78,7 @@ serde_with = { workspace = true }
 sha1_smol = { workspace = true }
 sha2 = { workspace = true }
 shlex = { workspace = true }
+socket2 = { workspace = true }
 sqlx = { workspace = true, features = [
 	"json",
 	"macros",

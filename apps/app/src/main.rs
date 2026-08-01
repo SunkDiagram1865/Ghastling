@@ -213,9 +213,7 @@ fn main() {
 
     let _log_guard = theseus::start_logger(&tauri_context.config().identifier);
 
-    tracing::info!(
-        "Initialized tracing subscriber. Loading Ghastling Launcher!"
-    );
+    tracing::info!("Initialized tracing subscriber. Loading Ghastling Launcher!");
 
     let mut builder = tauri::Builder::default();
 
@@ -344,6 +342,7 @@ fn main() {
         .plugin(api::drop::init())
         .plugin(api::files::init())
         .plugin(api::worlds::init())
+        .plugin(api::terracotta::init())
         .manage(PendingUpdateData::default())
         .invoke_handler(tauri::generate_handler![
             initialize_state,

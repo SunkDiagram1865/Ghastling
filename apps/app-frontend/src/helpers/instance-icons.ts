@@ -8,6 +8,46 @@ export interface BuiltInInstanceIcon {
 
 export const builtInInstanceIcons: BuiltInInstanceIcon[] = [
 	{
+		id: 'grass-block',
+		name: defineMessage({
+			id: 'app.instance.icon-picker.icon.grass-block',
+			defaultMessage: 'Grass Block',
+		}),
+		url: new URL('../assets/instance-icons/grass-block.png', import.meta.url).href,
+	},
+	{
+		id: 'anvil',
+		name: defineMessage({
+			id: 'app.instance.icon-picker.icon.anvil',
+			defaultMessage: 'Anvil',
+		}),
+		url: new URL('../assets/instance-icons/anvil.png', import.meta.url).href,
+	},
+	{
+		id: 'fabric',
+		name: defineMessage({
+			id: 'app.instance.icon-picker.icon.fabric',
+			defaultMessage: 'Fabric',
+		}),
+		url: new URL('../assets/instance-icons/Fabric.png', import.meta.url).href,
+	},
+	{
+		id: 'neoforge',
+		name: defineMessage({
+			id: 'app.instance.icon-picker.icon.neoforge',
+			defaultMessage: 'NeoForge',
+		}),
+		url: new URL('../assets/instance-icons/NeoForge.png', import.meta.url).href,
+	},
+	{
+		id: 'quilt',
+		name: defineMessage({
+			id: 'app.instance.icon-picker.icon.quilt',
+			defaultMessage: 'Quilt',
+		}),
+		url: new URL('../assets/instance-icons/Quilt.png', import.meta.url).href,
+	},
+	{
 		id: 'bread',
 		name: defineMessage({ id: 'app.instance.icon-picker.icon.bread', defaultMessage: 'Bread' }),
 		url: new URL('../assets/instance-icons/bread.png', import.meta.url).href,
@@ -95,14 +135,6 @@ export const builtInInstanceIcons: BuiltInInstanceIcon[] = [
 		url: new URL('../assets/instance-icons/gold-block.png', import.meta.url).href,
 	},
 	{
-		id: 'grass-block',
-		name: defineMessage({
-			id: 'app.instance.icon-picker.icon.grass-block',
-			defaultMessage: 'Grass Block',
-		}),
-		url: new URL('../assets/instance-icons/grass-block.png', import.meta.url).href,
-	},
-	{
 		id: 'iron-block',
 		name: defineMessage({
 			id: 'app.instance.icon-picker.icon.iron-block',
@@ -155,36 +187,20 @@ export const builtInInstanceIcons: BuiltInInstanceIcon[] = [
 		}),
 		url: new URL('../assets/instance-icons/water-bucket.png', import.meta.url).href,
 	},
-	{
-		id: 'anvil',
-		name: defineMessage({
-			id: 'app.instance.icon-picker.icon.anvil',
-			defaultMessage: 'Anvil',
-		}),
-		url: new URL('../assets/instance-icons/anvil.png', import.meta.url).href,
-	},
-	{
-		id: 'fabric',
-		name: defineMessage({
-			id: 'app.instance.icon-picker.icon.fabric',
-			defaultMessage: 'Fabric',
-		}),
-		url: new URL('../assets/instance-icons/Fabric.png', import.meta.url).href,
-	},
-	{
-		id: 'neoforge',
-		name: defineMessage({
-			id: 'app.instance.icon-picker.icon.neoforge',
-			defaultMessage: 'NeoForge',
-		}),
-		url: new URL('../assets/instance-icons/NeoForge.png', import.meta.url).href,
-	},
-	{
-		id: 'quilt',
-		name: defineMessage({
-			id: 'app.instance.icon-picker.icon.quilt',
-			defaultMessage: 'Quilt',
-		}),
-		url: new URL('../assets/instance-icons/Quilt.png', import.meta.url).href,
-	},
 ]
+
+const defaultLoaderIconMap: Record<string, string> = {
+	vanilla: 'grass-block',
+	forge: 'anvil',
+	fabric: 'fabric',
+	neoforge: 'neoforge',
+	quilt: 'quilt',
+	optifine: 'grass-block',
+}
+
+export function getDefaultIconForLoader(loader: string): string | undefined {
+	const iconId = defaultLoaderIconMap[loader]
+	if (!iconId) return undefined
+	const icon = builtInInstanceIcons.find((i) => i.id === iconId)
+	return icon?.url
+}

@@ -185,6 +185,7 @@ onUnmounted(() => unlisten())
 				size="48px"
 				:icon-path="instance.icon_path"
 				:instance-id="instance.id"
+				:loader="instance.loader"
 				:alt="instance.name"
 			/>
 			<div class="h-full flex items-center font-bold text-contrast leading-normal">
@@ -246,6 +247,7 @@ onUnmounted(() => unlisten())
 					size="48px"
 					:icon-path="instance.icon_path"
 					:instance-id="instance.id"
+					:loader="instance.loader"
 					:alt="instance.name"
 					:class="`transition-all ${modLoading || installing ? `brightness-[0.25] scale-[0.85]` : `group-hover:brightness-75`}`"
 				/>

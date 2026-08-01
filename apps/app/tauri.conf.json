@@ -115,7 +115,7 @@
 				"style-src": "'unsafe-inline' 'self'",
 				"script-src": "'self'",
 				"frame-src": "https://www.youtube.com https://www.youtube-nocookie.com https://discord.com 'self'",
-				"media-src": "https://*.githubusercontent.com"
+				"media-src": "'self' data: blob: https://*.githubusercontent.com"
 			}
 		}
 	}

@@ -9,6 +9,17 @@ import {
 } from '@modrinth/ui'
 import { ref } from 'vue'
 
+import AlibabaLogo from '@/assets/java-vendors/alibaba.png'
+import AmazonLogo from '@/assets/java-vendors/amazon.png'
+import AzulLogo from '@/assets/java-vendors/azul.png'
+import BellSoftLogo from '@/assets/java-vendors/bellsoft.png'
+import EclipseLogo from '@/assets/java-vendors/eclipse.png'
+import GraalVmLogo from '@/assets/java-vendors/graalvm.png'
+import IbmLogo from '@/assets/java-vendors/ibm.png'
+import JetBrainsLogo from '@/assets/java-vendors/jetbrains.png'
+import MicrosoftLogo from '@/assets/java-vendors/microsoft.png'
+import OracleLogo from '@/assets/java-vendors/oracle.png'
+import SapLogo from '@/assets/java-vendors/sap.png'
 import ModalWrapper from '@/components/ui/modal/ModalWrapper.vue'
 import { trackEvent } from '@/helpers/analytics'
 import { download_java, list_java_feed_vendors, list_java_feed_versions } from '@/helpers/jre'
@@ -43,6 +54,21 @@ const messages = defineMessages({
 })
 
 const emit = defineEmits(['downloaded'])
+
+// Java 发行商品牌信息：logo 图标与产品名
+const vendorBranding = {
+	Alibaba: { logo: AlibabaLogo, product: 'Dragonwell' },
+	Amazon: { logo: AmazonLogo, product: 'Corretto' },
+	Azul: { logo: AzulLogo, product: 'Zulu' },
+	BellSoft: { logo: BellSoftLogo, product: 'Liberica JDK' },
+	Eclipse: { logo: EclipseLogo, product: 'Temurin' },
+	GraalVM: { logo: GraalVmLogo, product: 'Community Edition' },
+	IBM: { logo: IbmLogo, product: 'Semeru' },
+	JetBrains: { logo: JetBrainsLogo, product: 'Runtime' },
+	Microsoft: { logo: MicrosoftLogo, product: 'OpenJDK' },
+	Oracle: { logo: OracleLogo, product: 'OpenJDK / GraalVM' },
+	SAP: { logo: SapLogo, product: 'SapMachine' },
+}
 
 const modal = ref(null)
 const loading = ref(false)
@@ -107,28 +133,55 @@ async function downloadVersion(info) {
 				<div v-else-if="vendors.length === 0" class="text-sm text-secondary py-4">
 					{{ formatMessage(messages.noVendors) }}
 				</div>
-				<div v-else class="grid grid-cols-3 gap-2">
+				<div v-else class="grid grid-cols-2 gap-2 sm:grid-cols-3">
 					<button
 						v-for="vendor in vendors"
 						:key="vendor"
-						class="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-button-border bg-button-bg hover:border-accent transition-colors cursor-pointer text-left"
+						class="flex items-center gap-3 px-3 py-2.5 rounded-lg border border-button-border bg-button-bg hover:border-accent transition-colors cursor-pointer text-left"
 						@click="selectVendor(vendor)"
 					>
 						<div
-							class="w-8 h-8 flex items-center justify-center rounded-full bg-button-bg border border-button-border shrink-0"
+							class="w-10 h-10 flex items-center justify-center overflow-hidden rounded-md p-1 bg-button-bg border border-button-border shrink-0"
 						>
-							<CoffeeIcon class="h-4 w-4" />
+							<img
+								v-if="vendorBranding[vendor]"
+								:src="vendorBranding[vendor].logo"
+								alt=""
+								class="w-full h-full object-contain"
+							/>
+							<CoffeeIcon v-else class="h-4 w-4" />
 						</div>
-						<span class="font-semibold text-sm">{{ vendor }}</span>
+						<span class="flex flex-col items-start gap-0.5 min-w-0 flex-1 leading-tight">
+							<span class="w-full truncate text-left text-sm font-semibold">{{ vendor }}</span>
+							<span
+								v-if="vendorBranding[vendor]"
+								class="w-full truncate text-left text-xs font-normal text-secondary"
+							>
+								{{ vendorBranding[vendor].product }}
+							</span>
+						</span>
 					</button>
 				</div>
 			</template>
 
 			<!-- Step 2: Version list -->
 			<template v-else>
-				<span class="font-semibold text-contrast">
-					{{ formatMessage(messages.selectVersion, { vendor: selectedVendor }) }}
-				</span>
+				<div class="flex items-center gap-3">
+					<div
+						class="w-10 h-10 flex items-center justify-center overflow-hidden rounded-md p-1 bg-button-bg border border-button-border shrink-0"
+					>
+						<img
+							v-if="vendorBranding[selectedVendor]"
+							:src="vendorBranding[selectedVendor].logo"
+							alt=""
+							class="w-full h-full object-contain"
+						/>
+						<CoffeeIcon v-else class="h-4 w-4" />
+					</div>
+					<span class="font-semibold text-contrast">
+						{{ formatMessage(messages.selectVersion, { vendor: selectedVendor }) }}
+					</span>
+				</div>
 				<div v-if="loading" class="flex items-center gap-2 text-sm text-secondary py-4">
 					<SpinnerIcon class="animate-spin h-4 w-4" /> {{ formatMessage(messages.loading) }}
 				</div>

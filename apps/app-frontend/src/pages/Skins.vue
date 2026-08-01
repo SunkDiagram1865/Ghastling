@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import {
 	CheckIcon,
-	EditIcon,
 	EyeIcon,
 	LogInIcon,
 	RotateCounterClockwiseIcon,
 	SpinnerIcon,
+	XIcon,
 } from '@modrinth/assets'
 import {
 	ButtonStyled,
+	CapeButton,
+	CapeLikeTextButton,
 	commonMessages,
 	ConfirmModal,
 	defineMessages,
@@ -200,11 +202,23 @@ const messages = defineMessages({
 	},
 	savedTab: {
 		id: 'app.skins.tabs.saved',
-		defaultMessage: 'Saved skins',
+		defaultMessage: 'Skins',
 	},
 	defaultTab: {
 		id: 'app.skins.tabs.default',
-		defaultMessage: 'Official skins',
+		defaultMessage: 'Capes',
+	},
+	noCapeTooltip: {
+		id: 'app.skins.modal.no-cape-tooltip',
+		defaultMessage: 'No cape',
+	},
+	noneCapeOption: {
+		id: 'app.skins.modal.none-cape-option',
+		defaultMessage: 'None',
+	},
+	capeFallbackName: {
+		id: 'app.skins.modal.cape-fallback-name',
+		defaultMessage: 'Cape',
 	},
 })
 
@@ -222,6 +236,14 @@ const themeStore = useTheming()
 const skins = ref<Skin[]>([])
 const capes = ref<Cape[]>([])
 const { browserOffline, offline, setNetworkReachable } = useNetworkStatus()
+
+const sortedCapes = computed(() => {
+	return [...capes.value].sort((a, b) => {
+		const nameA = (a.name || '').toLowerCase()
+		const nameB = (b.name || '').toLowerCase()
+		return nameA.localeCompare(nameB)
+	})
+})
 
 const accountsCard = inject('accountsCard') as Ref<typeof AccountsCard>
 const currentUser = ref(undefined)
@@ -346,7 +368,7 @@ const isAddSkinButtonDragActive = ref(false)
 
 const deleteSkinModal = ref()
 const skinToDelete = ref<Skin | null>(null)
-const skinListTab = ref<'saved' | 'default'>('saved')
+const skinListTab = ref<'skins' | 'capes'>('skins')
 
 const skinListTabLinks = computed(() => [
 	{
@@ -526,6 +548,19 @@ function changeSkin(newSkin: Skin) {
 	if (isSkinManagementReadOnly.value) return
 
 	selectedSkin.value = newSkin
+}
+
+function selectCape(cape: Cape | undefined) {
+	if (isSkinManagementReadOnly.value || !selectedSkin.value) return
+
+	selectedSkin.value = {
+		...selectedSkin.value,
+		cape_id: cape?.id,
+	}
+}
+
+function isCapeSelected(cape: Cape) {
+	return selectedSkin.value?.cape_id === cape.id
 }
 
 function resetSelectedSkin() {
@@ -1039,7 +1074,7 @@ await loadSkins()
 				>
 					<template v-if="hasPendingSkinChange" #nametag-badge>
 						<div
-							class="flex items-center justify-center gap-1.5 rounded-full border border-solid border-brand-blue bg-bg-blue px-3 py-1 text-base font-semibold leading-6 text-brand-blue"
+							class="flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-solid border-brand-blue bg-bg-blue px-3 py-1 text-base font-semibold leading-6 text-brand-blue"
 						>
 							<EyeIcon class="size-5 shrink-0" />
 							{{ formatMessage(messages.previewingBadge) }}
@@ -1051,7 +1086,7 @@ await loadSkins()
 							class="flex max-w-[calc(100vw-2rem)] flex-wrap items-center justify-center gap-2 px-2"
 						>
 							<button
-								class="flex h-10 min-w-0 cursor-pointer items-center justify-center gap-2 rounded-[14px] border-0 bg-surface-4 px-4 py-2.5 text-base font-semibold leading-5 text-contrast shadow-md transition-[filter,transform] duration-200 enabled:hover:brightness-[--hover-brightness] enabled:focus-visible:brightness-[--hover-brightness] enabled:active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 [&>svg]:size-5 [&>svg]:shrink-0"
+								class="flex h-10 min-w-[180px] cursor-pointer items-center justify-center gap-2 rounded-[14px] border-0 bg-surface-4 px-6 py-2.5 text-base font-semibold leading-5 text-contrast shadow-md transition-[filter,transform] duration-200 enabled:hover:brightness-[--hover-brightness] enabled:focus-visible:brightness-[--hover-brightness] enabled:active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 [&>svg]:size-5 [&>svg]:shrink-0"
 								:disabled="isApplyingSkin || isSkinManagementReadOnly"
 								@click="resetSelectedSkin"
 							>
@@ -1059,7 +1094,7 @@ await loadSkins()
 								{{ formatMessage(commonMessages.resetButton) }}
 							</button>
 							<button
-								class="flex h-10 min-w-0 cursor-pointer items-center justify-center gap-2 rounded-[14px] border-0 bg-brand px-4 py-2.5 text-base font-semibold leading-5 text-[rgba(0,0,0,0.9)] shadow-md transition-[filter,transform] duration-200 enabled:hover:brightness-[--hover-brightness] enabled:focus-visible:brightness-[--hover-brightness] enabled:active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 [&>svg]:size-5 [&>svg]:shrink-0"
+								class="flex h-10 min-w-[180px] cursor-pointer items-center justify-center gap-2 rounded-[14px] border-0 bg-brand px-6 py-2.5 text-base font-semibold leading-5 text-[rgba(0,0,0,0.9)] shadow-md transition-[filter,transform] duration-200 enabled:hover:brightness-[--hover-brightness] enabled:focus-visible:brightness-[--hover-brightness] enabled:active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 [&>svg]:size-5 [&>svg]:shrink-0"
 								:disabled="isApplyingSkin || isSkinManagementReadOnly"
 								@click="applySelectedSkin"
 							>
@@ -1068,15 +1103,6 @@ await loadSkins()
 								{{ formatMessage(messages.applyButton) }}
 							</button>
 						</div>
-						<button
-							v-else
-							class="flex h-10 min-w-0 cursor-pointer items-center justify-center gap-2 rounded-[14px] border-0 bg-surface-4 px-4 py-2.5 text-base font-semibold leading-5 shadow-md transition-[filter,transform] duration-200 enabled:hover:brightness-[--hover-brightness] enabled:focus-visible:brightness-[--hover-brightness] enabled:active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 [&>svg]:size-5 [&>svg]:shrink-0"
-							:disabled="!selectedSkin || isSkinManagementReadOnly"
-							@click="(e: MouseEvent) => selectedSkin && editSkinModal?.show(e, selectedSkin)"
-						>
-							<EditIcon />
-							{{ formatMessage(messages.editSkinButton) }}
-						</button>
 					</template>
 				</SkinPreviewRenderer>
 			</div>
@@ -1085,16 +1111,17 @@ await loadSkins()
 		<div class="pt-2">
 			<NavTabs
 				class="mb-4"
-				:active-index="skinListTab === 'saved' ? 0 : 1"
+				:active-index="skinListTab === 'skins' ? 0 : 1"
 				:links="skinListTabLinks"
 				mode="local"
 				@tab-click="
 					(index: number) => {
-						skinListTab = index === 0 ? 'saved' : 'default'
+						skinListTab = index === 0 ? 'skins' : 'capes'
 					}
 				"
 			/>
 			<VirtualSkinSectionList
+				v-if="skinListTab === 'skins'"
 				ref="skinSectionList"
 				:active-tab="skinListTab"
 				:saved-skins="savedSkins"
@@ -1114,6 +1141,33 @@ await loadSkins()
 				@add-skin-dragleave="onAddSkinDragLeave"
 				@add-skin-drop="onAddSkinDrop"
 			/>
+			<div v-else class="flex flex-col gap-4">
+				<div
+					class="grid grid-cols-3 gap-3 min-[1300px]:grid-cols-4 min-[1750px]:grid-cols-5 min-[2050px]:grid-cols-6"
+				>
+					<CapeLikeTextButton
+						class="w-full"
+						:tooltip="formatMessage(messages.noCapeTooltip)"
+						:highlighted="!selectedSkin?.cape_id"
+						:disabled="isSkinManagementReadOnly"
+						@click="selectCape(undefined)"
+					>
+						<template #icon><XIcon /></template>
+						<span>{{ formatMessage(messages.noneCapeOption) }}</span>
+					</CapeLikeTextButton>
+					<CapeButton
+						v-for="cape in sortedCapes"
+						:id="cape.id"
+						:key="cape.id"
+						class="w-full"
+						:texture="cape.texture"
+						:name="cape.name || formatMessage(messages.capeFallbackName)"
+						:selected="isCapeSelected(cape)"
+						:disabled="isSkinManagementReadOnly"
+						@select="selectCape(cape)"
+					/>
+				</div>
+			</div>
 		</div>
 	</div>
 

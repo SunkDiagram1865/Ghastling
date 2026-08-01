@@ -68,6 +68,14 @@ export default new createRouter({
 			},
 		},
 		{
+			path: '/multiplayer',
+			name: 'Multiplayer',
+			component: Pages.Multiplayer,
+			meta: {
+				breadcrumb: [{ name: 'Multiplayer' }],
+			},
+		},
+		{
 			path: '/library',
 			name: 'Library',
 			component: Library.Index,

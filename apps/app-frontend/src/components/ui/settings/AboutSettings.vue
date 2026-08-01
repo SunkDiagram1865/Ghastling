@@ -1,22 +1,16 @@
 <script setup lang="ts">
-import { CheckIcon, CopyIcon, ExternalIcon, WrenchIcon } from '@modrinth/assets'
-import { ButtonStyled, defineMessages, injectNotificationManager, useVIntl } from '@modrinth/ui'
+import { CheckIcon, CopyIcon, ExternalIcon } from '@modrinth/assets'
+import { defineMessages, useVIntl } from '@modrinth/ui'
 import { getVersion } from '@tauri-apps/api/app'
-import { inject, ref } from 'vue'
+import { ref } from 'vue'
 
 import AfdianIcon from '@/assets/external/afdian.png'
 import QqIcon from '@/assets/external/qq.svg?component'
 import { GhastlingBrandConfig } from '@/config'
-import { isDev } from '@/helpers/utils'
-import { handleSevereError } from '@/store/error.js'
 
 const { formatMessage } = useVIntl()
 const version = await getVersion()
-const isDevEnvironment = await isDev()
 const copied = ref(false)
-const { addNotification } = injectNotificationManager()
-const replayOnboarding = inject<(mode: 'main' | 'instance') => Promise<void>>('replayOnboarding')
-const previewMinecraftCrashModal = inject<() => void>('previewMinecraftCrashModal')
 
 async function copyQqGroupNumber() {
 	await navigator.clipboard.writeText(GhastlingBrandConfig.qqGroupNumber)
@@ -75,30 +69,6 @@ const messages = defineMessages({
 		id: 'app.settings.about.project-website',
 		defaultMessage: 'Visit the project website',
 	},
-	replayOnboarding: {
-		id: 'app.settings.about.replay-onboarding',
-		defaultMessage: 'Replay tour',
-	},
-	testError: {
-		id: 'app.settings.about.test-error',
-		defaultMessage: 'Trigger test error',
-	},
-	testErrorMessage: {
-		id: 'app.settings.about.test-error-message',
-		defaultMessage: 'Test error triggered from the development settings.',
-	},
-	testNotificationError: {
-		id: 'app.settings.about.test-notification-error',
-		defaultMessage: 'Trigger notification test error',
-	},
-	testNotificationErrorTitle: {
-		id: 'app.settings.about.test-notification-error-title',
-		defaultMessage: 'Test notification error',
-	},
-	previewMinecraftCrashModal: {
-		id: 'app.settings.about.preview-minecraft-crash-modal',
-		defaultMessage: 'Preview Minecraft crash window',
-	},
 	contentSearchAttribution: {
 		id: 'app.settings.about.content-search-attribution',
 		defaultMessage:
@@ -113,18 +83,6 @@ const messages = defineMessages({
 		defaultMessage: 'Visit MC Encyclopedia',
 	},
 })
-
-function triggerTestError() {
-	handleSevereError(new Error(formatMessage(messages.testErrorMessage)))
-}
-
-function triggerTestNotificationError() {
-	addNotification({
-		title: formatMessage(messages.testNotificationErrorTitle),
-		text: formatMessage(messages.testErrorMessage),
-		type: 'error',
-	})
-}
 </script>
 
 <template>
@@ -160,23 +118,6 @@ function triggerTestNotificationError() {
 			<p class="m-0 mt-3 text-primary">
 				{{ formatMessage(messages.contentSearchAttribution) }}
 			</p>
-			<div v-if="isDevEnvironment" class="mt-4 flex flex-wrap gap-2">
-				<ButtonStyled>
-					<button @click="triggerTestError">
-						<WrenchIcon /> {{ formatMessage(messages.testError) }}
-					</button>
-				</ButtonStyled>
-				<ButtonStyled>
-					<button @click="triggerTestNotificationError">
-						<WrenchIcon /> {{ formatMessage(messages.testNotificationError) }}
-					</button>
-				</ButtonStyled>
-				<ButtonStyled>
-					<button @click="previewMinecraftCrashModal?.()">
-						<WrenchIcon /> {{ formatMessage(messages.previewMinecraftCrashModal) }}
-					</button>
-				</ButtonStyled>
-			</div>
 		</div>
 
 		<div>
@@ -237,14 +178,6 @@ function triggerTestNotificationError() {
 					<ExternalIcon class="size-5 shrink-0 text-secondary" />
 				</a>
 			</div>
-		</div>
-
-		<div class="flex flex-wrap gap-2">
-			<ButtonStyled>
-				<button @click="replayOnboarding?.('main')">
-					{{ formatMessage(messages.replayOnboarding) }}
-				</button>
-			</ButtonStyled>
 		</div>
 
 		<div class="flex flex-col items-start gap-3">

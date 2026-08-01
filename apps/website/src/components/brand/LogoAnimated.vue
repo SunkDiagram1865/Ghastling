@@ -1,11 +1,11 @@
 <template>
-	<div class="axolotl-logo">
-		<img src="/axolotl.png" alt="" />
+	<div class="ghastling-logo">
+		<img src="/ghastling.png" alt="" />
 	</div>
 </template>
 
 <style lang="scss" scoped>
-.axolotl-logo {
+.ghastling-logo {
 	display: flex;
 	align-items: center;
 	justify-content: center;

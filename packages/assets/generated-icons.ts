@@ -124,6 +124,7 @@ import _FilePlusIcon from './icons/file-plus.svg?component'
 import _FileTextIcon from './icons/file-text.svg?component'
 import _FilterIcon from './icons/filter.svg?component'
 import _FilterXIcon from './icons/filter-x.svg?component'
+import _FlaskConicalIcon from './icons/flask-conical.svg?component'
 import _FoldVerticalIcon from './icons/fold-vertical.svg?component'
 import _FolderIcon from './icons/folder.svg?component'
 import _FolderArchiveIcon from './icons/folder-archive.svg?component'
@@ -560,6 +561,7 @@ export const FilePlusIcon = _FilePlusIcon
 export const FileTextIcon = _FileTextIcon
 export const FilterIcon = _FilterIcon
 export const FilterXIcon = _FilterXIcon
+export const FlaskConicalIcon = _FlaskConicalIcon
 export const FoldVerticalIcon = _FoldVerticalIcon
 export const FolderIcon = _FolderIcon
 export const FolderArchiveIcon = _FolderArchiveIcon

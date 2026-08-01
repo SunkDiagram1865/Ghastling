@@ -31,23 +31,51 @@ export const ANNOUNCEMENT_CHANGE_TYPES: readonly AnnouncementChangeType[] = [
 
 export const launcherAnnouncements: readonly LauncherAnnouncement[] = [
 	{
-		id: 'launcher-0.0.1',
-		version: '0.0.1',
-		publishedAt: '2026-07-30',
+		id: 'launcher-0.0.2',
+		version: '0.0.2',
+		publishedAt: '2026-08-01',
 		title: {
-			'zh-CN': 'Ghastling Launcher 0.0.1',
+			'zh-CN': 'Ghastling Launcher 0.0.2',
 		},
 		changes: {
 			added: [
 				{
-					'zh-CN': 'Ghastling Launcher 首个版本发布，基于 Modrinth 和 Axolotl 进行二次开发的 Minecraft 启动器。',
+					'zh-CN': '启动器账号分类，不同账号登录方式的分组。',
 				},
 				{
-					'zh-CN': '便携模式：数据存储在可执行文件所在目录 (./com.cysunk.ghestling)。',
+					'zh-CN': '增加陶瓦联机功能，实现 P2P 联机功能。',
 				},
 				{
-					'zh-CN': '自定义强调色和 Ghastling 品牌定制。',
+					'zh-CN': '增加下载 Java 下载图标',
 				},
+				{
+					'zh-CN': '启动器开屏界面添加 Ghastling 音效',
+				},
+				{
+					'zh-CN': '皮肤管理页添加披风切换功能。',
+				},
+				{
+					'zh-CN': '侧边栏实例数量显示，可以设置成 0 隐藏。',
+				},
+			],
+			fixed: [
+				{
+					'zh-CN': '下载游戏版本未检测到 Java 在尝试下载 Java 时校验导致失败的 bug。',
+				},
+				{
+					'zh-CN': '修复缩略图无法正常应用的 bug。',
+				},
+				{
+					'zh-CN': '修复 Minecraft 进程正常结束启动器显示崩溃的 bug。',
+				},
+			],
+			removed: [
+				{
+					'zh-CN': '移除多语言支持，仅支持中文。',
+				},
+				{
+					'zh-CN': '移除 Axolotl 首次开屏弹窗。',
+				}
 			],
 		},
 	},

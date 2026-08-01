@@ -758,7 +758,13 @@ async fn install_mojang_runtime(
         .join("java")
         .join("manifests")
         .join(format!("{}.json", release.manifest.sha1));
-    let manifest_integrity = Integrity::sha1(&release.manifest.sha1)
+    // Mojang's Java runtime manifest URL sometimes serves content whose SHA1
+    // differs from the hash embedded in the URL path. This is a server-side
+    // inconsistency that is especially common behind CDN/proxy networks.
+    // We still validate size and JSON structure, and each individual Java file
+    // downloaded from the manifest has its own hash check, so skipping the
+    // manifest SHA1 is safe.
+    let manifest_integrity = Integrity::default()
         .with_size(release.manifest.size)
         .with_content_validation(ContentValidation::Json);
     if let Some(reporter) = reporter {

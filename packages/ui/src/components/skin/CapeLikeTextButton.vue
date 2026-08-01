@@ -7,10 +7,12 @@ withDefaults(
 	defineProps<{
 		tooltip?: string
 		highlighted?: boolean
+		disabled?: boolean
 	}>(),
 	{
 		tooltip: undefined,
 		highlighted: false,
+		disabled: false,
 	},
 )
 </script>
@@ -19,27 +21,26 @@ withDefaults(
 	<button
 		v-tooltip="tooltip"
 		type="button"
-		class="cape-like-text-button group m-0 block cursor-pointer border-0 bg-transparent p-0"
+		class="group block aspect-[31/40] m-0 p-0 border-0 bg-transparent cursor-pointer"
+		:class="{ 'pointer-events-none opacity-65': disabled }"
 		:aria-label="tooltip"
 		:aria-pressed="highlighted"
+		:disabled="disabled"
 		@click="emit('click')"
 	>
 		<span
-			:class="[
-				'relative block overflow-hidden rounded-lg border-0 p-[3px] shadow-[var(--shadow-button)] transition-[transform,background,color,filter] duration-200 group-active:scale-95 group-hover:brightness-[--hover-brightness] group-focus-visible:brightness-[--hover-brightness]',
-				highlighted ? 'bg-brand text-brand' : 'text-primary [background:var(--color-button-bg)]',
-			]"
+			class="relative block h-full w-full shrink-0 rounded-[20px] border border-solid transition-[border-color,background-color,transform] duration-200 p-1 group-active:scale-95"
+			:class="
+				highlighted
+					? 'border-brand bg-brand-highlight'
+					: 'border-surface-4 bg-surface-3 hover:border-surface-5 hover:bg-surface-4'
+			"
 		>
 			<span
-				:class="[
-					'relative z-10 block aspect-[10/16] min-h-[96px] w-[60px] overflow-hidden rounded-[5px]',
-					highlighted
-						? '[background:linear-gradient(var(--color-brand-highlight),var(--color-brand-highlight)),var(--color-button-bg)]'
-						: '[background:var(--color-button-bg)]',
-				]"
+				class="relative z-10 flex items-center justify-center h-full w-full text-primary"
 			>
-				<span class="absolute inset-0 flex flex-col items-center justify-center text-center">
-					<span class="mb-1 flex items-center justify-center leading-none">
+				<span class="flex flex-col items-center justify-center text-center gap-1">
+					<span class="flex items-center justify-center leading-none">
 						<slot name="icon"></slot>
 					</span>
 					<span class="block text-xs leading-none">

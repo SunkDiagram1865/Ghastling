@@ -13,10 +13,8 @@ use crate::{
 
 use super::{Credentials, png_util};
 
-pub(crate) const OFFLINE_SKIN_PACK_FILE_NAME: &str =
-    "Ghastling Offline Skin.zip";
-pub(crate) const OFFLINE_SKIN_PACK_LEGACY_ID: &str =
-    "Ghastling Offline Skin.zip";
+pub(crate) const OFFLINE_SKIN_PACK_FILE_NAME: &str = "Ghastling Offline Skin.zip";
+pub(crate) const OFFLINE_SKIN_PACK_LEGACY_ID: &str = "Ghastling Offline Skin.zip";
 pub(crate) const OFFLINE_SKIN_PACK_MODERN_ID: &str =
     "file/Ghastling Offline Skin.zip";
 

@@ -13,15 +13,15 @@ const props = withDefaults(
 		isEquipped?: boolean
 		selected?: boolean
 		faded?: boolean
+		disabled?: boolean
 	}>(),
 	{
 		isEquipped: false,
 		selected: undefined,
 		faded: false,
+		disabled: false,
 	},
 )
-
-console.log(props)
 
 const highlighted = computed(() => props.selected ?? props.isEquipped)
 </script>
@@ -29,36 +29,42 @@ const highlighted = computed(() => props.selected ?? props.isEquipped)
 <template>
 	<button
 		v-tooltip="name"
-		class="block border-0 m-0 p-0 bg-transparent group cursor-pointer"
+		class="group block aspect-[31/40] m-0 p-0 border-0 bg-transparent cursor-pointer"
+		:class="{ 'pointer-events-none opacity-65': disabled }"
 		:aria-label="name"
+		:aria-pressed="highlighted"
+		:disabled="disabled"
 		@click="emit('select')"
 	>
 		<span
+			class="relative block h-full w-full shrink-0 rounded-[20px] border border-solid transition-[border-color,background-color,transform] duration-200 p-1 group-active:scale-95"
 			:class="
 				highlighted
-					? `bg-brand highlighted-outer-glow`
-					: `bg-button-bg brightness-95 group-hover:brightness-100`
+					? 'border-brand bg-brand-highlight'
+					: 'border-surface-4 bg-surface-3 hover:border-surface-5 hover:bg-surface-4'
 			"
-			class="relative block p-[3px] rounded-lg border-0 group-active:scale-95 transition-all"
 		>
 			<span
-				class="block magical-cape-transform rounded-[5px]"
-				:class="{
-					'highlighted-inner-shadow': highlighted,
-					'brightness-[0.3] contrast-[0.8]': faded,
-				}"
+				class="relative z-10 flex items-center justify-center h-full w-full"
 			>
-				<img :src="texture" alt="" />
-			</span>
-			<span
-				v-if="$slots.default || $slots.icon"
-				class="p-4 absolute inset-0 flex items-center justify-center text-primary font-medium"
-			>
-				<span class="mb-1">
-					<slot name="icon"></slot>
+				<span
+					class="block magical-cape-transform rounded-[16px] overflow-hidden"
+					:class="{
+						'brightness-[0.3] contrast-[0.8]': faded,
+					}"
+				>
+					<img :src="texture" alt="" />
 				</span>
-				<span class="text-xs">
-					<slot></slot>
+				<span
+					v-if="$slots.default || $slots.icon"
+					class="absolute inset-0 flex flex-col items-center justify-center text-primary font-medium gap-1"
+				>
+					<span class="flex items-center justify-center leading-none">
+						<slot name="icon"></slot>
+					</span>
+					<span class="block text-xs leading-none">
+						<slot></slot>
+					</span>
 				</span>
 			</span>
 		</span>
@@ -69,9 +75,8 @@ const highlighted = computed(() => props.selected ?? props.isEquipped)
 	aspect-ratio: 10 / 16;
 	position: relative;
 	overflow: hidden;
-	box-sizing: content-box;
-	width: 60px;
-	min-height: 96px;
+	height: 90%;
+	width: auto;
 }
 
 .magical-cape-transform img {
@@ -90,19 +95,5 @@ const highlighted = computed(() => props.selected ?? props.isEquipped)
 	// scale the image up a little bit to avoid edges from the surrounding texture due to rounding
 	scale: 1.01;
 	transform-origin: calc(10 / 2 / 64 * 100%) calc(16 / 2 / 32 * 100%);
-}
-
-.highlighted-inner-shadow::before {
-	content: '';
-	position: absolute;
-	inset: 0;
-	box-shadow: inset 0 0 4px 4px rgba(0, 0, 0, 0.4);
-	z-index: 2;
-}
-
-@supports (background-color: color-mix(in srgb, transparent, transparent)) {
-	.highlighted-glow::before {
-		box-shadow: inset 0 0 2px 4px color-mix(in srgb, var(--color-brand), transparent 10%);
-	}
 }
 </style>

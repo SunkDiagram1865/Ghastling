@@ -47,65 +47,6 @@
 						</template>
 					</RadioButtons>
 				</section>
-
-				<section>
-					<h2 class="text-base font-semibold mb-2">{{ formatMessage(messages.capeSection) }}</h2>
-					<div class="relative w-fit max-w-full">
-						<Transition
-							enter-active-class="transition-all duration-200 ease-out"
-							enter-from-class="opacity-0 max-h-0"
-							enter-to-class="opacity-100 max-h-6"
-							leave-active-class="transition-all duration-200 ease-in"
-							leave-from-class="opacity-100 max-h-6"
-							leave-to-class="opacity-0 max-h-0"
-						>
-							<div
-								v-if="showCapeTopFade"
-								class="pointer-events-none absolute left-0 right-0 top-0 z-10 h-6 bg-gradient-to-b from-bg-raised to-transparent"
-							/>
-						</Transition>
-
-						<div
-							ref="capeListRef"
-							class="grid grid-cols-[repeat(4,max-content)] auto-rows-max gap-2 overflow-y-auto pr-1"
-							:style="{ maxHeight: capeListMaxHeight }"
-							@scroll="checkCapeScrollState"
-						>
-							<CapeLikeTextButton
-								:tooltip="formatMessage(messages.noCapeTooltip)"
-								:highlighted="!selectedCape"
-								@click="selectCape(undefined)"
-							>
-								<template #icon><XIcon /></template>
-								<span>{{ formatMessage(messages.noneCapeOption) }}</span>
-							</CapeLikeTextButton>
-
-							<CapeButton
-								v-for="cape in sortedCapes"
-								:id="cape.id"
-								:key="cape.id"
-								:texture="cape.texture"
-								:name="cape.name || formatMessage(messages.capeFallbackName)"
-								:selected="selectedCape?.id === cape.id"
-								@select="selectCape(cape)"
-							/>
-						</div>
-
-						<Transition
-							enter-active-class="transition-all duration-200 ease-out"
-							enter-from-class="opacity-0 max-h-0"
-							enter-to-class="opacity-100 max-h-6"
-							leave-active-class="transition-all duration-200 ease-in"
-							leave-from-class="opacity-100 max-h-6"
-							leave-to-class="opacity-0 max-h-0"
-						>
-							<div
-								v-if="showCapeBottomFade"
-								class="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-6 bg-gradient-to-t from-bg-raised to-transparent"
-							/>
-						</Transition>
-					</div>
-				</section>
 			</div>
 		</div>
 
@@ -133,19 +74,16 @@
 import { CheckIcon, SaveIcon, SpinnerIcon, UploadIcon, XIcon } from '@modrinth/assets'
 import {
 	ButtonStyled,
-	CapeButton,
-	CapeLikeTextButton,
 	commonMessages,
 	defineMessages,
 	injectNotificationManager,
 	NewModal,
 	RadioButtons,
 	SkinPreviewRenderer,
-	useScrollIndicator,
 	useVIntl,
 } from '@modrinth/ui'
 import { arrayBufferToBase64 } from '@modrinth/utils'
-import { computed, nextTick, ref, useTemplateRef, watch } from 'vue'
+import { computed, ref, useTemplateRef, watch } from 'vue'
 
 import {
 	type Cape,
@@ -159,7 +97,6 @@ import {
 	type SkinTextureUrl,
 } from '@/helpers/skins.ts'
 
-const CAPE_LIST_MAX_HEIGHT = 334
 const messages = defineMessages({
 	editSkinTitle: {
 		id: 'app.skins.modal.edit-title',
@@ -189,22 +126,6 @@ const messages = defineMessages({
 		id: 'app.skins.modal.arm-style-slim',
 		defaultMessage: 'Slim',
 	},
-	capeSection: {
-		id: 'app.skins.modal.cape-section',
-		defaultMessage: 'Cape',
-	},
-	noCapeTooltip: {
-		id: 'app.skins.modal.no-cape-tooltip',
-		defaultMessage: 'No cape',
-	},
-	noneCapeOption: {
-		id: 'app.skins.modal.none-cape-option',
-		defaultMessage: 'None',
-	},
-	capeFallbackName: {
-		id: 'app.skins.modal.cape-fallback-name',
-		defaultMessage: 'Cape',
-	},
 	savingTooltip: {
 		id: 'app.skins.modal.saving-tooltip',
 		defaultMessage: 'Saving...',
@@ -232,8 +153,6 @@ const { handleError } = injectNotificationManager()
 
 const modal = useTemplateRef('modal')
 const textureFileInput = useTemplateRef<HTMLInputElement>('textureFileInput')
-const capeListRef = ref<HTMLElement | null>(null)
-const capeListMaxHeight = ref(`${CAPE_LIST_MAX_HEIGHT}px`)
 const mode = ref<'new' | 'edit'>('new')
 const currentSkin = ref<Skin | null>(null)
 const isSaving = ref(false)
@@ -247,53 +166,6 @@ const props = defineProps<{ capes?: Cape[] }>()
 
 const selectedCapeTexture = computed(() => selectedCape.value?.texture)
 const canEditTextureAndModel = computed(() => currentSkin.value?.source !== 'default')
-const {
-	showTopFade: showCapeTopFade,
-	showBottomFade: showCapeBottomFade,
-	checkScrollState: checkCapeScrollState,
-	forceCheck: forceCapeScrollCheck,
-} = useScrollIndicator(capeListRef)
-
-let capeListLayoutFrame: number | null = null
-function updateCapeListLayout() {
-	const capeList = capeListRef.value
-	const modalContent = capeList?.closest('[data-modal-content]') as HTMLElement | null
-
-	if (!capeList || !modalContent) {
-		capeListMaxHeight.value = `${CAPE_LIST_MAX_HEIGHT}px`
-		forceCapeScrollCheck()
-		return
-	}
-
-	const availableHeight =
-		modalContent.getBoundingClientRect().bottom - capeList.getBoundingClientRect().top
-
-	capeListMaxHeight.value = `${Math.min(
-		CAPE_LIST_MAX_HEIGHT,
-		Math.max(0, Math.floor(availableHeight)),
-	)}px`
-
-	nextTick(() => forceCapeScrollCheck())
-}
-
-function refreshCapeListLayout() {
-	if (capeListLayoutFrame !== null) {
-		cancelAnimationFrame(capeListLayoutFrame)
-	}
-
-	capeListLayoutFrame = requestAnimationFrame(() => {
-		capeListLayoutFrame = null
-		updateCapeListLayout()
-	})
-}
-
-const sortedCapes = computed(() => {
-	return [...(props.capes || [])].sort((a, b) => {
-		const nameA = (a.name || '').toLowerCase()
-		const nameB = (b.name || '').toLowerCase()
-		return nameA.localeCompare(nameB)
-	})
-})
 
 async function loadPreviewSkin() {
 	if (uploadedTextureUrl.value) {
@@ -364,7 +236,6 @@ async function show(e: MouseEvent, skin?: Skin) {
 	await loadPreviewSkin()
 
 	modal.value?.show(e)
-	nextTick(() => refreshCapeListLayout())
 }
 
 async function showNew(e: MouseEvent, skinTextureUrl: SkinTextureUrl) {
@@ -377,21 +248,15 @@ async function showNew(e: MouseEvent, skinTextureUrl: SkinTextureUrl) {
 	await loadPreviewSkin()
 
 	modal.value?.show(e)
-	nextTick(() => refreshCapeListLayout())
 }
 
 async function setUploadedTexture(skinTextureUrl: SkinTextureUrl) {
 	uploadedTextureUrl.value = skinTextureUrl
 	await loadPreviewSkin()
-	nextTick(() => refreshCapeListLayout())
 }
 
 function hide() {
 	modal.value?.hide()
-}
-
-function selectCape(cape: Cape | undefined) {
-	selectedCape.value = cape
 }
 
 function openTextureFileBrowser() {
@@ -487,44 +352,7 @@ async function save() {
 
 watch([uploadedTextureUrl, currentSkin], async () => {
 	await loadPreviewSkin()
-	refreshCapeListLayout()
 })
-
-watch(
-	() => props.capes,
-	() => {
-		nextTick(() => refreshCapeListLayout())
-	},
-	{ immediate: true },
-)
-
-watch(
-	capeListRef,
-	(capeList, _, onCleanup) => {
-		if (!capeList) return
-
-		const modalContent = capeList.closest('[data-modal-content]')
-		const resizeObserver = new ResizeObserver(() => refreshCapeListLayout())
-
-		if (modalContent instanceof HTMLElement) {
-			resizeObserver.observe(modalContent)
-		}
-
-		window.addEventListener('resize', refreshCapeListLayout, { passive: true })
-		refreshCapeListLayout()
-
-		onCleanup(() => {
-			resizeObserver.disconnect()
-			window.removeEventListener('resize', refreshCapeListLayout)
-
-			if (capeListLayoutFrame !== null) {
-				cancelAnimationFrame(capeListLayoutFrame)
-				capeListLayoutFrame = null
-			}
-		})
-	},
-	{ flush: 'post' },
-)
 
 const emit = defineEmits<{
 	(event: 'saved', options: { applied: boolean; skin?: Skin; previousSkin?: Skin }): void

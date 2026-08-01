@@ -188,6 +188,7 @@ defineExpose({ show, hide })
 				<InstanceIcon
 					:icon-path="instance.icon_path"
 					:instance-id="props.instance.id"
+					:loader="instance.loader"
 					size="24px"
 				/>
 				{{ instance.name }} <ChevronRightIcon />

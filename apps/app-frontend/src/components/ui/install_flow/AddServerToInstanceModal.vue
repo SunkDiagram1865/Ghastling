@@ -146,6 +146,7 @@ async function addServer(instance) {
 						<InstanceIcon
 							:icon-path="instance.icon_path"
 							:instance-id="instance.id"
+							:loader="instance.loader"
 							class="mr-2 [--size:2rem]"
 						/>
 						{{ instance.name }}

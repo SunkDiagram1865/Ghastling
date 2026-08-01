@@ -13,6 +13,7 @@ import type { MinecraftLaunchErrorPayload } from '@/composables/useMinecraftLaun
 import { process_listener } from '@/helpers/events.js'
 import { get as getInstance } from '@/helpers/instance'
 import { export_crash_context } from '@/helpers/logs.js'
+import { shouldShowMinecraftCrash } from '@/helpers/process.js'
 
 interface CrashModalPayload extends MinecraftLaunchErrorPayload {
 	title?: string
@@ -391,6 +392,10 @@ async function handleProcessEvent(event: ProcessEvent): Promise<void> {
 		return
 	}
 	if (event.event !== 'finished' || activeRuns.get(event.instance_id) !== event.uuid) return
+	if (!shouldShowMinecraftCrash(event.crashed)) {
+		activeRuns.delete(event.instance_id)
+		return
+	}
 
 	await new Promise((resolve) => setTimeout(resolve, 2000))
 	if (!mounted || activeRuns.get(event.instance_id) !== event.uuid) return
@@ -400,7 +405,7 @@ async function handleProcessEvent(event: ProcessEvent): Promise<void> {
 			console.error('Failed to analyze finished Minecraft process', error)
 			return null
 		})
-		if (!mounted || (!event.crashed && !analysis?.crashed)) return
+		if (!mounted) return
 
 		const instance = await getInstance(event.instance_id).catch(() => null)
 		if (!mounted) return

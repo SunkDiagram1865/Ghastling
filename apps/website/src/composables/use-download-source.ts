@@ -1,7 +1,7 @@
 export type DownloadSource = 'auto' | 'cnb' | 'github'
 export type ResolvedDownloadSource = Exclude<DownloadSource, 'auto'>
 
-const DOWNLOAD_SOURCE_STORAGE_KEY = 'axolotl-download-source'
+const DOWNLOAD_SOURCE_STORAGE_KEY = 'ghastling-download-source'
 const MAINLAND_CHINA_TIMEZONES = new Set([
 	'Asia/Chongqing',
 	'Asia/Harbin',
@@ -23,8 +23,8 @@ function isMainlandChinaBrowser() {
 }
 
 export function useDownloadSource() {
-	const selectedSource = useState<DownloadSource>('axolotl-download-source', () => 'auto')
-	const browserInformationReady = useState('axolotl-download-source-browser-ready', () => false)
+	const selectedSource = useState<DownloadSource>('ghastling-download-source', () => 'auto')
+	const browserInformationReady = useState('ghastling-download-source-browser-ready', () => false)
 
 	const resolvedSource = computed<ResolvedDownloadSource>(() => {
 		if (selectedSource.value !== 'auto') return selectedSource.value

@@ -134,6 +134,15 @@
 	"app.action-bar.view-logs": {
 		"message": "查看日志"
 	},
+	"app.advanced-settings.startup-sound.title": {
+		"message": "启动音效"
+	},
+	"app.advanced-settings.startup-sound.description": {
+		"message": "启动器启动时随机播放一段音效（在开屏界面期间）。"
+	},
+	"app.advanced-settings.debug.title": {
+		"message": "调试"
+	},
 	"app.appearance-settings.accent-color.blue": {
 		"message": "蓝色"
 	},
@@ -273,7 +282,7 @@
 		"message": "显示总游玩时间"
 	},
 	"app.appearance-settings.sidebar-instance-count.description": {
-		"message": "侧边栏中显示的最大实例数量。设为 0 则显示全部。"
+		"message": "侧边栏中显示的最大实例数量。设为 ∞ 则显示全部。"
 	},
 	"app.appearance-settings.sidebar-instance-count.title": {
 		"message": "侧边栏实例数量限制"
@@ -1553,6 +1562,174 @@
 	"app.navigation.skin-selector": {
 		"message": "皮肤选择器"
 	},
+	"app.navigation.multiplayer": {
+		"message": "联机"
+	},
+	"app.multiplayer.title": {
+		"message": "联机"
+	},
+	"app.multiplayer.host": {
+		"message": "创建房间"
+	},
+	"app.multiplayer.join": {
+		"message": "加入房间"
+	},
+	"app.multiplayer.host-description": {
+		"message": "创建虚拟局域网房间，让好友直接连接到你的游戏。"
+	},
+	"app.multiplayer.join-description": {
+		"message": "输入房间码加入好友的虚拟局域网房间。"
+	},
+	"app.multiplayer.player-name": {
+		"message": "玩家名"
+	},
+	"app.multiplayer.room-code": {
+		"message": "房间码"
+	},
+	"app.multiplayer.room-code-placeholder": {
+		"message": "例如 U/ABCD-EFGH-IJKL-MNOP"
+	},
+	"app.multiplayer.start-hosting": {
+		"message": "创建房间"
+	},
+	"app.multiplayer.join-room": {
+		"message": "加入房间"
+	},
+	"app.multiplayer.copy-room-code": {
+		"message": "复制房间码"
+	},
+	"app.multiplayer.status.idle": {
+		"message": "未连接"
+	},
+	"app.multiplayer.status.starting": {
+		"message": "启动中..."
+	},
+	"app.multiplayer.status.host-scanning": {
+		"message": "正在扫描..."
+	},
+	"app.multiplayer.status.host-ready": {
+		"message": "房间已就绪"
+	},
+	"app.multiplayer.status.guest-connecting": {
+		"message": "正在加入..."
+	},
+	"app.multiplayer.status.guest-ready": {
+		"message": "已连接到房间"
+	},
+	"app.multiplayer.status.error": {
+		"message": "错误"
+	},
+	"app.multiplayer.players": {
+		"message": "玩家"
+	},
+	"app.multiplayer.players-in-room": {
+		"message": "{count} 位玩家在房间中"
+	},
+	"app.multiplayer.not-running": {
+		"message": "联机服务未运行。请创建房间或加入房间以开始联机。"
+	},
+	"app.multiplayer.not-running-title": {
+		"message": "开始联机会话"
+	},
+	"app.multiplayer.share-code": {
+		"message": "将此代码分享给好友："
+	},
+	"app.multiplayer.server-address": {
+		"message": "备用连接地址"
+	},
+	"app.multiplayer.host-label": {
+		"message": "房主"
+	},
+	"app.multiplayer.guest-label": {
+		"message": "访客"
+	},
+	"app.multiplayer.unknown-player-role": {
+		"message": "未知身份"
+	},
+	"app.multiplayer.platform-info": {
+		"message": "当前平台：{platform}"
+	},
+	"app.multiplayer.binary-not-found": {
+		"message": "未找到陶瓦联机程序，请放置于："
+	},
+	"app.multiplayer.download-terracotta": {
+		"message": "下载陶瓦联机"
+	},
+	"app.multiplayer.status.downloading": {
+		"message": "下载中..."
+	},
+	"app.multiplayer.status.fatal": {
+		"message": "严重错误"
+	},
+	"app.multiplayer.status.guest-starting": {
+		"message": "正在连接..."
+	},
+	"app.multiplayer.status.host-starting": {
+		"message": "正在启动主机..."
+	},
+	"app.multiplayer.status.waiting": {
+		"message": "等待中..."
+	},
+	"app.multiplayer.check-network": {
+		"message": "检查网络连接"
+	},
+	"app.multiplayer.connecting": {
+		"message": "连接中..."
+	},
+	"app.multiplayer.disconnect": {
+		"message": "断开连接"
+	},
+	"app.multiplayer.download-progress": {
+		"message": "下载进度"
+	},
+	"app.multiplayer.error.install": {
+		"message": "安装错误"
+	},
+	"app.multiplayer.error.network": {
+		"message": "网络错误"
+	},
+	"app.multiplayer.error.os": {
+		"message": "系统错误"
+	},
+	"app.multiplayer.error.terracotta": {
+		"message": "陶瓦联机错误"
+	},
+	"app.multiplayer.error.unknown": {
+		"message": "未知错误"
+	},
+	"app.multiplayer.retry": {
+		"message": "重试"
+	},
+	"app.multiplayer.verifying": {
+		"message": "验证中..."
+	},
+	"app.multiplayer.extracting": {
+		"message": "正在解压..."
+	},
+	"app.multiplayer.installing": {
+		"message": "正在安装..."
+	},
+	"app.multiplayer.powered-by-terracotta": {
+		"message": "由 Terracotta | 陶瓦联机 强力驱动"
+	},
+	"app.multiplayer.back": {
+		"message": "返回"
+	},
+	"app.multiplayer.start-terracotta": {
+		"message": "启动陶瓦联机"
+	},
+	"app.multiplayer.start-description": {
+		"message": "启动联机服务以创建房间或加入好友的房间。"
+	},
+	"app.multiplayer.lan-hint": {
+		"message": "请打开 Minecraft 进入世界，按 ESC → 对局域网开放 → 选择一个端口，陶瓦联机会自动检测。"
+	},
+	"app.multiplayer.loading": {
+		"message": "初始化中..."
+	},
+	"app.multiplayer.no-players": {
+		"message": "暂无玩家"
+	},
 	"app.navigation.worlds": {
 		"message": "世界"
 	},
@@ -1761,10 +1938,10 @@
 		"message": "浏览时直接翻译 Modrinth 项目的标题、摘要和介绍。保留原文、双语同屏，或者让译文站 C 位，都由你决定。"
 	},
 	"app.onboarding.translation.title": {
-		"message": "翻译，是 Ghastling 的拿手活"
+		"message": "翻译，是 Axolotl 的拿手活"
 	},
 	"app.onboarding.updates.description": {
-		"message": "决定 Ghastling 何时检查更新，以及是否替你安装。"
+		"message": "决定 Axolotl 何时检查更新，以及是否替你安装。"
 	},
 	"app.onboarding.updates.title": {
 		"message": "保持在线"
@@ -1860,7 +2037,7 @@
 		"message": "支持项目持续开发"
 	},
 	"app.settings.about.attribution": {
-		"message": "本程序由 Axolotl 开源项目修改而来。"
+		"message": "本程序由 Modrinth, Axolotl 开源项目修改而来。"
 	},
 	"app.settings.about.community-support": {
 		"message": "社区与支持"
@@ -1875,7 +2052,7 @@
 		"message": "复制群号"
 	},
 	"app.settings.about.developer": {
-		"message": "由 {organizationName} 的 {developerName} 开发。"
+		"message": "由 {developerName} 开发。"
 	},
 	"app.settings.about.mcmod-website": {
 		"message": "访问 MC 百科"
@@ -1911,7 +2088,13 @@
 		"message": "测试通知错误"
 	},
 	"app.settings.about.qq-group": {
-		"message": "玩家 QQ 群"
+		"message": "加入 QQ 群"
+	},
+	"app.settings.about.qq-group-desc": {
+		"message": "{groupNumber}"
+	},
+	"app.settings.about.view-releases": {
+		"message": "查看完整更新日志"
 	},
 	"app.settings.about.version": {
 		"message": "版本 {version}"
@@ -2243,6 +2426,9 @@
 	"app.settings.resources.select-directory": {
 		"message": "选择新的应用目录"
 	},
+	"app.settings.tabs.advanced-features": {
+		"message": "高级功能"
+	},
 	"app.settings.tabs.updates": {
 		"message": "更新"
 	},
@@ -2255,11 +2441,11 @@
 	"app.settings.updates.checking": {
 		"message": "正在检查更新……"
 	},
-	"app.settings.updates.cnb": {
-		"message": "CNB 渠道"
-	},
 	"app.settings.updates.description": {
 		"message": "选择 Ghastling 检查启动器更新的渠道。"
+	},
+	"app.settings.updates.view-all": {
+		"message": "查看完整更新日志"
 	},
 	"app.settings.updates.announcements.description": {
 		"message": "查看当前版本的更新内容和历史版本公告。"
@@ -2406,10 +2592,10 @@
 		"message": "第三方皮肤管理"
 	},
 	"app.skins.tabs.saved": {
-		"message": "已保存皮肤"
+		"message": "皮肤"
 	},
 	"app.skins.tabs.default": {
-		"message": "官方皮肤"
+		"message": "披风"
 	},
 	"app.skins.preview.edit-button": {
 		"message": "编辑皮肤"
@@ -3146,6 +3332,15 @@
 	"minecraft-account.label": {
 		"message": "Minecraft 账户"
 	},
+	"minecraft-account.group.microsoft": {
+		"message": "正版账户"
+	},
+	"minecraft-account.group.third-party": {
+		"message": "第三方账户"
+	},
+	"minecraft-account.group.offline": {
+		"message": "离线账户"
+	},
 	"minecraft-account.not-signed-in": {
 		"message": "未登录"
 	},
@@ -3336,7 +3531,7 @@
 		"message": "取消"
 	},
 	"drop.help.title": {
-		"message": "我可以拖入什么到 Ghastling？"
+		"message": "我可以拖入什么到 Axolotl？"
 	},
 	"drop.help.instances-title": {
 		"message": "启动器实例"

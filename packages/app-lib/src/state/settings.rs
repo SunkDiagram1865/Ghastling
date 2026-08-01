@@ -279,7 +279,7 @@ impl Settings {
             self.custom_background_opacity.clamp(10, 100) as i32;
         let transparent_background_opacity =
             self.transparent_background_opacity.min(100) as i32;
-        let sidebar_instance_count = self.sidebar_instance_count.min(50) as i32;
+        let sidebar_instance_count = self.sidebar_instance_count.min(51) as i32;
         let version = self.version as i64;
         let onboarding_version = self.onboarding_version as i64;
         let minecraft_metadata_source = self.minecraft_metadata_source.as_str();

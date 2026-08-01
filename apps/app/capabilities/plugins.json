@@ -115,6 +115,7 @@
 		"translation:default",
 		"utils:default",
 		"worlds:default",
-		"drop:default"
+		"drop:default",
+		"terracotta:default"
 	]
 }

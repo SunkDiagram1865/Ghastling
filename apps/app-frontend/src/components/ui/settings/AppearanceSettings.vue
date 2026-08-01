@@ -288,7 +288,7 @@ const messages = defineMessages({
 	},
 	sidebarInstanceCountDescription: {
 		id: 'app.appearance-settings.sidebar-instance-count.description',
-		defaultMessage: 'Maximum number of instances to show in the sidebar. Set to 0 to show all.',
+		defaultMessage: 'Maximum number of instances to show in the sidebar. Set to ∞ to show all.',
 	},
 })
 
@@ -814,8 +814,9 @@ watch(
 			id="sidebar-instance-count"
 			v-model="settings.sidebar_instance_count"
 			:min="0"
-			:max="50"
+			:max="51"
 			:step="1"
+			max-label="∞"
 		/>
 	</div>
 

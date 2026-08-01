@@ -1,5 +1,5 @@
 {
-	"name": "@axolotl/website",
+	"name": "@ghastling/website",
 	"private": true,
 	"type": "module",
 	"scripts": {

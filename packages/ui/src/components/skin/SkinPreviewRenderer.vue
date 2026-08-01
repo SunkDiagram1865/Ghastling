@@ -32,7 +32,7 @@
 		>
 			<div
 				v-if="$slots['nametag-badge']"
-				class="absolute bottom-[calc(100%+1rem)] left-1/2 flex -translate-x-1/2 items-center justify-center"
+				class="absolute bottom-[calc(100%+1rem)] left-1/2 flex flex-nowrap whitespace-nowrap -translate-x-1/2 items-center justify-center"
 			>
 				<slot name="nametag-badge" />
 			</div>

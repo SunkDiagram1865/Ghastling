@@ -5,6 +5,10 @@
  */
 import { invoke } from '@tauri-apps/api/core'
 
+export function shouldShowMinecraftCrash(crashed) {
+	return crashed === true
+}
+
 /// Gets all running process IDs with a given instance ID
 /// Returns [u32]
 export async function get_by_instance_id(instanceId) {

@@ -70,26 +70,26 @@ const props = withDefaults(
 	},
 )
 
-const AXOLOTL = [
-	'\x1B[49m                                                   \x1B[39m',
-	'\x1B[49m       \x1B[48;5;170m     \x1B[49m                           \x1B[48;5;170m     \x1B[49m       \x1B[39m',
-	'\x1B[49m       \x1B[48;5;170m     \x1B[49m                           \x1B[48;5;170m     \x1B[49m       \x1B[39m',
-	'\x1B[49m            \x1B[48;5;170m     \x1B[49m                 \x1B[48;5;170m     \x1B[49m            \x1B[39m',
-	'\x1B[49m            \x1B[48;5;170m        \x1B[49m          \x1B[48;5;170m         \x1B[49m            \x1B[39m',
-	'\x1B[49m               \x1B[48;5;170m     \x1B[49m          \x1B[48;5;170m     \x1B[49m                \x1B[39m',
-	'\x1B[49m \x1B[48;5;170m     \x1B[49m         \x1B[48;5;170m     \x1B[49m          \x1B[48;5;170m     \x1B[49m          \x1B[48;5;170m     \x1B[49m \x1B[39m',
-	'\x1B[49m   \x1B[48;5;170m   \x1B[49m  \x1B[48;5;206m                                   \x1B[49m  \x1B[48;5;170m   \x1B[49m   \x1B[39m',
-	'\x1B[49m     \x1B[48;5;170m   \x1B[49m\x1B[48;5;206m                                   \x1B[49m\x1B[48;5;170m   \x1B[49m     \x1B[39m',
-	'\x1B[49m        \x1B[48;5;206m                                   \x1B[49m        \x1B[39m',
-	'\x1B[49m        \x1B[48;5;53m          \x1B[49m\x1B[48;5;206m               \x1B[49m\x1B[48;5;53m          \x1B[49m        \x1B[39m',
-	'\x1B[49m \x1B[48;5;170m     \x1B[49m  \x1B[48;5;53m          \x1B[49m\x1B[48;5;206m               \x1B[49m\x1B[48;5;53m          \x1B[49m  \x1B[48;5;170m     \x1B[49m \x1B[39m',
-	'\x1B[49m   \x1B[48;5;170m   \x1B[49m  \x1B[48;5;53m          \x1B[49m\x1B[48;5;206m               \x1B[49m\x1B[48;5;53m          \x1B[49m  \x1B[48;5;170m   \x1B[49m   \x1B[39m',
-	'\x1B[49m     \x1B[48;5;170m   \x1B[49m\x1B[48;5;206m             \x1B[49m\x1B[48;5;170m         \x1B[49m\x1B[48;5;206m             \x1B[49m\x1B[48;5;170m   \x1B[49m     \x1B[39m',
-	'\x1B[49m     \x1B[48;5;170m   \x1B[49m\x1B[48;5;206m             \x1B[49m\x1B[48;5;170m         \x1B[49m\x1B[48;5;206m             \x1B[49m\x1B[48;5;170m   \x1B[49m     \x1B[39m',
-	'\x1B[49m        \x1B[48;5;206m                                   \x1B[49m        \x1B[39m',
-	'\x1B[49m        \x1B[48;5;206m                                   \x1B[49m        \x1B[39m',
-	'\x1B[49m                                                   \x1B[39m',
-]
+// const AXOLOTL = [
+// 	'\x1B[49m                                                   \x1B[39m',
+// 	'\x1B[49m       \x1B[48;5;170m     \x1B[49m                           \x1B[48;5;170m     \x1B[49m       \x1B[39m',
+// 	'\x1B[49m       \x1B[48;5;170m     \x1B[49m                           \x1B[48;5;170m     \x1B[49m       \x1B[39m',
+// 	'\x1B[49m            \x1B[48;5;170m     \x1B[49m                 \x1B[48;5;170m     \x1B[49m            \x1B[39m',
+// 	'\x1B[49m            \x1B[48;5;170m        \x1B[49m          \x1B[48;5;170m         \x1B[49m            \x1B[39m',
+// 	'\x1B[49m               \x1B[48;5;170m     \x1B[49m          \x1B[48;5;170m     \x1B[49m                \x1B[39m',
+// 	'\x1B[49m \x1B[48;5;170m     \x1B[49m         \x1B[48;5;170m     \x1B[49m          \x1B[48;5;170m     \x1B[49m          \x1B[48;5;170m     \x1B[49m \x1B[39m',
+// 	'\x1B[49m   \x1B[48;5;170m   \x1B[49m  \x1B[48;5;206m                                   \x1B[49m  \x1B[48;5;170m   \x1B[49m   \x1B[39m',
+// 	'\x1B[49m     \x1B[48;5;170m   \x1B[49m\x1B[48;5;206m                                   \x1B[49m\x1B[48;5;170m   \x1B[49m     \x1B[39m',
+// 	'\x1B[49m        \x1B[48;5;206m                                   \x1B[49m        \x1B[39m',
+// 	'\x1B[49m        \x1B[48;5;53m          \x1B[49m\x1B[48;5;206m               \x1B[49m\x1B[48;5;53m          \x1B[49m        \x1B[39m',
+// 	'\x1B[49m \x1B[48;5;170m     \x1B[49m  \x1B[48;5;53m          \x1B[49m\x1B[48;5;206m               \x1B[49m\x1B[48;5;53m          \x1B[49m  \x1B[48;5;170m     \x1B[49m \x1B[39m',
+// 	'\x1B[49m   \x1B[48;5;170m   \x1B[49m  \x1B[48;5;53m          \x1B[49m\x1B[48;5;206m               \x1B[49m\x1B[48;5;53m          \x1B[49m  \x1B[48;5;170m   \x1B[49m   \x1B[39m',
+// 	'\x1B[49m     \x1B[48;5;170m   \x1B[49m\x1B[48;5;206m             \x1B[49m\x1B[48;5;170m         \x1B[49m\x1B[48;5;206m             \x1B[49m\x1B[48;5;170m   \x1B[49m     \x1B[39m',
+// 	'\x1B[49m     \x1B[48;5;170m   \x1B[49m\x1B[48;5;206m             \x1B[49m\x1B[48;5;170m         \x1B[49m\x1B[48;5;206m             \x1B[49m\x1B[48;5;170m   \x1B[49m     \x1B[39m',
+// 	'\x1B[49m        \x1B[48;5;206m                                   \x1B[49m        \x1B[39m',
+// 	'\x1B[49m        \x1B[48;5;206m                                   \x1B[49m        \x1B[39m',
+// 	'\x1B[49m                                                   \x1B[39m',
+// ]
 
 const EMPTY_STATE_BUBBLES: Record<string, string[]> = {
 	server: [
@@ -146,7 +146,7 @@ function writeEmptyState() {
 	terminal.value.reset()
 	const bubble = EMPTY_STATE_BUBBLES[props.emptyStateType]
 	if (bubble) {
-		for (const line of [...bubble, ...AXOLOTL]) {
+		for (const line of bubble) {
 			terminal.value.writeln(line)
 		}
 	}

@@ -10,12 +10,14 @@ import {
 	LibraryIcon,
 	LogInIcon,
 	LogOutIcon,
+	PlayIcon,
 	PlusIcon,
 	RefreshCwIcon,
 	RightArrowIcon,
 	SettingsIcon,
 	SpinnerIcon,
 	UserIcon,
+	UsersIcon,
 	WorldIcon,
 } from '@modrinth/assets'
 import {
@@ -72,7 +74,7 @@ import MinecraftAuthErrorModal from '@/components/ui/minecraft-auth-error-modal/
 import MinecraftCrashModal from '@/components/ui/MinecraftCrashModal.vue'
 import AppSettingsModal from '@/components/ui/modal/AppSettingsModal.vue'
 import AuthGrantFlowWaitModal from '@/components/ui/modal/AuthGrantFlowWaitModal.vue'
-import CommunityAnnouncementModal from '@/components/ui/modal/CommunityAnnouncementModal.vue'
+// import CommunityAnnouncementModal from '@/components/ui/modal/CommunityAnnouncementModal.vue'
 import CurseForgeManualDownloadsModal from '@/components/ui/modal/CurseForgeManualDownloadsModal.vue'
 import InstallToPlayModal from '@/components/ui/modal/InstallToPlayModal.vue'
 import InstanceIconPickerModal from '@/components/ui/modal/InstanceIconPickerModal.vue'
@@ -314,7 +316,7 @@ watch(
 )
 
 const stateInitialized = ref(false)
-const communityAnnouncementModal = ref()
+// const communityAnnouncementModal = ref()
 const updateAnnouncementModal = ref()
 const minecraftCrashModal = ref()
 const pendingUpdateAnnouncementVersion = ref(null)
@@ -408,6 +410,10 @@ const messages = defineMessages({
 	skinSelector: {
 		id: 'app.navigation.skin-selector',
 		defaultMessage: 'Skin selector',
+	},
+	multiplayer: {
+		id: 'app.navigation.multiplayer',
+		defaultMessage: 'Multiplayer',
 	},
 	library: {
 		id: 'app.navigation.library',
@@ -586,7 +592,25 @@ async function exportNotificationErrorLogs(notification) {
 	}
 }
 
+const startupSoundModules = import.meta.glob<string>('./assets/sounds/*.ogg', {
+	query: '?url',
+	import: 'default',
+})
+
+async function playStartupSound() {
+	const enabled = localStorage.getItem('ghastling-startup-sound-enabled') !== 'false'
+	if (!enabled) return
+	const keys = Object.keys(startupSoundModules)
+	if (keys.length === 0) return
+	const key = keys[Math.floor(Math.random() * keys.length)]
+	const url = await startupSoundModules[key]()
+	const audio = new Audio(url)
+	audio.volume = 0.5
+	audio.play().catch((e) => console.error('Failed to play startup sound:', e))
+}
+
 async function setupApp() {
+	await playStartupSound()
 	const initialSettings = await getSettings()
 	await downloadManager.start()
 	const {
@@ -774,7 +798,7 @@ async function scheduleStartupDialogs() {
 		return
 	}
 
-	communityAnnouncementModal.value?.showIfNeeded()
+	// communityAnnouncementModal.value?.showIfNeeded()
 }
 
 provide('replayOnboarding', replayOnboarding)
@@ -2380,6 +2404,13 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 					<ChangeSkinIcon />
 				</NavButton>
 				<NavButton
+					v-tooltip.right="formatMessage(messages.multiplayer)"
+					to="/multiplayer"
+					:is-primary="(r) => r.path === '/multiplayer'"
+				>
+					<UsersIcon />
+				</NavButton>
+				<NavButton
 					v-tooltip.right="formatMessage(messages.library)"
 					data-onboarding-id="nav-library"
 					to="/library"
@@ -2597,7 +2628,7 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 		:error-action-label="formatMessage(messages.exportErrorLogs)"
 	/>
 	<MinecraftCrashModal ref="minecraftCrashModal" @error="handleError" />
-	<CommunityAnnouncementModal ref="communityAnnouncementModal" />
+	<!-- <CommunityAnnouncementModal ref="communityAnnouncementModal" /> -->
 	<UpdateAnnouncementModal ref="updateAnnouncementModal" @closed="handleUpdateAnnouncementClosed" />
 	<ErrorModal ref="errorModal" />
 	<MinecraftAuthErrorModal ref="minecraftAuthErrorModal" />

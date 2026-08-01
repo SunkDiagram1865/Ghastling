@@ -38,98 +38,175 @@
 			</button>
 		</ButtonStyled>
 	</div>
-	<Accordion
+	<div
 		v-else
-		class="w-full mt-2 bg-button-bg border border-solid border-surface-5 rounded-xl overflow-clip"
-		button-class="button-base w-full bg-transparent px-3 py-2 border-0 cursor-pointer"
-		:open-by-default="false"
+		class="flex flex-col gap-3 bg-button-bg border border-solid border-surface-5 rounded-xl p-3 mt-2"
 	>
-		<template #title>
-			<div class="flex gap-2 w-full min-w-0">
-				<Avatar size="36px" :src="selectedAccount ? avatarUrl : ghastlingLogo" />
-				<div class="flex flex-col items-start w-full min-w-0">
-					<span class="truncate w-full text-left">{{
-						selectedAccount ? selectedAccount.profile.name : formatMessage(messages.selectAccount)
-					}}</span>
-					<span class="text-secondary text-xs">
-						{{
-							selectedAccount?.account_type === 'offline'
-								? formatMessage(messages.offlineAccount)
-								: selectedAccount?.account_type === 'yggdrasil'
-									? selectedAccount.yggdrasil?.server_name ||
-										formatMessage(messages.thirdPartyAccount)
-									: formatMessage(messages.minecraftAccount)
-						}}
-					</span>
-				</div>
+		<!-- 当前选中账号 -->
+		<div class="flex gap-2 w-full min-w-0">
+			<Avatar size="36px" :src="selectedAccount ? avatarUrl : ghastlingLogo" />
+			<div class="flex flex-col items-start w-full min-w-0">
+				<span class="truncate w-full text-left font-semibold text-contrast">{{
+					selectedAccount ? selectedAccount.profile.name : formatMessage(messages.selectAccount)
+				}}</span>
+				<span class="text-secondary text-xs">
+					{{
+						selectedAccount?.account_type === 'offline'
+							? formatMessage(messages.offlineAccount)
+							: selectedAccount?.account_type === 'yggdrasil'
+								? selectedAccount.yggdrasil?.server_name ||
+									formatMessage(messages.thirdPartyAccount)
+								: formatMessage(messages.minecraftAccount)
+					}}
+				</span>
 			</div>
-		</template>
-		<div class="bg-button-bg pt-1 pb-2 border border-solid border-surface-5">
-			<template v-if="accounts.length > 0">
-				<div v-for="account in accounts" :key="account.profile.id" class="flex gap-1 items-center">
-					<button
-						class="flex items-center flex-shrink flex-grow overflow-clip gap-2 p-2 border-0 bg-transparent cursor-pointer button-base min-w-0"
-						@click="setAccount(account)"
+		</div>
+
+		<!-- 正版账户（Microsoft） -->
+		<div v-if="microsoftAccounts.length > 0" class="flex flex-col gap-1">
+			<span class="text-xs font-semibold text-secondary">
+				{{ formatMessage(messages.microsoftAccountsLabel) }}
+			</span>
+			<div
+				v-for="account in microsoftAccounts"
+				:key="account.profile.id"
+				class="flex gap-1 items-center"
+			>
+				<button
+					class="flex items-center flex-1 overflow-clip gap-2 p-2 rounded-lg border-2 cursor-pointer min-w-0 transition-colors"
+					:class="
+						isSelected(account)
+							? 'border-brand bg-brand bg-opacity-10'
+							: 'border-transparent bg-transparent hover:bg-surface-2'
+					"
+					@click="setAccount(account)"
+				>
+					<Avatar :src="getAccountAvatarUrl(account)" size="24px" />
+					<p
+						class="m-0 truncate min-w-0"
+						:class="isSelected(account) ? 'text-contrast font-semibold' : 'text-primary'"
 					>
-						<RadioButtonCheckedIcon
-							v-if="selectedAccount && selectedAccount.profile.id === account.profile.id"
-							class="w-5 h-5 text-brand shrink-0"
-						/>
-						<RadioButtonIcon v-else class="w-5 h-5 text-secondary shrink-0" />
-						<Avatar :src="getAccountAvatarUrl(account)" size="24px" />
-						<p
-							class="m-0 truncate min-w-0"
-							:class="
-								selectedAccount && selectedAccount.profile.id === account.profile.id
-									? 'text-contrast font-semibold'
-									: 'text-primary'
-							"
-						>
-							{{ account.profile.name }}
-						</p>
-						<span v-if="account.account_type === 'offline'" class="text-secondary text-xs shrink-0">
-							{{ formatMessage(messages.offlineBadge) }}
-						</span>
-						<span
-							v-else-if="account.account_type === 'yggdrasil'"
-							class="text-secondary text-xs shrink-0"
-						>
-							{{ account.yggdrasil?.server_name || formatMessage(messages.thirdPartyBadge) }}
-						</span>
-					</button>
-					<ButtonStyled circular color="red" color-fill="none" hover-color-fill="background">
-						<button
-							v-tooltip="formatMessage(messages.removeAccount)"
-							class="mr-2"
-							@click="logout(account)"
-						>
-							<TrashIcon />
-						</button>
-					</ButtonStyled>
-				</div>
-			</template>
-			<div class="flex flex-col gap-2 px-2 pt-2">
-				<ButtonStyled v-if="accounts.length > 0 && !offline" class="w-full">
-					<button :disabled="loginDisabled" @click="login()">
-						<PlusIcon />
-						{{ formatMessage(messages.addMicrosoftAccount) }}
-					</button>
-				</ButtonStyled>
-				<ButtonStyled v-if="accounts.length > 0 && !offline" class="w-full">
-					<button :disabled="loginDisabled" @click="showYggdrasilAccountModal()">
-						<PlusIcon />
-						{{ formatMessage(messages.addThirdPartyAccount) }}
-					</button>
-				</ButtonStyled>
-				<ButtonStyled v-if="accounts.length > 0" class="w-full">
-					<button :disabled="loginDisabled" @click="showOfflineAccountModal()">
-						<PlusIcon />
-						{{ formatMessage(messages.addOfflineAccount) }}
+						{{ account.profile.name }}
+					</p>
+				</button>
+				<ButtonStyled circular color="red" color-fill="none" hover-color-fill="background">
+					<button
+						v-tooltip="formatMessage(messages.removeAccount)"
+						class="mr-1"
+						@click="logout(account)"
+					>
+						<TrashIcon />
 					</button>
 				</ButtonStyled>
 			</div>
 		</div>
-	</Accordion>
+
+		<!-- 第三方账户（Yggdrasil） -->
+		<div v-if="yggdrasilAccounts.length > 0" class="flex flex-col gap-1">
+			<span class="text-xs font-semibold text-secondary">
+				{{ formatMessage(messages.thirdPartyAccountsLabel) }}
+			</span>
+			<div
+				v-for="account in yggdrasilAccounts"
+				:key="account.profile.id"
+				class="flex gap-1 items-center"
+			>
+				<button
+					class="flex items-center flex-1 overflow-clip gap-2 p-2 rounded-lg border-2 cursor-pointer min-w-0 transition-colors"
+					:class="
+						isSelected(account)
+							? 'border-brand bg-brand bg-opacity-10'
+							: 'border-transparent bg-transparent hover:bg-surface-2'
+					"
+					@click="setAccount(account)"
+				>
+					<Avatar :src="getAccountAvatarUrl(account)" size="24px" />
+					<p
+						class="m-0 truncate min-w-0"
+						:class="isSelected(account) ? 'text-contrast font-semibold' : 'text-primary'"
+					>
+						{{ account.profile.name }}
+					</p>
+					<span class="text-secondary text-xs shrink-0">
+						{{ account.yggdrasil?.server_name || formatMessage(messages.thirdPartyBadge) }}
+					</span>
+				</button>
+				<ButtonStyled circular color="red" color-fill="none" hover-color-fill="background">
+					<button
+						v-tooltip="formatMessage(messages.removeAccount)"
+						class="mr-1"
+						@click="logout(account)"
+					>
+						<TrashIcon />
+					</button>
+				</ButtonStyled>
+			</div>
+		</div>
+
+		<!-- 离线账户 -->
+		<div v-if="offlineAccounts.length > 0" class="flex flex-col gap-1">
+			<span class="text-xs font-semibold text-secondary">
+				{{ formatMessage(messages.offlineAccountsLabel) }}
+			</span>
+			<div
+				v-for="account in offlineAccounts"
+				:key="account.profile.id"
+				class="flex gap-1 items-center"
+			>
+				<button
+					class="flex items-center flex-1 overflow-clip gap-2 p-2 rounded-lg border-2 cursor-pointer min-w-0 transition-colors"
+					:class="
+						isSelected(account)
+							? 'border-brand bg-brand bg-opacity-10'
+							: 'border-transparent bg-transparent hover:bg-surface-2'
+					"
+					@click="setAccount(account)"
+				>
+					<Avatar :src="getAccountAvatarUrl(account)" size="24px" />
+					<p
+						class="m-0 truncate min-w-0"
+						:class="isSelected(account) ? 'text-contrast font-semibold' : 'text-primary'"
+					>
+						{{ account.profile.name }}
+					</p>
+					<span class="text-secondary text-xs shrink-0">
+						{{ formatMessage(messages.offlineBadge) }}
+					</span>
+				</button>
+				<ButtonStyled circular color="red" color-fill="none" hover-color-fill="background">
+					<button
+						v-tooltip="formatMessage(messages.removeAccount)"
+						class="mr-1"
+						@click="logout(account)"
+					>
+						<TrashIcon />
+					</button>
+				</ButtonStyled>
+			</div>
+		</div>
+
+		<!-- 添加账号 -->
+		<div class="flex flex-col gap-2 pt-2 border-t border-button-border">
+			<ButtonStyled v-if="!offline" class="w-full">
+				<button :disabled="loginDisabled" @click="login()">
+					<PlusIcon />
+					{{ formatMessage(messages.addMicrosoftAccount) }}
+				</button>
+			</ButtonStyled>
+			<ButtonStyled v-if="!offline" class="w-full">
+				<button :disabled="loginDisabled" @click="showYggdrasilAccountModal()">
+					<PlusIcon />
+					{{ formatMessage(messages.addThirdPartyAccount) }}
+				</button>
+			</ButtonStyled>
+			<ButtonStyled class="w-full">
+				<button :disabled="loginDisabled" @click="showOfflineAccountModal()">
+					<PlusIcon />
+					{{ formatMessage(messages.addOfflineAccount) }}
+				</button>
+			</ButtonStyled>
+		</div>
+	</div>
 	<ModalWrapper ref="offlineAccountModal" :header="formatMessage(messages.offlineModalTitle)">
 		<div class="flex min-w-[22rem] flex-col gap-4">
 			<p class="m-0 text-secondary">{{ formatMessage(messages.offlineModalDescription) }}</p>
@@ -272,14 +349,11 @@
 import {
 	LogInIcon,
 	PlusIcon,
-	RadioButtonCheckedIcon,
-	RadioButtonIcon,
 	RefreshCwIcon,
 	SpinnerIcon,
 	TrashIcon,
 } from '@modrinth/assets'
 import {
-	Accordion,
 	Avatar,
 	ButtonStyled,
 	Checkbox,
@@ -523,6 +597,21 @@ watch(offline, async () => {
 const selectedAccount = computed(() =>
 	accounts.value.find((account) => account.profile.id === defaultUser.value),
 )
+
+// 按账号类型分组：正版（Microsoft）、第三方（Yggdrasil）、离线
+const microsoftAccounts = computed(() =>
+	accounts.value.filter((account) => account.account_type === 'microsoft'),
+)
+const yggdrasilAccounts = computed(() =>
+	accounts.value.filter((account) => account.account_type === 'yggdrasil'),
+)
+const offlineAccounts = computed(() =>
+	accounts.value.filter((account) => account.account_type === 'offline'),
+)
+
+function isSelected(account: MinecraftCredential) {
+	return selectedAccount.value?.profile.id === account.profile.id
+}
 
 function getAccountSkin(account: MinecraftCredential | undefined): Skin | undefined {
 	if (!account || account.account_type === 'offline') return undefined
@@ -984,6 +1073,18 @@ const messages = defineMessages({
 	minecraftAccount: {
 		id: 'minecraft-account.label',
 		defaultMessage: 'Minecraft account',
+	},
+	microsoftAccountsLabel: {
+		id: 'minecraft-account.group.microsoft',
+		defaultMessage: 'Microsoft accounts',
+	},
+	thirdPartyAccountsLabel: {
+		id: 'minecraft-account.group.third-party',
+		defaultMessage: 'Third-party accounts',
+	},
+	offlineAccountsLabel: {
+		id: 'minecraft-account.group.offline',
+		defaultMessage: 'Offline accounts',
 	},
 	signInToMinecraft: {
 		id: 'minecraft-account.sign-in',

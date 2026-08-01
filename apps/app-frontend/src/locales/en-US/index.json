@@ -264,7 +264,7 @@
 		"message": "Show play time"
 	},
 	"app.appearance-settings.sidebar-instance-count.description": {
-		"message": "Maximum number of instances to show in the sidebar. Set to 0 to show all."
+		"message": "Maximum number of instances to show in the sidebar. Set to ∞ to show all."
 	},
 	"app.appearance-settings.sidebar-instance-count.title": {
 		"message": "Sidebar instance limit"
@@ -307,6 +307,12 @@
 	},
 	"app.appearance-settings.unknown-pack-warning.title": {
 		"message": "Warn me before installing unknown modpacks"
+	},
+	"app.advanced-settings.startup-sound.title": {
+		"message": "Startup sound"
+	},
+	"app.advanced-settings.startup-sound.description": {
+		"message": "Play a random sound when the launcher starts (during the splash screen)."
 	},
 	"app.auth-servers.unreachable.body": {
 		"message": "Minecraft authentication servers may be down right now. Check your internet connection and try again later."
@@ -1559,6 +1565,171 @@
 	"app.modpack.version-supports": {
 		"message": "Supports"
 	},
+	"app.multiplayer.back": {
+		"message": "Back"
+	},
+	"app.multiplayer.binary-not-found": {
+		"message": "Terracotta binary not found. Please download it and place it at:"
+	},
+	"app.multiplayer.check-network": {
+		"message": "Check your network connection"
+	},
+	"app.multiplayer.connecting": {
+		"message": "Connecting..."
+	},
+	"app.multiplayer.copy-room-code": {
+		"message": "Copy room code"
+	},
+	"app.multiplayer.disconnect": {
+		"message": "Disconnect"
+	},
+	"app.multiplayer.download-progress": {
+		"message": "Download progress"
+	},
+	"app.multiplayer.download-terracotta": {
+		"message": "Download Terracotta"
+	},
+	"app.multiplayer.error.install": {
+		"message": "Installation error"
+	},
+	"app.multiplayer.error.network": {
+		"message": "Network error"
+	},
+	"app.multiplayer.error.os": {
+		"message": "System error"
+	},
+	"app.multiplayer.error.terracotta": {
+		"message": "Terracotta error"
+	},
+	"app.multiplayer.error.unknown": {
+		"message": "Unknown error"
+	},
+	"app.multiplayer.extracting": {
+		"message": "Extracting..."
+	},
+	"app.multiplayer.guest-label": {
+		"message": "Guest"
+	},
+	"app.multiplayer.host": {
+		"message": "Host"
+	},
+	"app.multiplayer.host-description": {
+		"message": "Create a virtual LAN room so friends can connect directly to your game."
+	},
+	"app.multiplayer.host-label": {
+		"message": "Host"
+	},
+	"app.multiplayer.installing": {
+		"message": "Installing..."
+	},
+	"app.multiplayer.join": {
+		"message": "Join"
+	},
+	"app.multiplayer.join-description": {
+		"message": "Enter a room code to join a friend's virtual LAN room."
+	},
+	"app.multiplayer.join-room": {
+		"message": "Join room"
+	},
+	"app.multiplayer.lan-hint": {
+		"message": "Open your Minecraft world, then press Esc → Open to LAN → choose a port. Terracotta will detect it automatically."
+	},
+	"app.multiplayer.loading": {
+		"message": "Initializing..."
+	},
+	"app.multiplayer.no-players": {
+		"message": "No players in room"
+	},
+	"app.multiplayer.not-running": {
+		"message": "Multiplayer service is not running. Start hosting or join a room to begin."
+	},
+	"app.multiplayer.not-running-title": {
+		"message": "Start a multiplayer session"
+	},
+	"app.multiplayer.platform-info": {
+		"message": "Current platform: {platform}"
+	},
+	"app.multiplayer.player-name": {
+		"message": "Player name"
+	},
+	"app.multiplayer.players": {
+		"message": "Players"
+	},
+	"app.multiplayer.players-in-room": {
+		"message": "{count} player(s) in room"
+	},
+	"app.multiplayer.powered-by-terracotta": {
+		"message": "Powered by Terracotta | 陶瓦联机"
+	},
+	"app.multiplayer.retry": {
+		"message": "Retry"
+	},
+	"app.multiplayer.room-code": {
+		"message": "Room code"
+	},
+	"app.multiplayer.room-code-placeholder": {
+		"message": "e.g. U/ABCD-EFGH-IJKL-MNOP"
+	},
+	"app.multiplayer.server-address": {
+		"message": "Backup connection address"
+	},
+	"app.multiplayer.share-code": {
+		"message": "Share this code with friends to let them join:"
+	},
+	"app.multiplayer.start-description": {
+		"message": "Start the multiplayer service to host games or join friends' rooms."
+	},
+	"app.multiplayer.start-hosting": {
+		"message": "Start hosting"
+	},
+	"app.multiplayer.start-terracotta": {
+		"message": "Start Terracotta"
+	},
+	"app.multiplayer.status.downloading": {
+		"message": "Downloading..."
+	},
+	"app.multiplayer.status.error": {
+		"message": "Error"
+	},
+	"app.multiplayer.status.fatal": {
+		"message": "Fatal error"
+	},
+	"app.multiplayer.status.guest-connecting": {
+		"message": "Joining room..."
+	},
+	"app.multiplayer.status.guest-ready": {
+		"message": "Connected to room"
+	},
+	"app.multiplayer.status.guest-starting": {
+		"message": "Connecting as guest..."
+	},
+	"app.multiplayer.status.host-ready": {
+		"message": "Room ready"
+	},
+	"app.multiplayer.status.host-scanning": {
+		"message": "Creating room..."
+	},
+	"app.multiplayer.status.host-starting": {
+		"message": "Starting host..."
+	},
+	"app.multiplayer.status.idle": {
+		"message": "Not connected"
+	},
+	"app.multiplayer.status.starting": {
+		"message": "Starting..."
+	},
+	"app.multiplayer.status.waiting": {
+		"message": "Waiting..."
+	},
+	"app.multiplayer.title": {
+		"message": "Multiplayer"
+	},
+	"app.multiplayer.unknown-player-role": {
+		"message": "Unknown role"
+	},
+	"app.multiplayer.verifying": {
+		"message": "Verifying..."
+	},
 	"app.navigation.create-instance": {
 		"message": "Create new instance"
 	},
@@ -1573,6 +1744,9 @@
 	},
 	"app.navigation.library": {
 		"message": "Library"
+	},
+	"app.navigation.multiplayer": {
+		"message": "Multiplayer"
 	},
 	"app.navigation.skin-selector": {
 		"message": "Skin selector"
@@ -2254,6 +2428,9 @@
 	},
 	"app.settings.tabs.resource-management": {
 		"message": "Resource management"
+	},
+	"app.settings.tabs.advanced-features": {
+		"message": "Advanced features"
 	},
 	"app.settings.tabs.translation": {
 		"message": "Translation"

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
 	CoffeeIcon,
+	FlaskConicalIcon,
 	GameIcon,
 	GaugeIcon,
 	GlobeIcon,
@@ -25,6 +26,7 @@ import { platform as getOsPlatform, version as getOsVersion } from '@tauri-apps/
 import { ref, watch } from 'vue'
 
 import AboutSettings from '@/components/ui/settings/AboutSettings.vue'
+import AdvancedFeatures from '@/components/ui/settings/AdvancedFeatures.vue'
 import AppearanceSettings from '@/components/ui/settings/AppearanceSettings.vue'
 import DefaultInstanceSettings from '@/components/ui/settings/DefaultInstanceSettings.vue'
 import FeatureFlagSettings from '@/components/ui/settings/FeatureFlagSettings.vue'
@@ -59,16 +61,16 @@ const tabs = [
 		content: AppearanceSettings,
 		onboardingId: 'settings-tab-appearance',
 	},
-	{
-		name: defineMessage({
-			id: 'app.settings.tabs.language',
-			defaultMessage: 'Language',
-		}),
-		icon: LanguagesIcon,
-		content: LanguageSettings,
-		badge: commonMessages.beta,
-		onboardingId: 'settings-tab-language',
-	},
+	// {
+	// 	name: defineMessage({
+	// 		id: 'app.settings.tabs.language',
+	// 		defaultMessage: 'Language',
+	// 	}),
+	// 	icon: LanguagesIcon,
+	// 	content: LanguageSettings,
+	// 	badge: commonMessages.beta,
+	// 	onboardingId: 'settings-tab-language',
+	// },
 	{
 		name: defineMessage({
 			id: 'app.settings.tabs.translation',
@@ -105,6 +107,15 @@ const tabs = [
 		icon: GaugeIcon,
 		content: ResourceManagementSettings,
 		onboardingId: 'settings-tab-resources',
+	},
+	{
+		name: defineMessage({
+			id: 'app.settings.tabs.advanced-features',
+			defaultMessage: 'Advanced features',
+		}),
+		icon: FlaskConicalIcon,
+		content: AdvancedFeatures,
+		onboardingId: 'settings-tab-advanced',
 	},
 	{
 		name: defineMessage({

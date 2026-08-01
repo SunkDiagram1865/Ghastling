@@ -398,6 +398,25 @@ fn main() {
                     .default_permission(
                         DefaultPermissionRule::AllowAllCommands,
                     ),
+            )
+            .plugin(
+                "terracotta",
+                InlinedPlugin::new()
+                    .commands(&[
+                        "terracotta_get_state",
+                        "terracotta_get_meta",
+                        "terracotta_start",
+                        "terracotta_stop",
+                        "terracotta_host",
+                        "terracotta_join",
+                        "terracotta_reset",
+                        "terracotta_get_platform_key",
+                        "terracotta_download",
+                        "terracotta_get_player_name",
+                    ])
+                    .default_permission(
+                        DefaultPermissionRule::AllowAllCommands,
+                    ),
             ),
     )
     .expect("Failed to run tauri-build");

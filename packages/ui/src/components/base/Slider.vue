@@ -40,15 +40,16 @@
 				@input="onInputWithSnap(($event.target as HTMLInputElement).value)"
 			/>
 			<div class="flex flex-row justify-between text-xs m-0">
-				<span> {{ min }} {{ unit }} </span>
-				<span> {{ max }} {{ unit }} </span>
+				<span> {{ minLabel ?? min }} {{ unit }} </span>
+				<span> {{ maxLabel ?? max }} {{ unit }} </span>
 			</div>
 		</div>
 		<StyledInput
-			:model-value="String(currentValue)"
-			type="number"
+			:model-value="inputDisplayValue"
+			:type="atMaxLabel ? 'text' : 'number'"
 			class="w-24 ml-3"
 			:disabled="disabled"
+			:readonly="atMaxLabel"
 			:min="min"
 			:max="max"
 			:step="step"
@@ -58,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import StyledInput from './StyledInput.vue'
 
@@ -74,6 +75,8 @@ interface Props {
 	snapRange?: number
 	disabled?: boolean
 	unit?: string
+	minLabel?: string
+	maxLabel?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -86,9 +89,18 @@ const props = withDefaults(defineProps<Props>(), {
 	snapRange: 100,
 	disabled: false,
 	unit: '',
+	minLabel: undefined,
+	maxLabel: undefined,
 })
 
 const currentValue = ref(Math.max(props.min, props.modelValue))
+
+// When maxLabel is provided and the current value sits at max, the number
+// input displays the maxLabel (e.g. "∞") instead of the raw number.
+const atMaxLabel = computed(() => !!props.maxLabel && currentValue.value === props.max)
+const inputDisplayValue = computed(() =>
+	atMaxLabel.value ? (props.maxLabel as string) : String(currentValue.value),
+)
 
 watch(
 	() => props.modelValue,
