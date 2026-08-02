@@ -111,22 +111,12 @@ jobs:
       - name: Set release version
         run: node scripts/ghastling/set-version.mjs "${{ github.ref_name }}"
 
-      - name: Build and upload release assets
-        uses: tauri-apps/tauri-action@1ddc7b49b13c3038297360482fcb3e058764d7c9 # v0.6.2
+      - name: Build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
-        with:
-          projectPath: apps/app
-          tauriScript: pnpm tauri
-          args: ${{ matrix.args }}
-          tagName: ${{ github.ref_name }}
-          releaseName: Ghastling Launcher ${{ github.ref_name }}
-          releaseDraft: true
-          prerelease: ${{ contains(github.ref_name, '-') }}
-          generateReleaseNotes: false
-          includeUpdaterJson: false
-          retryAttempts: 2
+        run: pnpm tauri build --config tauri-release.conf.json
+        working-directory: apps/app
 
       - name: Build portable zip
         env:
