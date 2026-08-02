@@ -40,10 +40,7 @@ for (const target of targets) {
 	}
 
 	const signature = fs.readFileSync(signaturePath, 'utf8')
-	const url = asset.browser_download_url ?? asset.url
-	if (!url) {
-		throw new Error(`Release asset ${asset.name} does not contain a download URL`)
-	}
+	const url = `https://github.com/SunkDiagram1865/Ghastling/releases/latest/download/${asset.name}`
 
 	for (const platform of target.platforms) {
 		platforms[platform] = { signature, url }
