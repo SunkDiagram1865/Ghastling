@@ -31,23 +31,23 @@ if (!announcement) {
 }
 
 const categoryLabels = {
-	added: { en: 'Added', zh: '新增' },
-	changed: { en: 'Changed', zh: '变更' },
-	deprecated: { en: 'Deprecated', zh: '弃用' },
-	removed: { en: 'Removed', zh: '移除' },
-	fixed: { en: 'Fixed', zh: 'Bug 修复' },
-	security: { en: 'Security', zh: '安全修复' },
+	added: { zh: '新增' },
+	changed: { zh: '变更' },
+	deprecated: { zh: '弃用' },
+	removed: { zh: '移除' },
+	fixed: { zh: 'Bug 修复' },
+	security: { zh: '安全修复' },
 }
 
-function renderLanguage(language) {
-	const locale = language === 'zh' ? 'zh-CN' : 'en-US'
-	const lines = [`## ${language === 'zh' ? '中文' : 'English'}`, '']
+function renderLanguage() {
+	const locale = 'zh-CN'
+	const lines = []
 
 	for (const type of catalogModule.ANNOUNCEMENT_CHANGE_TYPES) {
 		const changes = announcement.changes[type]
 		if (!changes?.length) continue
 
-		lines.push(`### ${categoryLabels[type][language]}`, '')
+		lines.push(`### ${categoryLabels[type].zh}`, '')
 		for (const change of changes) {
 			lines.push(`- ${change[locale]}`)
 		}
@@ -55,7 +55,7 @@ function renderLanguage(language) {
 	}
 
 	if (announcement.notes) {
-		lines.push(`### ${language === 'zh' ? '说明' : 'Notes'}`, '', announcement.notes[locale], '')
+		lines.push(`### 说明`, '', announcement.notes[locale], '')
 	}
 
 	return lines
@@ -64,10 +64,9 @@ function renderLanguage(language) {
 const lines = [
 	`# ${announcement.title['zh-CN']}`,
 	'',
-	`发布日期 / Published: ${announcement.publishedAt}`,
+	`发布日期：${announcement.publishedAt}`,
 	'',
-	...renderLanguage('zh'),
-	...renderLanguage('en'),
+	...renderLanguage(),
 ]
 
 await fs.writeFile(outputPath, `${lines.join('\n').replace(/\n+$/, '')}\n`)
