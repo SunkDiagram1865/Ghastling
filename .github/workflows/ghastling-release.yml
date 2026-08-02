@@ -128,26 +128,31 @@ jobs:
           $version = "${{ github.ref_name }}" -replace '^v', ''
           $appName = "Ghastling Launcher"
           $outDir = "target/release/bundle/portable"
-          $buildDir = "target/portable-build"
+          $buildDir = "target/portable-build/ziproot"
 
           New-Item -ItemType Directory -Force -Path $outDir | Out-Null
+          New-Item -ItemType Directory -Force -Path $buildDir | Out-Null
 
-          # Reuse the binary already built by tauri-action
+          # Reuse the binary already built
           $appExe = "target/release/${appName}.exe"
           if (Test-Path $appExe) {
-            New-Item -ItemType Directory -Force -Path "$buildDir\Ghastling" | Out-Null
-            Copy-Item -Force $appExe "$buildDir\Ghastling\"
+            Copy-Item -Force $appExe "$buildDir\${appName}.exe"
 
             # Create empty .Ghastling folder to trigger portable mode
-            New-Item -ItemType Directory -Force -Path "$buildDir\Ghastling\.Ghastling" | Out-Null
+            New-Item -ItemType Directory -Force -Path "$buildDir\.Ghastling" | Out-Null
 
-            # Create portable zip (for manual download)
+            # Create portable zip using .NET ZipFile with Deflate compression
             $zipName = "Ghastling_${version}_x64.zip"
-            Compress-Archive -Path "$buildDir\Ghastling" -DestinationPath "$outDir\$zipName" -Force
-            Write-Output "Created portable zip: $outDir\$zipName"
+            $zipPath = Join-Path $outDir $zipName
+            if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
+
+            Add-Type -AssemblyName System.IO.Compression.FileSystem
+            $compression = [System.IO.Compression.CompressionLevel]::Optimal
+            [System.IO.Compression.ZipFile]::CreateFromDirectory($buildDir, $zipPath, $compression, $false)
+            Write-Output "Created portable zip: $zipPath"
 
             # Sign the portable zip for Tauri auto-update
-            $zipPath = Resolve-Path "$outDir\$zipName"
+            $zipPath = Resolve-Path $zipPath
 
             cd apps/app
             pnpm tauri signer sign --password "$env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD" "$zipPath"
