@@ -34,7 +34,7 @@ for (const platform of requiredPlatforms) {
 		url.protocol === 'https:' &&
 		(source === 'github'
 			? url.hostname === 'github.com' &&
-				/SunkDiagram1865\/Ghastling\/releases\/download\//i.test(pathname)
+				/SunkDiagram1865\/Ghastling\/releases\/(latest\/)?download\//i.test(pathname)
 			: url.hostname === 'cnb.cool' &&
 				new RegExp(
 					`/ghastling/ghastling/-/releases/download/${tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/`,
