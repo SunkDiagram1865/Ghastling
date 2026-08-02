@@ -33,7 +33,7 @@ export const launcherAnnouncements: readonly LauncherAnnouncement[] = [
 	{
 		id: 'launcher-0.0.2',
 		version: '0.0.2',
-		publishedAt: '2026-08-01',
+		publishedAt: '2026-08-02',
 		title: {
 			'zh-CN': 'Ghastling Launcher 0.0.2',
 		},
@@ -75,7 +75,7 @@ export const launcherAnnouncements: readonly LauncherAnnouncement[] = [
 				},
 				{
 					'zh-CN': '移除 Axolotl 首次开屏弹窗。',
-				}
+				},
 			],
 		},
 	},
