@@ -29,14 +29,17 @@ for (const platform of requiredPlatforms) {
 	}
 
 	const url = new URL(update.url)
-	const pathname = decodeURIComponent(url.pathname).toLowerCase()
+	const pathname = decodeURIComponent(url.pathname)
 	const isExpectedUrl =
 		url.protocol === 'https:' &&
 		(source === 'github'
 			? url.hostname === 'github.com' &&
-				pathname.includes('/SunkDiagram1865/ghastling/releases/download/')
+				/SunkDiagram1865\/Ghastling\/releases\/download\//i.test(pathname)
 			: url.hostname === 'cnb.cool' &&
-				pathname.includes(`/ghastling/ghastling/-/releases/download/${tag.toLowerCase()}/`))
+				new RegExp(
+					`/ghastling/ghastling/-/releases/download/${tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/`,
+					'i',
+				).test(pathname))
 	if (!isExpectedUrl) {
 		throw new Error(`Unexpected ${source} update URL for ${platform}: ${update.url}`)
 	}

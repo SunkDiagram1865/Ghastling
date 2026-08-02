@@ -37,7 +37,7 @@ jobs:
         uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Run release guardrails
         run: |
@@ -104,14 +104,14 @@ jobs:
         uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
 
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - uses: ./.github/actions/replace-gradle-mirror
 
       - name: Set release version
         run: node scripts/ghastling/set-version.mjs "${{ github.ref_name }}"
 
-      - name: Build
+      - name: Build and upload release assets
         uses: tauri-apps/tauri-action@1ddc7b49b13c3038297360482fcb3e058764d7c9 # v0.6.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -120,64 +120,62 @@ jobs:
           projectPath: apps/app
           tauriScript: pnpm tauri
           args: ${{ matrix.args }}
+          tagName: ${{ github.ref_name }}
+          releaseName: Ghastling Launcher ${{ github.ref_name }}
+          releaseDraft: true
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          generateReleaseNotes: false
+          includeUpdaterJson: false
           retryAttempts: 2
 
-      - name: Package updater zip and sign
-        shell: bash
+      - name: Build portable zip
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        shell: pwsh
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
+          $version = "${{ github.ref_name }}" -replace '^v', ''
+          $appName = "Ghastling Launcher"
+          $outDir = "target/release/bundle/portable"
+          $buildDir = "target/portable-build"
 
-          # 1. 找到便携版 EXE
-          EXE_SRC=$(find target/release -maxdepth 1 -name "Ghastling Launcher.exe" | head -1)
-          if [[ -z "$EXE_SRC" ]]; then
-            echo "Error: Could not find Ghastling Launcher.exe in target/release/"
-            ls -la target/release/ || true
+          New-Item -ItemType Directory -Force -Path $outDir | Out-Null
+
+          # Reuse the binary already built by tauri-action
+          $appExe = "target/release/${appName}.exe"
+          if (Test-Path $appExe) {
+            New-Item -ItemType Directory -Force -Path "$buildDir\Ghastling" | Out-Null
+            Copy-Item -Force $appExe "$buildDir\Ghastling\"
+
+            # Create empty .Ghastling folder to trigger portable mode
+            New-Item -ItemType Directory -Force -Path "$buildDir\Ghastling\.Ghastling" | Out-Null
+
+            # Create portable zip (for manual download)
+            $zipName = "Ghastling_${version}_x64.zip"
+            Compress-Archive -Path "$buildDir\Ghastling" -DestinationPath "$outDir\$zipName" -Force
+            Write-Output "Created portable zip: $outDir\$zipName"
+
+            # Sign the portable zip for Tauri auto-update
+            $zipPath = Resolve-Path "$outDir\$zipName"
+
+            cd apps/app
+            pnpm tauri signer sign --password "$env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD" "$zipPath"
+            cd ../..
+
+            $sigPath = "${zipPath}.sig"
+            if (Test-Path $sigPath) {
+              gh release upload "${{ github.ref_name }}" $zipPath --clobber
+              gh release upload "${{ github.ref_name }}" $sigPath --clobber
+              Write-Output "Uploaded portable zip $zipName and signature"
+            } else {
+              Write-Error "Signature file not generated for $zipName"
+              exit 1
+            }
+          } else {
+            Write-Error "Binary not found at $appExe"
             exit 1
-          fi
-
-          # 2. 打包更新 zip（zip 内只有 Ghastling Launcher.exe）
-          ZIP_NAME="Ghastling_${VERSION}_x64.zip"
-          mkdir -p updater-stage
-          cp "$EXE_SRC" "updater-stage/Ghastling Launcher.exe"
-          cd updater-stage
-          if command -v zip >/dev/null 2>&1; then
-            zip -9 "../${ZIP_NAME}" "Ghastling Launcher.exe"
-          else
-            powershell -NoProfile -Command "Compress-Archive -Path 'Ghastling Launcher.exe' -DestinationPath '../${ZIP_NAME}' -Force"
-          fi
-          cd ..
-
-          # 3. 写入私钥临时文件（base64 解码）
-          KEY_TMP="$(mktemp /tmp/ghastling-sign-key.XXXXXX)"
-          SIG_TMP="${KEY_TMP}.sig"
-          printf '%s' "$TAURI_SIGNING_PRIVATE_KEY" | base64 -d > "$KEY_TMP"
-
-          # 4. 下载 minisign 并签名（签名密码通过环境变量）
-          if ! command -v minisign >/dev/null 2>&1; then
-            MINISIGN_VER="0.11"
-            curl -fsSL -o /tmp/minisign.zip \
-              "https://github.com/jedisct1/minisign/releases/download/${MINISIGN_VER}/minisign-${MINISIGN_VER}-win64.zip"
-            unzip -jo /tmp/minisign.zip -d /tmp/minisign-bin
-            export PATH="/tmp/minisign-bin:$PATH"
-          fi
-
-          SIG_NAME="${ZIP_NAME}.sig"
-          echo "$TAURI_SIGNING_PRIVATE_KEY_PASSWORD" \
-            | minisign -S -s "$KEY_TMP" -c "Ghastling ${VERSION} updater zip" \
-                -m "${ZIP_NAME}" -x "${SIG_NAME}" 2>/dev/null \
-            || minisign -S -s "$KEY_TMP" -W -c "Ghastling ${VERSION} updater zip" \
-                -m "${ZIP_NAME}" -x "${SIG_NAME}"
-
-          # 5. 上传 zip + sig
-          gh release upload "${GITHUB_REF_NAME}" "${ZIP_NAME}" "${SIG_NAME}" --clobber
-
-          # 6. 清理
-          rm -f "$KEY_TMP" "$SIG_TMP"
-          rm -rf updater-stage /tmp/minisign-bin /tmp/minisign.zip /tmp/ghastling-sign-key.*
+          }
 
   verify-and-publish:
     name: Verify and publish
