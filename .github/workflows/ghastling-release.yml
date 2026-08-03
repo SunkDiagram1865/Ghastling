@@ -138,9 +138,6 @@ jobs:
           if (Test-Path $appExe) {
             Copy-Item -Force $appExe "$buildDir\${appName}.exe"
 
-            # Create empty .Ghastling folder to trigger portable mode
-            New-Item -ItemType Directory -Force -Path "$buildDir\.Ghastling" | Out-Null
-
             # Create portable zip using .NET ZipFile with Deflate compression
             $zipName = "Ghastling_${version}_x64.zip"
             $zipPath = Join-Path $outDir $zipName
