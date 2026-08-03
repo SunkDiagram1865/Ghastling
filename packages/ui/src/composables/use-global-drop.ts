@@ -1,4 +1,4 @@
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, watch, type Ref } from 'vue'
 
 import type { NativeFileDropEvent, FileDropProvider } from '#ui/providers/file-drop'
 import { injectFileDrop } from '#ui/providers/file-drop'
@@ -55,7 +55,11 @@ export interface UseGlobalDropOptions {
 	onError?: (message: string) => void
 }
 
-export function useGlobalDrop(options: UseGlobalDropOptions, fileDropOverride?: FileDropProvider | null) {
+export function useGlobalDrop(
+	options: UseGlobalDropOptions,
+	fileDropOverride?: FileDropProvider | null,
+	enabled: Ref<boolean> | boolean = true,
+) {
 	const fileDrop = fileDropOverride ?? injectFileDrop(null)
 	const loadingState = injectLoadingState(null)
 	const notificationManager = injectNotificationManager(null)
@@ -67,6 +71,47 @@ export function useGlobalDrop(options: UseGlobalDropOptions, fileDropOverride?: 
 
 	let nativeFileDropUnlisten: (() => void) | null = null
 	let unmounted = false
+
+	const isEnabled = typeof enabled === 'boolean' ? ref(enabled) : enabled
+
+	function cleanup() {
+		isDragging.value = false
+		isProcessing.value = false
+		if (nativeFileDropUnlisten) {
+			nativeFileDropUnlisten()
+			nativeFileDropUnlisten = null
+			debug('cleanup: native file drop listener removed')
+		}
+	}
+
+	function setup() {
+		if (!fileDrop) {
+			debug('setup: fileDrop provider not available — native drops disabled')
+			return
+		}
+
+		if (!isEnabled.value) {
+			debug('setup: drag-and-drop disabled by user setting')
+			return
+		}
+
+		cleanup()
+
+		fileDrop.listenNativeFileDrop(handleNativeDrop)
+			.then((unlisten) => {
+				if (unmounted || !isEnabled.value) {
+					debug('setup: component unmounted or disabled before listener was ready, cleaning up')
+					unlisten()
+					return
+				}
+
+				nativeFileDropUnlisten = unlisten
+				debug('setup: native file drop listener registered successfully')
+			})
+			.catch((err) => {
+				debug('setup: failed to register native file drop listener', err)
+			})
+	}
 
 	/**
 	 * Walk the `shortcut_resolved` chain up to 3 levels.
@@ -83,6 +128,11 @@ export function useGlobalDrop(options: UseGlobalDropOptions, fileDropOverride?: 
 	}
 
 	async function handleNativeDrop(event: NativeFileDropEvent) {
+		if (!isEnabled.value) {
+			debug('handleNativeDrop: drag-and-drop disabled, ignoring event')
+			return
+		}
+
 		if (event.type === 'enter' || event.type === 'over') {
 			isDragging.value = true
 			return
@@ -153,41 +203,22 @@ export function useGlobalDrop(options: UseGlobalDropOptions, fileDropOverride?: 
 		}
 	}
 
-	async function setup() {
-		if (!fileDrop) {
-			debug('setup: fileDrop provider not available — native drops disabled')
-			return
-		}
-
-		let unlisten: () => void
-		try {
-			unlisten = await fileDrop.listenNativeFileDrop(handleNativeDrop)
-			debug('setup: native file drop listener registered successfully')
-		} catch (err) {
-			debug('setup: failed to register native file drop listener', err)
-			return
-		}
-
-		if (unmounted) {
-			debug('setup: component unmounted before listener was ready, cleaning up')
-			unlisten()
-			return
-		}
-
-		nativeFileDropUnlisten = unlisten
-	}
-
 	onMounted(() => {
 		void setup()
 	})
 
 	onUnmounted(() => {
 		unmounted = true
-		isDragging.value = false
-		isProcessing.value = false
-		if (nativeFileDropUnlisten) {
-			nativeFileDropUnlisten()
-			nativeFileDropUnlisten = null
+		cleanup()
+	})
+
+	watch(isEnabled, (newVal, oldVal) => {
+		if (newVal === oldVal) return
+		debug('isEnabled changed', { newVal })
+		if (newVal) {
+			setup()
+		} else {
+			cleanup()
 		}
 	})
 

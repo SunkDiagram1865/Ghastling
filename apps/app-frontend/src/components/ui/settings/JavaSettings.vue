@@ -106,7 +106,7 @@ watch(autoHighPerformanceMode, async (val) => {
 
 const columns = [
 	{ key: 'parsed_version', label: formatMessage(messages.version), width: '8rem' },
-	{ key: 'distribution', label: formatMessage(messages.distribution) },
+	{ key: 'distribution', label: formatMessage(messages.distribution), width: '10rem' },
 	{ key: 'path', label: formatMessage(messages.path) },
 	{ key: 'actions', label: formatMessage(messages.actions), align: 'right', width: '3rem' },
 ]

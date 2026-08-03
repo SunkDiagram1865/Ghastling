@@ -84,6 +84,7 @@ import {
 import { isBuiltInInstanceIcon } from '@/helpers/instance-icon-frame'
 import { get_loader_versions as getLoaderManifest } from '@/helpers/metadata'
 import { get as getSettings, set as setSettings } from '@/helpers/settings.ts'
+import { isDev } from '@/helpers/utils.js'
 import { get_categories, get_game_versions, get_loaders } from '@/helpers/tags'
 import { get_instance_worlds } from '@/helpers/worlds'
 import i18n from '@/i18n.config'
@@ -116,6 +117,7 @@ const curseForgeClassIds: Partial<Record<ProjectType, number>> = {
 	modpack: 4471,
 }
 
+const isDevEnvironment = await isDev()
 const curseForgeCapability = ref(
 	await getCurseForgeCapability().catch(() => ({
 		status: 'missing_key' as const,
@@ -123,13 +125,15 @@ const curseForgeCapability = ref(
 	})),
 )
 const contentSource = ref<'all' | 'modrinth' | 'curseforge'>(
-	curseForgeCapability.value.configured && route.query.source === 'curseforge'
-		? 'curseforge'
-		: route.query.source === 'modrinth'
-			? 'modrinth'
-			: curseForgeCapability.value.configured
-				? 'all'
-				: 'modrinth',
+	projectType.value === 'server'
+		? (route.query.source === 'modrinth' ? 'modrinth' : 'all')
+		: (curseForgeCapability.value.configured || isDevEnvironment) && route.query.source === 'curseforge'
+			? 'curseforge'
+			: route.query.source === 'modrinth'
+				? 'modrinth'
+				: (curseForgeCapability.value.configured || isDevEnvironment)
+					? 'all'
+					: 'modrinth',
 )
 const curseForgeCategoriesByClass = ref<Record<number, CurseForgeCategory[]>>({})
 
@@ -145,7 +149,7 @@ async function ensureCurseForgeCategories(projectTypeValue: ProjectType) {
 }
 
 if (
-	curseForgeCapability.value.configured &&
+	(curseForgeCapability.value.configured || isDevEnvironment) &&
 	(contentSource.value === 'curseforge' || contentSource.value === 'all')
 ) {
 	await ensureCurseForgeCategories(projectType.value).catch(handleError)
@@ -1402,7 +1406,7 @@ async function search(requestParams: string) {
 	let includeCurseForge =
 		!isServer &&
 		contentSource.value !== 'modrinth' &&
-		curseForgeCapability.value.configured &&
+		(curseForgeCapability.value.configured || isDevEnvironment) &&
 		curseForgeClassIds[projectType.value] !== undefined
 
 	if (includeCurseForge) {
@@ -1915,13 +1919,21 @@ provideBrowseManager({
 
 <template>
 	<div data-onboarding-id="browse-content" class="flex flex-col gap-3 p-6">
-		<div v-if="curseForgeCapability.configured && projectType !== 'server'" class="flex gap-2">
+		<div
+			v-if="projectType === 'server' || (curseForgeCapability.configured || isDevEnvironment)"
+			class="flex gap-2"
+		>
 			<ButtonStyled
-				v-for="source in [
-					{ id: 'all', label: messages.allSources },
-					{ id: 'modrinth', label: messages.modrinthSource },
-					{ id: 'curseforge', label: messages.curseForgeSource },
-				]"
+				v-for="source in projectType === 'server'
+					? [
+							{ id: 'all', label: messages.allSources },
+							{ id: 'modrinth', label: messages.modrinthSource },
+						]
+					: [
+							{ id: 'all', label: messages.allSources },
+							{ id: 'modrinth', label: messages.modrinthSource },
+							{ id: 'curseforge', label: messages.curseForgeSource },
+						]"
 				:key="source.id"
 				:type="contentSource === source.id ? 'outlined' : 'transparent'"
 			>

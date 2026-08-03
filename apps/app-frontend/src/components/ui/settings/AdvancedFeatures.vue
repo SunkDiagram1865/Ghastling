@@ -15,6 +15,8 @@ watch(startupSoundEnabled, (val) => {
 	localStorage.setItem(STARTUP_SOUND_KEY, String(val))
 })
 
+const dragDropEnabled = inject<import('vue').Ref<boolean>>('dragDropEnabled', ref(true))
+
 const { addNotification } = injectNotificationManager()
 const replayOnboarding = inject<(mode: 'main' | 'instance') => Promise<void>>('replayOnboarding')
 const previewMinecraftCrashModal = inject<() => void>('previewMinecraftCrashModal')
@@ -39,6 +41,14 @@ const messages = defineMessages({
 	startupSoundDescription: {
 		id: 'app.advanced-settings.startup-sound.description',
 		defaultMessage: '启动器启动时随机播放一段音效（在开屏界面期间）。',
+	},
+	dragDropTitle: {
+		id: 'app.advanced-settings.drag-drop.title',
+		defaultMessage: '拖放导入',
+	},
+	dragDropDescription: {
+		id: 'app.advanced-settings.drag-drop.description',
+		defaultMessage: '拖放文件到窗口即可自动识别并导入（模组、整合包、存档等）。',
 	},
 	debugTitle: {
 		id: 'app.advanced-settings.debug.title',
@@ -89,10 +99,26 @@ const messages = defineMessages({
 			/>
 		</div>
 
+		<div class="flex items-center justify-between gap-4">
+			<div>
+				<h2 class="m-0 text-lg font-semibold text-contrast">
+					{{ formatMessage(messages.dragDropTitle) }}
+				</h2>
+				<p class="m-0 mt-1 text-sm text-secondary">
+					{{ formatMessage(messages.dragDropDescription) }}
+				</p>
+			</div>
+			<Toggle
+				id="drag-drop-enabled"
+				:model-value="dragDropEnabled"
+				@update:model-value="(e) => (dragDropEnabled = !!e)"
+			/>
+		</div>
+
 		<div>
-			<h3 class="m-0 mb-3 text-base font-semibold text-contrast">
+			<h2 class="m-0 mb-3 text-lg font-semibold text-contrast">
 				{{ formatMessage(messages.debugTitle) }}
-			</h3>
+			</h2>
 			<div class="flex flex-wrap gap-2">
 				<ButtonStyled>
 					<button @click="triggerTestError">

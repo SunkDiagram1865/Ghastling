@@ -1094,6 +1094,15 @@ const currentImportContext = ref<{ launcherType: string; basePath: string } | nu
 
 const dropDebug = useDebugLogger('DropFlow')
 
+const DRAG_DROP_KEY = 'ghastling-drag-drop-enabled'
+const dragDropEnabled = ref(localStorage.getItem(DRAG_DROP_KEY) !== 'false')
+
+watch(dragDropEnabled, (val) => {
+	localStorage.setItem(DRAG_DROP_KEY, String(val))
+})
+
+provide('dragDropEnabled', dragDropEnabled)
+
 const dropProcessingNotificationId = ref<number | null>(null)
 
 const { isDragging, isProcessing } = useGlobalDrop(
@@ -1186,6 +1195,7 @@ const { isDragging, isProcessing } = useGlobalDrop(
 		},
 	},
 	fileDrop,
+	dragDropEnabled,
 )
 
 function clearDropProcessingNotification() {

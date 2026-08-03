@@ -190,17 +190,17 @@ watch([selectedVersion, customPath, overrideJavaArgs, javaArgs, overrideEnvVars,
 </script>
 
 <template>
-	<div>
+	<div class="w-full min-w-0">
 		<JavaDetectionModal ref="javaDetectionModal" @submit="(val) => { selectedVersion = SELECT_CUSTOM; customPath = val.path }" />
 		<h2 class="m-0 mb-3 text-base font-extrabold text-contrast block">
 			{{ formatMessage(messages.javaInstallation) }}
 		</h2>
 
-		<div class="flex flex-col gap-1">
+		<div class="flex flex-col gap-1 w-full min-w-0">
 			<div
 				v-for="row in tableData"
 				:key="row._select"
-				class="flex items-start gap-2.5 px-3 py-2 rounded-lg cursor-pointer transition-colors border-l-[3px]"
+				class="flex items-start gap-2.5 px-3 py-2 rounded-lg cursor-pointer transition-colors border-l-[3px] w-full min-w-0"
 				:class="selectedVersion === row._select
 					? 'border-accent bg-accent/5'
 					: 'border-transparent hover:bg-button-bg'"
@@ -218,33 +218,35 @@ watch([selectedVersion, customPath, overrideJavaArgs, javaArgs, overrideEnvVars,
 						<div v-if="selectedVersion === row._select" class="w-2 h-2 rounded-full bg-white" />
 					</div>
 				</div>
-				<div class="flex-1 min-w-0">
-					<div class="flex items-center gap-2">
+				<div class="flex-1 min-w-0 overflow-hidden">
+					<div class="flex items-center gap-2 min-w-0 overflow-hidden">
 						<span
 							v-if="row._isAuto"
-							class="text-sm font-semibold text-accent"
+							class="text-sm font-semibold text-accent truncate flex-1 min-w-0"
 						>
 							{{ formatMessage(messages.autoLabel) }}
 						</span>
 						<span
 							v-else-if="row._isCustom"
-							class="text-sm font-semibold italic text-secondary"
+							class="text-sm font-semibold italic text-secondary truncate flex-1 min-w-0"
 						>
 							{{ formatMessage(messages.customLabel) }}
 						</span>
-						<span v-else class="text-sm font-semibold tabular-nums">
+						<span v-else class="text-sm font-semibold tabular-nums truncate flex-1 min-w-0">
 							Java {{ row.parsed_version }}
 						</span>
-						<span v-if="!row._isAuto && !row._isCustom && row.distribution" class="text-xs text-secondary">
+						<span v-if="!row._isAuto && !row._isCustom && row.distribution" class="text-xs text-secondary shrink-0 whitespace-nowrap">
 							{{ row.distribution }}
 						</span>
 					</div>
-					<div v-if="row._isAuto" class="text-xs text-secondary mt-0.5">
-						Java {{ row.parsed_version }}
-						<span v-if="row.distribution"> — {{ row.distribution }}</span>
+					<div v-if="row._isAuto" class="text-xs text-secondary mt-0.5 overflow-hidden">
+						<div class="truncate">
+							Java {{ row.parsed_version }}
+							<span v-if="row.distribution"> — {{ row.distribution }}</span>
+						</div>
 					</div>
-					<div v-else-if="row.path" v-tooltip="row.path" class="text-xs text-secondary font-mono truncate mt-0.5">
-						{{ row.path }}
+					<div v-else-if="row.path" class="text-xs text-secondary font-mono mt-0.5 overflow-hidden" v-tooltip="row.path">
+						<span class="block truncate">{{ row.path }}</span>
 					</div>
 				</div>
 			</div>
