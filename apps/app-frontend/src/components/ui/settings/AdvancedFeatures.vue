@@ -3,7 +3,6 @@ import { WrenchIcon } from '@modrinth/assets'
 import { ButtonStyled, defineMessages, injectNotificationManager, Toggle, useVIntl } from '@modrinth/ui'
 import { inject, ref, watch } from 'vue'
 
-import { isDev } from '@/helpers/utils'
 import { handleSevereError } from '@/store/error.js'
 
 const { formatMessage } = useVIntl()
@@ -16,7 +15,6 @@ watch(startupSoundEnabled, (val) => {
 	localStorage.setItem(STARTUP_SOUND_KEY, String(val))
 })
 
-const isDevEnvironment = await isDev()
 const { addNotification } = injectNotificationManager()
 const replayOnboarding = inject<(mode: 'main' | 'instance') => Promise<void>>('replayOnboarding')
 const previewMinecraftCrashModal = inject<() => void>('previewMinecraftCrashModal')
@@ -97,27 +95,25 @@ const messages = defineMessages({
 			</h3>
 			<div class="flex flex-wrap gap-2">
 				<ButtonStyled>
+					<button @click="triggerTestError">
+						<WrenchIcon /> {{ formatMessage(messages.testError) }}
+					</button>
+				</ButtonStyled>
+				<ButtonStyled>
+					<button @click="triggerTestNotificationError">
+						<WrenchIcon /> {{ formatMessage(messages.testNotificationError) }}
+					</button>
+				</ButtonStyled>
+				<ButtonStyled>
+					<button @click="previewMinecraftCrashModal?.()">
+						<WrenchIcon /> {{ formatMessage(messages.previewMinecraftCrashModal) }}
+					</button>
+				</ButtonStyled>
+				<ButtonStyled>
 					<button @click="replayOnboarding?.('main')">
 						{{ formatMessage(messages.replayOnboarding) }}
 					</button>
 				</ButtonStyled>
-				<template v-if="isDevEnvironment">
-					<ButtonStyled>
-						<button @click="triggerTestError">
-							<WrenchIcon /> {{ formatMessage(messages.testError) }}
-						</button>
-					</ButtonStyled>
-					<ButtonStyled>
-						<button @click="triggerTestNotificationError">
-							<WrenchIcon /> {{ formatMessage(messages.testNotificationError) }}
-						</button>
-					</ButtonStyled>
-					<ButtonStyled>
-						<button @click="previewMinecraftCrashModal?.()">
-							<WrenchIcon /> {{ formatMessage(messages.previewMinecraftCrashModal) }}
-						</button>
-					</ButtonStyled>
-				</template>
 			</div>
 		</div>
 	</div>

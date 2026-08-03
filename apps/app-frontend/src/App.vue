@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AuthFeature, TauriModrinthClient, VerboseLoggingFeature } from '@modrinth/api-client'
+import { AuthFeature, PanelVersionFeature, TauriModrinthClient, VerboseLoggingFeature } from '@modrinth/api-client'
 import {
 	ChangeSkinIcon,
 	CompassIcon,
@@ -14,6 +14,7 @@ import {
 	PlusIcon,
 	RefreshCwIcon,
 	RightArrowIcon,
+	ServerStackIcon,
 	SettingsIcon,
 	SpinnerIcon,
 	UserIcon,
@@ -207,6 +208,8 @@ const appVersion = getVersion()
 const tauriApiClient = new TauriModrinthClient({
 	userAgent: async () => GhastlingBrandConfig.userAgent(await appVersion, await getOsType()),
 	labrinthBaseUrl: config.labrinthBaseUrl,
+	archonBaseUrl: config.archonBaseUrl,
+	sharedInstancesBaseUrl: config.sharedInstancesBaseUrl,
 	features: [
 		...(GhastlingBrandConfig.capabilities.privateModrinthServices
 			? [
@@ -215,6 +218,7 @@ const tauriApiClient = new TauriModrinthClient({
 					}),
 				]
 			: []),
+		new PanelVersionFeature(),
 		new ModrinthMirrorFallbackFeature(),
 		new VerboseLoggingFeature(),
 	],
@@ -418,6 +422,10 @@ const messages = defineMessages({
 	library: {
 		id: 'app.navigation.library',
 		defaultMessage: 'Library',
+	},
+	modrinthHosting: {
+		id: 'app.nav.modrinth-hosting',
+		defaultMessage: 'Modrinth Hosting',
 	},
 	downloads: {
 		id: 'app.navigation.downloads',
@@ -2411,25 +2419,33 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 					<UsersIcon />
 				</NavButton>
 				<NavButton
-					v-tooltip.right="formatMessage(messages.library)"
-					data-onboarding-id="nav-library"
-					to="/library"
-					:is-primary="(r) => r.path === '/library' || r.path === '/library'"
-					:is-subpage="
-						() =>
-							route.path.startsWith('/instance') ||
-							((route.path.startsWith('/browse') || route.path.startsWith('/project')) &&
-								route.query.i)
-					"
-				>
-					<LibraryIcon />
-				</NavButton>
-				<NavButton
-					v-tooltip.right="formatMessage(messages.downloads)"
-					data-onboarding-id="nav-downloads"
-					to="/downloads"
-					class="relative"
-				>
+				v-tooltip.right="formatMessage(messages.library)"
+				data-onboarding-id="nav-library"
+				to="/library"
+				:is-primary="(r) => r.path === '/library' || r.path === '/library'"
+				:is-subpage="
+					() =>
+						route.path.startsWith('/instance') ||
+						((route.path.startsWith('/browse') || route.path.startsWith('/project')) &&
+							route.query.i)
+				"
+			>
+				<LibraryIcon />
+			</NavButton>
+			<NavButton
+				v-tooltip.right="formatMessage(messages.modrinthHosting)"
+				to="/hosting/manage"
+				:is-primary="(r) => r.path === '/hosting/manage' || r.path === '/hosting/manage/'"
+				:is-subpage="(r) => r.path.startsWith('/hosting/manage/') && r.path !== '/hosting/manage/'"
+			>
+				<ServerStackIcon />
+			</NavButton>
+			<NavButton
+				v-tooltip.right="formatMessage(messages.downloads)"
+				data-onboarding-id="nav-downloads"
+				to="/downloads"
+				class="relative"
+			>
 					<DownloadIcon />
 					<span
 						v-if="downloadManager.activeCount.value > 0"
@@ -2459,46 +2475,6 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				:to="() => settingsModal?.show()"
 			>
 				<SettingsIcon />
-			</NavButton>
-			<OverflowMenu
-				v-if="GhastlingBrandConfig.capabilities.privateModrinthServices && credentials?.user"
-				v-tooltip.right="`Modrinth account`"
-				data-onboarding-id="account-entry"
-				class="w-12 h-12 text-primary rounded-full flex items-center justify-center text-2xl transition-all bg-transparent hover:bg-button-bg hover:text-contrast border-0 cursor-pointer"
-				:options="[
-					{
-						id: 'view-profile',
-						action: () => openUrl('https://modrinth.com/user/' + credentials.user.username),
-					},
-					{
-						id: 'sign-out',
-						action: () => logOut(),
-						color: 'danger',
-					},
-				]"
-				placement="right-end"
-			>
-				<Avatar :src="credentials?.user?.avatar_url" alt="" size="32px" circle />
-				<template #view-profile>
-					<UserIcon />
-					<span class="inline-flex items-center gap-1">
-						{{ formatMessage(messages.signedInAs) }}
-						<span class="inline-flex items-center gap-1 text-contrast font-semibold">
-							<Avatar :src="credentials?.user?.avatar_url" alt="" size="20px" circle />
-							{{ credentials?.user?.username }}
-						</span>
-					</span>
-					<ExternalIcon />
-				</template>
-				<template #sign-out> <LogOutIcon /> Sign out </template>
-			</OverflowMenu>
-			<NavButton
-				v-else-if="GhastlingBrandConfig.capabilities.privateModrinthServices"
-				v-tooltip.right="'Sign in to a Modrinth account'"
-				data-onboarding-id="account-entry"
-				:to="() => signIn()"
-			>
-				<LogInIcon class="text-brand" />
 			</NavButton>
 		</div>
 		<div data-tauri-drag-region class="app-grid-statusbar bg-bg-raised h-[--top-bar-height] flex">
@@ -2610,6 +2586,37 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 						<suspense>
 							<AccountsCard ref="accounts" />
 						</suspense>
+						<template v-if="GhastlingBrandConfig.capabilities.privateModrinthServices && credentials?.user">
+							<h3 class="text-base text-primary font-medium m-0 mb-2 mt-3">
+								当前 Modrinth 账号：
+							</h3>
+							<div
+								class="flex gap-1 items-center bg-button-bg border border-solid border-surface-5 rounded-xl p-2"
+							>
+								<button
+									class="flex items-center flex-1 overflow-clip gap-2 p-1 rounded-lg border-2 cursor-pointer min-w-0 transition-colors border-transparent bg-transparent hover:bg-surface-2"
+								>
+									<Avatar
+										:src="credentials?.user?.avatar_url"
+										alt=""
+										size="24px"
+										circle
+									/>
+									<p class="m-0 truncate min-w-0 text-primary">
+										{{ credentials?.user?.username }}
+									</p>
+								</button>
+								<ButtonStyled circular color="red" color-fill="none" hover-color-fill="background">
+									<button
+									v-tooltip="'退出登录'"
+									class="mr-1"
+									@click="logOut"
+								>
+										<LogOutIcon />
+									</button>
+								</ButtonStyled>
+							</div>
+						</template>
 					</div>
 					<div id="sidebar-default-teleport-target"></div>
 				</div>

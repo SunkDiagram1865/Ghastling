@@ -1559,6 +1559,9 @@
 	"app.navigation.library": {
 		"message": "实例库"
 	},
+	"app.nav.modrinth-hosting": {
+		"message": "Modrinth 托管"
+	},
 	"app.navigation.skin-selector": {
 		"message": "皮肤选择器"
 	},

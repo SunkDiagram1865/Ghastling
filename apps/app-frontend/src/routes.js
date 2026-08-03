@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import * as Pages from '@/pages'
 import * as Help from '@/pages/help'
+import * as Hosting from '@/pages/hosting/manage'
 import * as Instance from '@/pages/instance'
 import * as Library from '@/pages/library'
 import * as Project from '@/pages/project'
@@ -41,6 +42,47 @@ export default new createRouter({
 			meta: {
 				breadcrumb: [{ name: 'Downloads' }],
 			},
+		},
+		{
+			path: '/hosting/manage/',
+			name: 'Servers',
+			component: Pages.Servers,
+			meta: {
+				breadcrumb: [{ name: 'Modrinth Hosting' }],
+			},
+		},
+		{
+			path: '/hosting/manage/:id',
+			name: 'ServerManage',
+			component: Hosting.Index,
+			props: true,
+			children: [
+				{
+					path: '',
+					name: 'ServerManageOverview',
+					component: Hosting.Overview,
+				},
+				{
+					path: 'content',
+					name: 'ServerManageContent',
+					component: Hosting.Content,
+				},
+				{
+					path: 'files',
+					name: 'ServerManageFiles',
+					component: Hosting.Files,
+				},
+				{
+					path: 'backups',
+					name: 'ServerManageBackups',
+					component: Hosting.Backups,
+				},
+				{
+					path: 'access',
+					name: 'ServerManageAccess',
+					component: Hosting.Access,
+				},
+			],
 		},
 		{
 			path: '/browse/:projectType',

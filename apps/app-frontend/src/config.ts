@@ -16,7 +16,7 @@ export const GhastlingBrandConfig = Object.freeze({
 	userAgent: (version: string, os: string) => `garbage-human-studio/ghastling/${version} (${os})`,
 	capabilities: Object.freeze({
 		publicModrinthApi: true,
-		privateModrinthServices: false,
+		privateModrinthServices: true,
 		ghsTelemetry: false,
 	}),
 })
@@ -24,6 +24,12 @@ export const GhastlingBrandConfig = Object.freeze({
 const siteUrl = trimTrailingSlash(import.meta.env.MODRINTH_URL || 'https://modrinth.com')
 const officialLabrinthBaseUrl = trimTrailingSlash(
 	import.meta.env.MODRINTH_API_BASE_URL || 'https://api.modrinth.com',
+)
+const archonBaseUrl = trimTrailingSlash(
+	import.meta.env.MODRINTH_ARCHON_BASE_URL || 'https://archon.modrinth.com',
+)
+const sharedInstancesBaseUrl = trimTrailingSlash(
+	import.meta.env.SHARED_INSTANCES_API_BASE_URL || 'https://shared-instances.modrinth.com',
 )
 export const MODRINTH_MIRROR_BASE_URL = 'https://mod.mcimirror.top/modrinth'
 type DownloadSourceMode = 'auto' | 'official_only' | 'mirror_preferred'
@@ -74,4 +80,6 @@ export const config = {
 		import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ||
 		'pk_test_51JbFxJJygY5LJFfKV50mnXzz3YLvBVe2Gd1jn7ljWAkaBlRz3VQdxN9mXcPSrFbSqxwAb0svte9yhnsmm7qHfcWn00R611Ce7b',
 	labrinthBaseUrl: getLabrinthBaseUrl,
+	archonBaseUrl,
+	sharedInstancesBaseUrl,
 }

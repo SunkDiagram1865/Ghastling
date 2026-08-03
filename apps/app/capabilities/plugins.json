@@ -51,6 +51,18 @@
 				},
 				{
 					"url": "https://*.taila228c5.ts.net/*"
+				},
+				{
+					"url": "https://github.com/*"
+				},
+				{
+					"url": "https://*.github.com/*"
+				},
+				{
+					"url": "https://*.githubusercontent.com/*"
+				},
+				{
+					"url": "https://objects.githubusercontent.com/*"
 				}
 			]
 		},
@@ -97,6 +109,7 @@
 			]
 		},
 		"auth:default",
+		"mr-auth:default",
 		"import:default",
 		"jre:default",
 		"logs:default",

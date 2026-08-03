@@ -284,6 +284,9 @@
 	"app.advanced-settings.startup-sound.description": {
 		"message": "啟動器啟動時隨機播放一段音效（在開屏界面期間）。"
 	},
+	"app.advanced-settings.debug.title": {
+		"message": "除錯"
+	},
 	"app.auth-servers.unreachable.body": {
 		"message": "Minecraft 驗證伺服器現在可能無法使用。請檢查網際網路連線，然後再試一次。"
 	},
