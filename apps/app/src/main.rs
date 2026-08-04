@@ -272,6 +272,9 @@ fn main() {
             window_state_builder.build()
         })
         .setup(|app| {
+            // 启动 GPU 占用率后台监控
+            api::system_info::init_gpu_monitor();
+
             #[cfg(target_os = "macos")]
             {
                 let payload = macos::deep_link::get_or_init_payload(app);
@@ -360,6 +363,7 @@ fn main() {
             check_symlink_capability,
             restart_as_admin,
             allow_symlink_target,
+            api::system_info::get_system_info,
         ]);
 
     tracing::info!("Initializing app...");

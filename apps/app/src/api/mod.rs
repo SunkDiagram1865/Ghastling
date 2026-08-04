@@ -14,6 +14,7 @@ pub mod mr_auth;
 pub mod process;
 pub mod settings;
 pub mod shortcuts;
+pub mod system_info;
 pub mod tags;
 pub mod terracotta;
 pub mod translation;

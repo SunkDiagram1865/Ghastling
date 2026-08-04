@@ -269,6 +269,18 @@
 	"app.appearance-settings.sidebar-instance-count.title": {
 		"message": "Sidebar instance limit"
 	},
+	"app.appearance-settings.discover-modpack.description": {
+		"message": "Show the \"Discover a modpack\" section on the Home page."
+	},
+	"app.appearance-settings.discover-modpack.title": {
+		"message": "Discover modpacks"
+	},
+	"app.appearance-settings.discover-mods.description": {
+		"message": "Show the \"Discover mods\" section on the Home page."
+	},
+	"app.appearance-settings.discover-mods.title": {
+		"message": "Discover mods"
+	},
 	"app.appearance-settings.skip-non-essential-warnings.description": {
 		"message": "Automatically skips low-risk confirmations like duplicate modpack installs, normal content deletion, bulk updates, unlinking modpacks, and repair prompts. Dangerous warnings will still be shown."
 	},

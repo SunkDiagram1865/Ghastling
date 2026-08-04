@@ -287,6 +287,18 @@
 	"app.appearance-settings.sidebar-instance-count.title": {
 		"message": "侧边栏实例数量限制"
 	},
+	"app.appearance-settings.discover-modpack.description": {
+		"message": "在主页显示「发现整合包」栏目。"
+	},
+	"app.appearance-settings.discover-modpack.title": {
+		"message": "发现整合包"
+	},
+	"app.appearance-settings.discover-mods.description": {
+		"message": "在主页显示「发现模组」栏目。"
+	},
+	"app.appearance-settings.discover-mods.title": {
+		"message": "发现模组"
+	},
 	"app.appearance-settings.skip-non-essential-warnings.description": {
 		"message": "自动跳过低风险确认，包括重复安装整合包、常规内容删除、批量更新、解除整合包关联及修复提示。危险警告仍会显示。"
 	},

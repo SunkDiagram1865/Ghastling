@@ -290,6 +290,22 @@ const messages = defineMessages({
 		id: 'app.appearance-settings.sidebar-instance-count.description',
 		defaultMessage: 'Maximum number of instances to show in the sidebar. Set to ∞ to show all.',
 	},
+	discoverModpackTitle: {
+		id: 'app.appearance-settings.discover-modpack.title',
+		defaultMessage: 'Discover modpacks',
+	},
+	discoverModpackDescription: {
+		id: 'app.appearance-settings.discover-modpack.description',
+		defaultMessage: 'Show the "Discover a modpack" section on the Home page.',
+	},
+	discoverModsTitle: {
+		id: 'app.appearance-settings.discover-mods.title',
+		defaultMessage: 'Discover mods',
+	},
+	discoverModsDescription: {
+		id: 'app.appearance-settings.discover-mods.description',
+		defaultMessage: 'Show the "Discover mods" section on the Home page.',
+	},
 })
 
 const os = ref(await getOS())
@@ -440,6 +456,20 @@ watch(
 	},
 	{ deep: true },
 )
+
+const SHOW_MODPACK_KEY = 'ghastling-home-show-discover-modpack'
+const SHOW_MODS_KEY = 'ghastling-home-show-discover-mods'
+const showDiscoverModpack = ref(localStorage.getItem(SHOW_MODPACK_KEY) === 'true')
+const showDiscoverMods = ref(localStorage.getItem(SHOW_MODS_KEY) === 'true')
+
+watch(showDiscoverModpack, (val) => {
+	localStorage.setItem(SHOW_MODPACK_KEY, String(val))
+	window.dispatchEvent(new CustomEvent('ghastling-home-discover-change'))
+})
+watch(showDiscoverMods, (val) => {
+	localStorage.setItem(SHOW_MODS_KEY, String(val))
+	window.dispatchEvent(new CustomEvent('ghastling-home-discover-change'))
+})
 </script>
 <template>
 	<h2 class="m-0 text-lg font-semibold text-contrast">
@@ -885,6 +915,34 @@ watch(
 					settings.feature_flags[worldsInHomeFlag] = newValue
 				}
 			"
+		/>
+	</div>
+
+	<div class="mt-6 flex items-center justify-between">
+		<div>
+			<h2 class="m-0 text-lg font-semibold text-contrast">
+				{{ formatMessage(messages.discoverModpackTitle) }}
+			</h2>
+			<p class="m-0 mt-1">{{ formatMessage(messages.discoverModpackDescription) }}</p>
+		</div>
+		<Toggle
+			id="discover-modpack"
+			:model-value="showDiscoverModpack"
+			@update:model-value="(e: boolean) => (showDiscoverModpack = e)"
+		/>
+	</div>
+
+	<div class="mt-6 flex items-center justify-between">
+		<div>
+			<h2 class="m-0 text-lg font-semibold text-contrast">
+				{{ formatMessage(messages.discoverModsTitle) }}
+			</h2>
+			<p class="m-0 mt-1">{{ formatMessage(messages.discoverModsDescription) }}</p>
+		</div>
+		<Toggle
+			id="discover-mods"
+			:model-value="showDiscoverMods"
+			@update:model-value="(e: boolean) => (showDiscoverMods = e)"
 		/>
 	</div>
 

@@ -7,6 +7,7 @@ import { computed, onUnmounted, ref, shallowRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import RowDisplay from '@/components/RowDisplay.vue'
+import SystemInfoPanel from '@/components/ui/SystemInfoPanel.vue'
 import RecentWorldsList from '@/components/ui/world/RecentWorldsList.vue'
 import { useNetworkStatus } from '@/composables/useNetworkStatus'
 import { useTranslationToggle } from '@/composables/useTranslationToggle'
@@ -57,6 +58,9 @@ const featuredMods = ref<SearchResult[]>([])
 const installedModpacksFilter = ref('')
 const originalFeaturedModpacks = shallowRef<SearchResult[]>([])
 const originalFeaturedMods = shallowRef<SearchResult[]>([])
+
+const showDiscoverModpack = ref(localStorage.getItem('ghastling-home-show-discover-modpack') === 'true')
+const showDiscoverMods = ref(localStorage.getItem('ghastling-home-show-discover-mods') === 'true')
 const {
 	translationActive,
 	translationLoading,
@@ -75,7 +79,9 @@ const recentInstances = computed(() =>
 )
 
 const hasFeaturedProjects = computed(
-	() => (featuredModpacks.value?.length ?? 0) + (featuredMods.value?.length ?? 0) > 0,
+	() =>
+		(showDiscoverModpack.value && (featuredModpacks.value?.length ?? 0) > 0) ||
+		(showDiscoverMods.value && (featuredMods.value?.length ?? 0) > 0),
 )
 
 const { offline } = useNetworkStatus()
@@ -195,8 +201,15 @@ const unlistenInstance = await instance_listener(
 	},
 )
 
+function onDiscoverChange() {
+	showDiscoverModpack.value = localStorage.getItem('ghastling-home-show-discover-modpack') === 'true'
+	showDiscoverMods.value = localStorage.getItem('ghastling-home-show-discover-mods') === 'true'
+}
+window.addEventListener('ghastling-home-discover-change', onDiscoverChange)
+
 onUnmounted(() => {
 	unlistenInstance()
+	window.removeEventListener('ghastling-home-discover-change', onDiscoverChange)
 })
 </script>
 
@@ -209,7 +222,7 @@ onUnmounted(() => {
 			<h1 v-else class="m-0 text-2xl font-extrabold">
 				{{ formatMessage(messages.welcome) }}
 			</h1>
-			<ButtonStyled size="large" type="transparent">
+			<ButtonStyled v-if="showDiscoverModpack || showDiscoverMods" size="large" type="transparent">
 				<button :disabled="translationLoading" @click="toggleTranslation">
 					<SpinnerIcon v-if="translationLoading" class="animate-spin" />
 					<LanguagesIcon v-else />
@@ -225,6 +238,9 @@ onUnmounted(() => {
 				</button>
 			</ButtonStyled>
 		</div>
+		<div class="rounded-xl border border-divider bg-bg/50 px-6 py-3">
+		<SystemInfoPanel />
+	</div>
 		<div data-onboarding-id="home-recent">
 			<RecentWorldsList :recent-instances="recentInstances" />
 		</div>
@@ -237,12 +253,14 @@ onUnmounted(() => {
 						route: '/browse/modpack',
 						instances: featuredModpacks,
 						downloaded: false,
+						show: showDiscoverModpack,
 					},
 					{
 						label: formatMessage(messages.discoverMods),
 						route: '/browse/mod',
 						instances: featuredMods,
 						downloaded: false,
+						show: showDiscoverMods,
 					},
 				]"
 				:can-paginate="true"
