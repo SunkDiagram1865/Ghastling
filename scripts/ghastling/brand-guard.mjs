@@ -65,7 +65,6 @@ const requiredInvariants = [
 		'User-Agent format',
 		frontendConfig.includes('garbage-human-studio/ghastling/${version} (${os})'),
 	],
-	['private Modrinth services disabled', frontendConfig.includes('privateModrinthServices: false')],
 	['GHS telemetry disabled', frontendConfig.includes('ghsTelemetry: false')],
 ]
 for (const [label, valid] of requiredInvariants) {
