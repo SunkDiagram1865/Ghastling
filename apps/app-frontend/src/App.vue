@@ -1876,6 +1876,11 @@ async function logOut() {
 onMounted(() => {
 	invoke('show_window')
 
+	// 同步关闭行为设置到后端（最小化到托盘 or 直接关闭）
+	invoke('set_close_to_tray', {
+		enabled: localStorage.getItem('ghastling-close-to-tray') === 'tray',
+	}).catch(() => {})
+
 	error.setErrorModal(errorModal.value)
 	error.setMinecraftAuthErrorModal(minecraftAuthErrorModal.value)
 

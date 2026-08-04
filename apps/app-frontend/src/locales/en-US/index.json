@@ -326,6 +326,18 @@
 	"app.advanced-settings.startup-sound.description": {
 		"message": "Play a random sound when the launcher starts (during the splash screen)."
 	},
+	"app.advanced-settings.close-behavior.title": {
+		"message": "Close button behavior"
+	},
+	"app.advanced-settings.close-behavior.description": {
+		"message": "Choose whether clicking the close button minimizes to system tray or exits the launcher."
+	},
+	"app.advanced-settings.close-behavior.tray": {
+		"message": "Minimize to system tray"
+	},
+	"app.advanced-settings.close-behavior.close": {
+		"message": "Close directly"
+	},
 	"app.advanced-settings.debug.title": {
 		"message": "Debug"
 	},

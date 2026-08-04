@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { WrenchIcon } from '@modrinth/assets'
-import { ButtonStyled, defineMessages, injectNotificationManager, Toggle, useVIntl } from '@modrinth/ui'
-import { inject, ref, watch } from 'vue'
+import { ButtonStyled, Combobox, defineMessages, injectNotificationManager, Toggle, useVIntl } from '@modrinth/ui'
+import { invoke } from '@tauri-apps/api/core'
+import { computed, inject, ref, watch } from 'vue'
 
 import { handleSevereError } from '@/store/error.js'
 
@@ -16,6 +17,26 @@ watch(startupSoundEnabled, (val) => {
 })
 
 const dragDropEnabled = inject<import('vue').Ref<boolean>>('dragDropEnabled', ref(true))
+
+const CLOSE_BEHAVIOR_KEY = 'ghastling-close-to-tray'
+
+// 关闭行为：'tray' 最小化到托盘，'close' 直接关闭
+const closeBehavior = ref<'tray' | 'close'>(
+	localStorage.getItem(CLOSE_BEHAVIOR_KEY) === 'tray' ? 'tray' : 'close',
+)
+
+const closeBehaviorOptions = computed(() => [
+	{ value: 'tray', label: formatMessage(messages.closeBehaviorTray) },
+	{ value: 'close', label: formatMessage(messages.closeBehaviorClose) },
+])
+
+watch(closeBehavior, (val) => {
+	localStorage.setItem(CLOSE_BEHAVIOR_KEY, val)
+	invoke('set_close_to_tray', { enabled: val === 'tray' }).catch(() => {})
+})
+
+// 组件挂载时同步设置到后端
+invoke('set_close_to_tray', { enabled: closeBehavior.value === 'tray' }).catch(() => {})
 
 const { addNotification } = injectNotificationManager()
 const replayOnboarding = inject<(mode: 'main' | 'instance') => Promise<void>>('replayOnboarding')
@@ -49,6 +70,22 @@ const messages = defineMessages({
 	dragDropDescription: {
 		id: 'app.advanced-settings.drag-drop.description',
 		defaultMessage: '拖放文件到窗口即可自动识别并导入（模组、整合包、存档等）。',
+	},
+	closeBehaviorTitle: {
+		id: 'app.advanced-settings.close-behavior.title',
+		defaultMessage: '关闭按钮行为',
+	},
+	closeBehaviorDescription: {
+		id: 'app.advanced-settings.close-behavior.description',
+		defaultMessage: '选择点击关闭按钮时是最小化到系统托盘还是直接退出启动器。',
+	},
+	closeBehaviorTray: {
+		id: 'app.advanced-settings.close-behavior.tray',
+		defaultMessage: '最小化到系统托盘',
+	},
+	closeBehaviorClose: {
+		id: 'app.advanced-settings.close-behavior.close',
+		defaultMessage: '直接关闭',
 	},
 	debugTitle: {
 		id: 'app.advanced-settings.debug.title',
@@ -113,6 +150,25 @@ const messages = defineMessages({
 				:model-value="dragDropEnabled"
 				@update:model-value="(e) => (dragDropEnabled = !!e)"
 			/>
+		</div>
+
+		<div class="grid grid-cols-[minmax(0,1fr)_11rem] items-center gap-6">
+			<div class="flex min-w-0 flex-col gap-1">
+				<h2 class="m-0 text-lg font-semibold text-contrast">
+					{{ formatMessage(messages.closeBehaviorTitle) }}
+				</h2>
+				<p class="m-0 leading-relaxed text-secondary">
+					{{ formatMessage(messages.closeBehaviorDescription) }}
+				</p>
+			</div>
+			<div class="w-44">
+				<Combobox
+					id="close-behavior"
+					v-model="closeBehavior"
+					name="Close behavior"
+					:options="closeBehaviorOptions"
+				/>
+			</div>
 		</div>
 
 		<div>

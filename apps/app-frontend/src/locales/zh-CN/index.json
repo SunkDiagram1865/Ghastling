@@ -140,6 +140,18 @@
 	"app.advanced-settings.startup-sound.description": {
 		"message": "启动器启动时随机播放一段音效（在开屏界面期间）。"
 	},
+	"app.advanced-settings.close-behavior.title": {
+		"message": "关闭按钮行为"
+	},
+	"app.advanced-settings.close-behavior.description": {
+		"message": "选择点击关闭按钮时是最小化到系统托盘还是直接退出启动器。"
+	},
+	"app.advanced-settings.close-behavior.tray": {
+		"message": "最小化到系统托盘"
+	},
+	"app.advanced-settings.close-behavior.close": {
+		"message": "直接关闭"
+	},
 	"app.advanced-settings.debug.title": {
 		"message": "调试"
 	},

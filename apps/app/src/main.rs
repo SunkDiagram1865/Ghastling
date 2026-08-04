@@ -6,10 +6,15 @@
 
 use native_dialog::{DialogBuilder, MessageLevel};
 use std::env;
-use std::sync::atomic::Ordering;
+use std::sync::atomic::{AtomicBool, Ordering};
+use tauri::menu::{Menu, MenuItem};
+use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
 use tauri::{Listener, Manager};
 use tauri_plugin_fs::FsExt;
 use theseus::prelude::*;
+
+// 控制关闭窗口时是否最小化到系统托盘
+static CLOSE_TO_TRAY: AtomicBool = AtomicBool::new(false);
 
 mod api;
 mod error;
@@ -140,6 +145,11 @@ fn restart_as_admin(app: tauri::AppHandle) {
 fn allow_symlink_target(app: tauri::AppHandle, path: String) {
     use tauri_plugin_fs::FsExt;
     let _ = app.fs_scope().allow_directory(&path, true);
+}
+
+#[tauri::command]
+fn set_close_to_tray(enabled: bool) {
+    CLOSE_TO_TRAY.store(enabled, Ordering::Relaxed);
 }
 
 #[tauri::command]
@@ -320,7 +330,58 @@ fn main() {
                 tracing::warn!("Failed to set window shadow: {e}");
             }
 
+            // 创建系统托盘
+            let show_item = MenuItem::with_id(app, "tray_show", "显示主界面", true, None::<&str>)?;
+            let quit_item = MenuItem::with_id(app, "tray_quit", "退出", true, None::<&str>)?;
+            let menu = Menu::with_items(app, &[&show_item, &quit_item])?;
+
+            let _tray = TrayIconBuilder::with_id("main-tray")
+                .icon(app.default_window_icon().unwrap().clone())
+                .menu(&menu)
+                .show_menu_on_left_click(false)
+                .tooltip("Ghastling Launcher")
+                .on_menu_event(|app, event| {
+                    match event.id().as_ref() {
+                        "tray_show" => {
+                            if let Some(window) = app.get_window("main") {
+                                let _ = window.show();
+                                let _ = window.unminimize();
+                                let _ = window.set_focus();
+                            }
+                        }
+                        "tray_quit" => {
+                            app.exit(0);
+                        }
+                        _ => {}
+                    }
+                })
+                .on_tray_icon_event(|tray, event| {
+                    if let TrayIconEvent::Click {
+                        button: MouseButton::Left,
+                        button_state: MouseButtonState::Up,
+                        ..
+                    } = event
+                    {
+                        let app = tray.app_handle();
+                        if let Some(window) = app.get_window("main") {
+                            let _ = window.show();
+                            let _ = window.unminimize();
+                            let _ = window.set_focus();
+                        }
+                    }
+                })
+                .build(app)?;
+
             Ok(())
+        })
+        .on_window_event(|window, event| {
+            // 拦截窗口关闭：若启用了"最小化到托盘"，则隐藏窗口而非关闭
+            if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                if CLOSE_TO_TRAY.load(Ordering::Relaxed) {
+                    api.prevent_close();
+                    let _ = window.hide();
+                }
+            }
         });
 
     builder = builder
@@ -363,6 +424,7 @@ fn main() {
             check_symlink_capability,
             restart_as_admin,
             allow_symlink_target,
+            set_close_to_tray,
             api::system_info::get_system_info,
         ]);
 
