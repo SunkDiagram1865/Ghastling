@@ -8,7 +8,9 @@ use native_dialog::{DialogBuilder, MessageLevel};
 use std::env;
 use std::sync::atomic::{AtomicBool, Ordering};
 use tauri::menu::{Menu, MenuItem};
-use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
+use tauri::tray::{
+    MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent,
+};
 use tauri::{Listener, Manager};
 use tauri_plugin_fs::FsExt;
 use theseus::prelude::*;
@@ -223,7 +225,9 @@ fn main() {
 
     let _log_guard = theseus::start_logger(&tauri_context.config().identifier);
 
-    tracing::info!("Initialized tracing subscriber. Loading Ghastling Launcher!");
+    tracing::info!(
+        "Initialized tracing subscriber. Loading Ghastling Launcher!"
+    );
 
     let mut builder = tauri::Builder::default();
 
@@ -331,8 +335,20 @@ fn main() {
             }
 
             // 创建系统托盘
-            let show_item = MenuItem::with_id(app, "tray_show", "显示主界面", true, None::<&str>)?;
-            let quit_item = MenuItem::with_id(app, "tray_quit", "退出", true, None::<&str>)?;
+            let show_item = MenuItem::with_id(
+                app,
+                "tray_show",
+                "显示主界面",
+                true,
+                None::<&str>,
+            )?;
+            let quit_item = MenuItem::with_id(
+                app,
+                "tray_quit",
+                "退出",
+                true,
+                None::<&str>,
+            )?;
             let menu = Menu::with_items(app, &[&show_item, &quit_item])?;
 
             let _tray = TrayIconBuilder::with_id("main-tray")
@@ -340,20 +356,18 @@ fn main() {
                 .menu(&menu)
                 .show_menu_on_left_click(false)
                 .tooltip("Ghastling Launcher")
-                .on_menu_event(|app, event| {
-                    match event.id().as_ref() {
-                        "tray_show" => {
-                            if let Some(window) = app.get_window("main") {
-                                let _ = window.show();
-                                let _ = window.unminimize();
-                                let _ = window.set_focus();
-                            }
+                .on_menu_event(|app, event| match event.id().as_ref() {
+                    "tray_show" => {
+                        if let Some(window) = app.get_window("main") {
+                            let _ = window.show();
+                            let _ = window.unminimize();
+                            let _ = window.set_focus();
                         }
-                        "tray_quit" => {
-                            app.exit(0);
-                        }
-                        _ => {}
                     }
+                    "tray_quit" => {
+                        app.exit(0);
+                    }
+                    _ => {}
                 })
                 .on_tray_icon_event(|tray, event| {
                     if let TrayIconEvent::Click {
