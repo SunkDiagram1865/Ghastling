@@ -20,8 +20,14 @@ static GPU_USAGE: OnceLock<AtomicU32> = OnceLock::new();
 
 #[cfg(target_os = "windows")]
 fn query_gpu_usage() -> f32 {
+    use std::os::windows::process::CommandExt;
+
+    // CREATE_NO_WINDOW = 0x08000000，阻止 GUI 进程中启动子进程时弹出控制台窗口
+    const CREATE_NO_WINDOW: u32 = 0x0800_0000;
+
     // 通过 PowerShell 读取 GPU 3D 引擎占用率性能计数器，求和所有实例
     let output = std::process::Command::new("powershell")
+		.creation_flags(CREATE_NO_WINDOW)
 		.args([
 			"-NoProfile",
 			"-NonInteractive",
