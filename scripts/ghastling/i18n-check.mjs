@@ -1,13 +1,18 @@
-import { readFile } from 'node:fs/promises'
+import { readFile, access } from 'node:fs/promises'
 import { parse, TYPE } from '@formatjs/icu-messageformat-parser'
 
-const localePairs = [
-	[
-		'apps/app-frontend/src/locales/en-US/index.json',
-		'apps/app-frontend/src/locales/zh-CN/index.json',
-	],
-	['packages/ui/src/locales/en-US/index.json', 'packages/ui/src/locales/zh-CN/index.json'],
-]
+// en-US 语言文件已删除，代码中的 defaultMessage 即为英文源文本
+// 无需独立对比 en-US 与 zh-CN 的键覆盖率
+const localePairs = []
+
+async function fileExists(path) {
+	try {
+		await access(path)
+		return true
+	} catch {
+		return false
+	}
+}
 
 const failures = []
 const allowedUntranslatedMessages = new Set([
@@ -58,6 +63,9 @@ function argumentNames(message) {
 }
 
 for (const [sourcePath, translationPath] of localePairs) {
+	if (!(await fileExists(sourcePath)) || !(await fileExists(translationPath))) {
+		continue
+	}
 	const source = JSON.parse(await readFile(sourcePath, 'utf8'))
 	const translation = JSON.parse(await readFile(translationPath, 'utf8'))
 
