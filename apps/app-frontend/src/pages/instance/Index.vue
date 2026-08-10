@@ -858,16 +858,16 @@ const timePlayedHumanized = computed(() => {
 	const duration = dayjs.duration(timePlayed.value, 'seconds')
 	const hours = Math.floor(duration.asHours())
 	if (hours >= 1) {
-		return hours + ' hour' + (hours > 1 ? 's' : '')
+		return hours + ' 小时'
 	}
 
 	const minutes = Math.floor(duration.asMinutes())
 	if (minutes >= 1) {
-		return minutes + ' minute' + (minutes > 1 ? 's' : '')
+		return minutes + ' 分钟'
 	}
 
 	const seconds = Math.floor(duration.asSeconds())
-	return seconds + ' second' + (seconds > 1 ? 's' : '')
+	return seconds + ' 秒'
 })
 
 onUnmounted(() => {

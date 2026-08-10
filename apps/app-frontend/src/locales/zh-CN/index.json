@@ -1772,6 +1772,24 @@
 	"app.onboarding.account.title": {
 		"message": "账号，随你安排"
 	},
+	"app.onboarding.multiplayer.title": {
+		"message": "多人联机"
+	},
+	"app.onboarding.multiplayer.description": {
+		"message": "陶瓦联机在这里。和朋友一起玩，享受优质的联机体验。"
+	},
+	"app.onboarding.action.click-multiplayer": {
+		"message": "点击联机继续"
+	},
+	"app.onboarding.hosting.title": {
+		"message": "服务器，简单点"
+	},
+	"app.onboarding.hosting.description": {
+		"message": "Modrinth 托管让服务器管理触手可及。"
+	},
+	"app.onboarding.action.click-hosting": {
+		"message": "点击 Modrinth 托管继续"
+	},
 	"app.onboarding.action.click-create": {
 		"message": "点击创建新实例，继续"
 	},
@@ -1910,12 +1928,6 @@
 	"app.onboarding.java.title": {
 		"message": "Java，在后台"
 	},
-	"app.onboarding.language.description": {
-		"message": "在这里选择启动器语言和管理翻译。不需要翻译腔。"
-	},
-	"app.onboarding.language.title": {
-		"message": "说你的语言"
-	},
 	"app.onboarding.library-page.description": {
 		"message": "按整合包、服务器或自定义配置筛选，再打开任意实例管理。"
 	},
@@ -1965,10 +1977,16 @@
 		"message": "浏览时直接翻译 Modrinth 项目的标题、摘要和介绍。保留原文、双语同屏，或者让译文站 C 位，都由你决定。"
 	},
 	"app.onboarding.translation.title": {
-		"message": "翻译，是 Axolotl 的拿手活"
+		"message": "翻译，是 Ghastling 的拿手活"
 	},
 	"app.onboarding.updates.description": {
-		"message": "决定 Axolotl 何时检查更新，以及是否替你安装。"
+		"message": "决定 Ghastling 何时检查更新，以及是否替你安装。"
+	},
+	"app.onboarding.advanced-features.title": {
+		"message": "进阶玩家的地盘"
+	},
+	"app.onboarding.advanced-features.description": {
+		"message": "启动音效、拖放导入、关闭到托盘和调试工具都在这里。"
 	},
 	"app.onboarding.updates.title": {
 		"message": "保持在线"
@@ -2064,7 +2082,7 @@
 		"message": "支持项目持续开发"
 	},
 	"app.settings.about.attribution": {
-		"message": "本程序由 Modrinth, Axolotl 开源项目修改而来。"
+		"message": "本程序由 Modrinth, Ghastling 开源项目修改而来。"
 	},
 	"app.settings.about.community-support": {
 		"message": "社区与支持"
@@ -3561,7 +3579,7 @@
 		"message": "取消"
 	},
 	"drop.help.title": {
-		"message": "我可以拖入什么到 Axolotl？"
+		"message": "我可以拖入什么到 Ghastling？"
 	},
 	"drop.help.instances-title": {
 		"message": "启动器实例"

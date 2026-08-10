@@ -146,7 +146,10 @@ export function useOnboardingTour(
 
 	function scheduleMissingTargetRetry(stepId: string) {
 		if (targetRetryCount >= missingTargetRetryLimit) {
-			void advance()
+			// inspect 步骤找不到目标时不自动跳过，保持对话框在中央让用户手动点击继续
+			if (step.value.interaction !== 'inspect') {
+				void advance()
+			}
 			return
 		}
 

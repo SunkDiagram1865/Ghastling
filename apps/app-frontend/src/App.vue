@@ -2427,10 +2427,11 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 					<ChangeSkinIcon />
 				</NavButton>
 				<NavButton
-					v-tooltip.right="formatMessage(messages.multiplayer)"
-					to="/multiplayer"
-					:is-primary="(r) => r.path === '/multiplayer'"
-				>
+				v-tooltip.right="formatMessage(messages.multiplayer)"
+				data-onboarding-id="nav-multiplayer"
+				to="/multiplayer"
+				:is-primary="(r) => r.path === '/multiplayer'"
+			>
 					<UsersIcon />
 				</NavButton>
 				<NavButton
@@ -2448,8 +2449,9 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 				<LibraryIcon />
 			</NavButton>
 			<NavButton
-				v-tooltip.right="formatMessage(messages.modrinthHosting)"
-				to="/hosting/manage"
+			v-tooltip.right="formatMessage(messages.modrinthHosting)"
+			data-onboarding-id="nav-hosting"
+			to="/hosting/manage"
 				:is-primary="(r) => r.path === '/hosting/manage' || r.path === '/hosting/manage/'"
 				:is-subpage="(r) => r.path.startsWith('/hosting/manage/') && r.path !== '/hosting/manage/'"
 			>

@@ -77,8 +77,8 @@ const {
 				v-else
 				:key="`${mode}-${step.id}`"
 				:step="step"
-				:current="stepIndex + 1"
-				:total="steps.length"
+				:current="stepIndex"
+				:total="steps.length - 1"
 				:docked="isDialogueStep"
 				@advance="handleManualClick"
 				@skip="emit('skip')"

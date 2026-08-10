@@ -95,6 +95,30 @@ export const onboardingMessages = defineMessages({
 		defaultMessage:
 			'When you are ready, sign in, switch accounts, or open your profile here. No deadline.',
 	},
+	multiplayerTitle: {
+		id: 'app.onboarding.multiplayer.title',
+		defaultMessage: 'Play together',
+	},
+	multiplayerDescription: {
+		id: 'app.onboarding.multiplayer.description',
+		defaultMessage: 'Terracotta multiplayer lives here. Join friends or host a session.',
+	},
+	clickMultiplayer: {
+		id: 'app.onboarding.action.click-multiplayer',
+		defaultMessage: 'Click Multiplayer to continue',
+	},
+	hostingTitle: {
+		id: 'app.onboarding.hosting.title',
+		defaultMessage: 'Servers, simplified',
+	},
+	hostingDescription: {
+		id: 'app.onboarding.hosting.description',
+		defaultMessage: 'Modrinth Hosting puts server management a click away.',
+	},
+	clickHosting: {
+		id: 'app.onboarding.action.click-hosting',
+		defaultMessage: 'Click Modrinth Hosting to continue',
+	},
 	downloadsTitle: { id: 'app.onboarding.downloads.title', defaultMessage: 'Download control room' },
 	downloadsDescription: {
 		id: 'app.onboarding.downloads.description',
@@ -130,11 +154,6 @@ export const onboardingMessages = defineMessages({
 		defaultMessage:
 			'Theme, accent, background, and window behavior. Make this launcher look familiar.',
 	},
-	languageTitle: { id: 'app.onboarding.language.title', defaultMessage: 'Speak your language' },
-	languageDescription: {
-		id: 'app.onboarding.language.description',
-		defaultMessage: 'Pick the launcher language and manage translations. No decoder ring required.',
-	},
 	translationTitle: {
 		id: 'app.onboarding.translation.title',
 		defaultMessage: 'Translation, the Ghastling way',
@@ -163,6 +182,14 @@ export const onboardingMessages = defineMessages({
 	resourcesDescription: {
 		id: 'app.onboarding.resources.description',
 		defaultMessage: 'Tune downloads, storage, and app resources. Give the fan a little dignity.',
+	},
+	advancedFeaturesTitle: {
+		id: 'app.onboarding.advanced-features.title',
+		defaultMessage: 'Power user territory',
+	},
+	advancedFeaturesDescription: {
+		id: 'app.onboarding.advanced-features.description',
+		defaultMessage: 'Startup sounds, drag-and-drop imports, close-to-tray, and debug tools live here.',
 	},
 	updatesTitle: { id: 'app.onboarding.updates.title', defaultMessage: 'Stay in the loop' },
 	updatesDescription: {
@@ -316,12 +343,6 @@ const settingsTourSteps: Array<[string, string, MessageDescriptor, MessageDescri
 		onboardingMessages.appearanceDescription,
 	],
 	[
-		'settings-language',
-		'settings-tab-language',
-		onboardingMessages.languageTitle,
-		onboardingMessages.languageDescription,
-	],
-	[
 		'settings-translation',
 		'settings-tab-translation',
 		onboardingMessages.translationTitle,
@@ -344,6 +365,12 @@ const settingsTourSteps: Array<[string, string, MessageDescriptor, MessageDescri
 		'settings-tab-resources',
 		onboardingMessages.resourcesTitle,
 		onboardingMessages.resourcesDescription,
+	],
+	[
+		'settings-advanced-features',
+		'settings-tab-advanced',
+		onboardingMessages.advancedFeaturesTitle,
+		onboardingMessages.advancedFeaturesDescription,
 	],
 	[
 		'settings-updates',
@@ -419,6 +446,42 @@ export const onboardingTours: Record<OnboardingMode, OnboardingStep[]> = {
 			control('account-entry'),
 		),
 		step(
+			'multiplayer-navigation',
+			'navigate',
+			copy(
+				onboardingMessages.multiplayerTitle,
+				onboardingMessages.multiplayerDescription,
+				onboardingMessages.clickMultiplayer,
+			),
+			control('nav-multiplayer', '/multiplayer'),
+		),
+		step(
+			'library-navigation',
+			'navigate',
+			copy(
+				onboardingMessages.libraryTitle,
+				onboardingMessages.libraryDescription,
+				onboardingMessages.clickLibrary,
+			),
+			control('nav-library', '/library'),
+		),
+		inspect(
+			'library-content',
+			'library-content',
+			onboardingMessages.libraryPageTitle,
+			onboardingMessages.libraryPageDescription,
+		),
+		step(
+			'hosting-navigation',
+			'navigate',
+			copy(
+				onboardingMessages.hostingTitle,
+				onboardingMessages.hostingDescription,
+				onboardingMessages.clickHosting,
+			),
+			control('nav-hosting', '/hosting/manage'),
+		),
+		step(
 			'downloads-navigation',
 			'navigate',
 			copy(
@@ -449,22 +512,6 @@ export const onboardingTours: Record<OnboardingMode, OnboardingStep[]> = {
 				...control(targetId),
 				closeSettingsAfter: index === settingsTourSteps.length - 1,
 			}),
-		),
-		step(
-			'library-navigation',
-			'navigate',
-			copy(
-				onboardingMessages.libraryTitle,
-				onboardingMessages.libraryDescription,
-				onboardingMessages.clickLibrary,
-			),
-			control('nav-library', '/library'),
-		),
-		inspect(
-			'library-content',
-			'library-content',
-			onboardingMessages.libraryPageTitle,
-			onboardingMessages.libraryPageDescription,
 		),
 		step(
 			'create-instance',
