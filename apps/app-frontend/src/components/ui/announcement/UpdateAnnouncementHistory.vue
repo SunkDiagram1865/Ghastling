@@ -9,7 +9,6 @@ import {
 	getLocalizedAnnouncementText,
 } from '@/announcements/catalog'
 import { GhastlingBrandConfig } from '@/config'
-import i18n from '@/i18n.config'
 
 import UpdateAnnouncementContent from './UpdateAnnouncementContent.vue'
 
@@ -38,7 +37,6 @@ const messages = defineMessages({
 	},
 })
 
-const locale = computed(() => i18n.global.locale.value)
 const launcherAnnouncements = getAnnouncements()
 const currentAnnouncement = computed(() => getAnnouncementByVersion(props.currentVersion))
 const historyAnnouncements = computed(() =>
@@ -86,7 +84,7 @@ const historyAnnouncements = computed(() =>
 								<span
 									class="truncate font-semibold text-primary transition-colors group-hover:text-contrast"
 								>
-									{{ getLocalizedAnnouncementText(announcement.title, locale) }}
+									{{ getLocalizedAnnouncementText(announcement.title) }}
 								</span>
 								<div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-secondary">
 									<TagItem class="px-1.5 py-0.5 text-xs">v{{ announcement.version }}</TagItem>

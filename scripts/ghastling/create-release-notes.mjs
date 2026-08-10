@@ -31,38 +31,37 @@ if (!announcement) {
 }
 
 const categoryLabels = {
-	added: { zh: '新增' },
-	changed: { zh: '变更' },
-	deprecated: { zh: '弃用' },
-	removed: { zh: '移除' },
-	fixed: { zh: 'Bug 修复' },
-	security: { zh: '安全修复' },
+	added: '新增',
+	changed: '变更',
+	deprecated: '弃用',
+	removed: '移除',
+	fixed: 'Bug 修复',
+	security: '安全修复',
 }
 
 function renderLanguage() {
-	const locale = 'zh-CN'
 	const lines = []
 
 	for (const type of catalogModule.ANNOUNCEMENT_CHANGE_TYPES) {
 		const changes = announcement.changes[type]
 		if (!changes?.length) continue
 
-		lines.push(`### ${categoryLabels[type].zh}`, '')
+		lines.push(`### ${categoryLabels[type]}`, '')
 		for (const change of changes) {
-			lines.push(`- ${change[locale]}`)
+			lines.push(`- ${change}`)
 		}
 		lines.push('')
 	}
 
 	if (announcement.notes) {
-		lines.push(`### 说明`, '', announcement.notes[locale], '')
+		lines.push('### 说明', '', announcement.notes, '')
 	}
 
 	return lines
 }
 
 const lines = [
-	`# ${announcement.title['zh-CN']}`,
+	`# ${announcement.title}`,
 	'',
 	`发布日期：${announcement.publishedAt}`,
 	'',

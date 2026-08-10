@@ -10,7 +10,6 @@ import {
 	getLocalizedAnnouncementText,
 	type LauncherAnnouncement,
 } from '@/announcements/catalog'
-import i18n from '@/i18n.config'
 
 const props = withDefaults(
 	defineProps<{
@@ -85,10 +84,9 @@ const categoryClasses: Record<AnnouncementChangeType, string> = {
 	security: 'bg-brand-orange',
 }
 
-const locale = computed(() => i18n.global.locale.value)
 const title = computed(() =>
 	props.announcement
-		? getLocalizedAnnouncementText(props.announcement.title, locale.value)
+		? getLocalizedAnnouncementText(props.announcement.title)
 		: formatMessage(messages.unknownTitle),
 )
 const versionLabel = computed(() =>
@@ -103,7 +101,7 @@ const categoryRows = computed(() =>
 				type,
 				label: formatMessage(messages[type]),
 				className: categoryClasses[type],
-				changes: changes.map((change) => getLocalizedAnnouncementText(change, locale.value)),
+				changes: changes.map((change) => getLocalizedAnnouncementText(change)),
 			},
 		]
 	}),
@@ -154,7 +152,7 @@ async function openChangelog() {
 				{{ formatMessage(messages.notes) }}
 			</h3>
 			<p class="m-0 leading-relaxed text-primary">
-				{{ getLocalizedAnnouncementText(announcement.notes, locale) }}
+				{{ getLocalizedAnnouncementText(announcement.notes) }}
 			</p>
 		</div>
 
