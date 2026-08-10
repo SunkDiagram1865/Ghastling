@@ -354,6 +354,7 @@ impl State {
 
         tracing::info!("Fetching app settings");
         let mut settings = Settings::get(&pool).await?;
+        crate::util::fetch::set_use_system_proxy(settings.use_system_proxy);
         let download_concurrency =
             settings.effective_max_concurrent_downloads();
         let fetch_semaphore =

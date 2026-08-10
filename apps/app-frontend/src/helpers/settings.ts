@@ -96,6 +96,7 @@ export type AppSettings = {
 	migrated: boolean
 
 	developer_mode: boolean
+	use_system_proxy: boolean
 	feature_flags: Record<FeatureFlag, boolean>
 
 	skipped_update: string | null

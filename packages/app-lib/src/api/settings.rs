@@ -20,6 +20,7 @@ pub async fn set(mut settings: Settings) -> crate::Result<()> {
     settings.apply_legacy_download_source_settings();
     settings.update(&state.pool).await?;
     state.update_download_settings(&settings);
+    crate::util::fetch::set_use_system_proxy(settings.use_system_proxy);
 
     Ok(())
 }

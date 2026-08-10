@@ -240,6 +240,7 @@ pub struct DownloadResult {
 
 static AUTO_PREFERS_OFFICIAL: AtomicBool = AtomicBool::new(false);
 static AUTO_SOURCE_PROBED: AtomicBool = AtomicBool::new(false);
+static USE_SYSTEM_PROXY: AtomicBool = AtomicBool::new(true);
 static IN_FLIGHT_DOWNLOADS: LazyLock<
     dashmap::DashMap<String, Weak<AsyncMutex<()>>>,
 > = LazyLock::new(dashmap::DashMap::new);
@@ -299,14 +300,25 @@ fn route(
     is_mirror: bool,
     supports_range: bool,
 ) -> DownloadRoute {
+    let proxy = if USE_SYSTEM_PROXY.load(Ordering::Relaxed) {
+        ProxyPolicy::System
+    } else {
+        ProxyPolicy::Direct
+    };
     DownloadRoute {
         url,
         source,
         is_mirror,
         allow_sensitive_headers: !is_mirror,
         supports_range,
-        proxy: ProxyPolicy::System,
+        proxy,
     }
+}
+
+/// Set whether to use system proxy for all HTTP requests.
+/// When disabled (false), all requests use direct connection without proxy.
+pub fn set_use_system_proxy(enabled: bool) {
+    USE_SYSTEM_PROXY.store(enabled, Ordering::Relaxed);
 }
 
 fn official_route(url: &str, resource: ResourceClass) -> DownloadRoute {

@@ -152,6 +152,12 @@
 	"app.advanced-settings.close-behavior.close": {
 		"message": "直接关闭"
 	},
+	"app.advanced-settings.system-proxy.title": {
+		"message": "系统代理"
+	},
+	"app.advanced-settings.system-proxy.description": {
+		"message": "使用系统代理进行网络下载。关闭后将直连网络，适用于代理配置导致下载失败的场景。"
+	},
 	"app.advanced-settings.debug.title": {
 		"message": "调试"
 	},

@@ -4,9 +4,20 @@ import { ButtonStyled, Combobox, defineMessages, injectNotificationManager, Togg
 import { invoke } from '@tauri-apps/api/core'
 import { computed, inject, ref, watch } from 'vue'
 
+import { get, set } from '@/helpers/settings.ts'
 import { handleSevereError } from '@/store/error.js'
 
 const { formatMessage } = useVIntl()
+
+const settings = ref(await get())
+
+watch(
+	settings,
+	async () => {
+		await set(settings.value)
+	},
+	{ deep: true },
+)
 
 const STARTUP_SOUND_KEY = 'ghastling-startup-sound-enabled'
 
@@ -65,7 +76,7 @@ const messages = defineMessages({
 	},
 	dragDropTitle: {
 		id: 'app.advanced-settings.drag-drop.title',
-		defaultMessage: '拖放导入',
+		defaultMessage: '全局拖放导入',
 	},
 	dragDropDescription: {
 		id: 'app.advanced-settings.drag-drop.description',
@@ -86,6 +97,14 @@ const messages = defineMessages({
 	closeBehaviorClose: {
 		id: 'app.advanced-settings.close-behavior.close',
 		defaultMessage: '直接关闭',
+	},
+	systemProxyTitle: {
+		id: 'app.advanced-settings.system-proxy.title',
+		defaultMessage: '系统代理',
+	},
+	systemProxyDescription: {
+		id: 'app.advanced-settings.system-proxy.description',
+		defaultMessage: '使用系统代理进行网络下载。关闭后将直连网络，适用于代理配置导致下载失败的场景。',
 	},
 	debugTitle: {
 		id: 'app.advanced-settings.debug.title',
@@ -149,6 +168,22 @@ const messages = defineMessages({
 				id="drag-drop-enabled"
 				:model-value="dragDropEnabled"
 				@update:model-value="(e) => (dragDropEnabled = !!e)"
+			/>
+		</div>
+
+		<div class="flex items-center justify-between gap-4">
+			<div>
+				<h2 class="m-0 text-lg font-semibold text-contrast">
+					{{ formatMessage(messages.systemProxyTitle) }}
+				</h2>
+				<p class="m-0 mt-1 text-sm text-secondary">
+					{{ formatMessage(messages.systemProxyDescription) }}
+				</p>
+			</div>
+			<Toggle
+				id="system-proxy-enabled"
+				:model-value="settings.use_system_proxy"
+				@update:model-value="(e) => (settings.use_system_proxy = !!e)"
 			/>
 		</div>
 

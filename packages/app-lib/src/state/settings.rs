@@ -113,6 +113,8 @@ pub struct Settings {
     pub migrated: bool,
 
     pub developer_mode: bool,
+    #[serde(default = "default_use_system_proxy")]
+    pub use_system_proxy: bool,
     pub feature_flags: HashMap<FeatureFlag, bool>,
 
     pub skipped_update: Option<String>,
@@ -154,7 +156,7 @@ impl Settings {
                 auto_concurrent_downloads, minecraft_metadata_source,
                 minecraft_file_source, modrinth_source, curseforge_source,
                 theme, locale, default_page, collapsed_navigation, hide_nametag_skins_page, advanced_rendering, native_decorations,
-                discord_rpc, developer_mode, telemetry, personalized_ads,
+                discord_rpc, developer_mode, telemetry, personalized_ads, use_system_proxy,
                 onboarded, onboarding_version, onboarding_instance_tour_completed,
                 json(extra_launch_args) extra_launch_args, json(custom_env_vars) custom_env_vars,
                 mc_memory_max, mc_memory_auto, mc_force_fullscreen, mc_game_resolution_x, mc_game_resolution_y, hide_on_process_start,
@@ -211,6 +213,7 @@ impl Settings {
             telemetry: res.telemetry == 1,
             discord_rpc: res.discord_rpc == 1,
             developer_mode: res.developer_mode == 1,
+            use_system_proxy: res.use_system_proxy == 1,
             personalized_ads: res.personalized_ads == 1,
             onboarded: res.onboarded == 1,
             onboarding_version: res.onboarding_version as usize,
@@ -360,7 +363,8 @@ impl Settings {
                 sidebar_instance_count = $50,
                 transparent_background = $51,
                 transparent_background_opacity = $52,
-                transparent_background_blur = $53
+                transparent_background_blur = $53,
+                use_system_proxy = $54
             ",
             max_concurrent_writes,
             max_concurrent_downloads,
@@ -415,6 +419,7 @@ impl Settings {
             self.transparent_background,
             transparent_background_opacity,
             self.transparent_background_blur,
+            self.use_system_proxy,
         )
         .execute(exec)
         .await?;
@@ -575,6 +580,10 @@ fn legacy_download_source(enabled: bool) -> DownloadSourceMode {
     } else {
         DownloadSourceMode::OfficialOnly
     }
+}
+
+fn default_use_system_proxy() -> bool {
+    true
 }
 
 /// Accent color used for interactive controls and highlights.
