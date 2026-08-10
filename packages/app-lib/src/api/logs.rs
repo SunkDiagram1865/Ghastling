@@ -139,10 +139,8 @@ fn push_compacted_log_run(
 ) {
     if count >= LOG_COMPACTION_THRESHOLD {
         output.push_str(line);
-        let _ = write!(
-            output,
-            " (x{count} times - compacted by Ghastling Launcher)"
-        );
+        let _ =
+            write!(output, " (x{count} times - compacted by Ghastling Launcher)");
         output.push_str(line_ending);
         stats.compacted_runs += 1;
         stats.compacted_lines += count;

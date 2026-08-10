@@ -13,14 +13,15 @@ use tokio::sync::Mutex;
 use tokio::task::JoinHandle;
 use tracing::{info, warn};
 
-pub use self::binary::terracotta_platform_key;
 use self::binary::{
     cleanup_legacy_versions, find_terracotta_executable,
     install_terracotta_binary, is_terracotta_executable,
     resolve_installed_terracotta_binary_path, resolve_terracotta_binary_path,
-    terracotta_binary_name, terracotta_binary_path, terracotta_download_urls,
-    validate_terracotta_version, versioned_terracotta_binary_name,
+    terracotta_binary_name, terracotta_binary_path,
+    terracotta_download_urls, validate_terracotta_version,
+    versioned_terracotta_binary_name,
 };
+pub use self::binary::terracotta_platform_key;
 use self::lan::MinecraftLanAnnouncer;
 use super::data::Credentials;
 
@@ -484,9 +485,7 @@ async fn download_terracotta_inner(
     let staging_dir = tempfile::Builder::new()
         .prefix("terracotta-install-")
         .tempdir_in(&target_dir)
-        .wrap_err(
-            "failed to create terracotta installation staging directory",
-        )?;
+        .wrap_err("failed to create terracotta installation staging directory")?;
     let staging_path = staging_dir.path().to_path_buf();
     let archive_data_clone = archive_data;
 
@@ -510,10 +509,8 @@ async fn download_terracotta_inner(
     let candidate =
         find_terracotta_executable(staging_dir.path(), Some(&versioned_name))
             .ok_or_else(|| {
-            eyre::eyre!(
-                "no valid terracotta executable found in downloaded archive"
-            )
-        })?;
+                eyre::eyre!("no valid terracotta executable found in downloaded archive")
+            })?;
 
     #[cfg(unix)]
     {
@@ -569,9 +566,7 @@ async fn run_terracotta_download(version: Option<String>) -> eyre::Result<()> {
 pub async fn download_terracotta(version: Option<String>) -> eyre::Result<()> {
     let _operation = TERRACOTTA_OPERATION.lock().await;
     if TERRACOTTA_STATE.lock().await.http_port.is_some() {
-        bail!(
-            "cannot replace terracotta while the multiplayer service is running"
-        );
+        bail!("cannot replace terracotta while the multiplayer service is running");
     }
     run_terracotta_download(version).await
 }
@@ -603,12 +598,7 @@ async fn terracotta_get<T: serde::de::DeserializeOwned>(
         .await
         .wrap_err("failed to read terracotta response")?;
     if !status.is_success() {
-        bail!(
-            "terracotta returned {} for {}: {}",
-            status.as_u16(),
-            path,
-            body
-        )
+        bail!("terracotta returned {} for {}: {}", status.as_u16(), path, body)
     }
     let parsed: T = serde_json::from_str(&body).wrap_err_with(|| {
         format!("failed to parse terracotta response for {path}: {body}")
@@ -739,8 +729,7 @@ pub async fn get_meta() -> eyre::Result<TerracottaMeta> {
 
 pub async fn get_player_name() -> String {
     match crate::State::get_if_initialized() {
-        Some(state_ref) => match Credentials::get_active(&state_ref.pool).await
-        {
+        Some(state_ref) => match Credentials::get_active(&state_ref.pool).await {
             Ok(Some(creds)) => creds.offline_profile.name,
             _ => "Anonymous".to_string(),
         },
@@ -819,10 +808,7 @@ pub async fn start_terracotta(
         .spawn()
         .wrap_err_with(|| {
             let mode = if is_macos { "daemon" } else { "--hmcl" };
-            format!(
-                "failed to start terracotta {mode} at {}",
-                final_path.display()
-            )
+            format!("failed to start terracotta {mode} at {}", final_path.display())
         })?;
 
     let stdout = child.stdout.take();
@@ -914,9 +900,7 @@ pub async fn start_terracotta(
                     let helper_exited = match hmcl_helper.as_mut() {
                         Some(helper) => helper
                             .try_wait()
-                            .wrap_err(
-                                "failed to inspect terracotta helper process",
-                            )?
+                            .wrap_err("failed to inspect terracotta helper process")?
                             .is_some(),
                         None => true,
                     };
@@ -944,15 +928,10 @@ pub async fn start_terracotta(
                     if let Some((status, output)) =
                         take_terminated_terracotta_process().await?
                     {
-                        let message =
-                            format_terracotta_exit(status, output).await;
-                        if let Ok(contents) =
-                            std::fs::read_to_string(&port_file)
-                        {
+                        let message = format_terracotta_exit(status, output).await;
+                        if let Ok(contents) = std::fs::read_to_string(&port_file) {
                             if let Ok(info) =
-                                serde_json::from_str::<TerracottaPortInfo>(
-                                    &contents,
-                                )
+                                serde_json::from_str::<TerracottaPortInfo>(&contents)
                             {
                                 let _ = std::fs::remove_file(&port_file);
                                 break info.port;
@@ -963,8 +942,7 @@ pub async fn start_terracotta(
                         );
                         let mut state = TERRACOTTA_STATE.lock().await;
                         state.status = TerracottaStatus::Error;
-                        state.error_type =
-                            Some(TerracottaErrorType::Terracotta);
+                        state.error_type = Some(TerracottaErrorType::Terracotta);
                         state.error_message = Some(msg.clone());
                         bail!(msg);
                     }
@@ -1077,10 +1055,7 @@ pub async fn start_hosting(
     let status = resp.status();
     if !status.is_success() {
         let body = resp.text().await.unwrap_or_default();
-        bail!(
-            "terracotta hosting failed with status {}: {body}",
-            status.as_u16()
-        );
+        bail!("terracotta hosting failed with status {}: {body}", status.as_u16());
     }
     Ok(())
 }
@@ -1119,10 +1094,7 @@ pub async fn start_joining(
     let status = resp.status();
     if !status.is_success() {
         let body = resp.text().await.unwrap_or_default();
-        bail!(
-            "terracotta joining failed with status {}: {body}",
-            status.as_u16()
-        );
+        bail!("terracotta joining failed with status {}: {body}", status.as_u16());
     }
     Ok(())
 }
@@ -1142,10 +1114,7 @@ pub async fn reset_state() -> eyre::Result<()> {
         let status = response.status();
         if !status.is_success() {
             let body = response.text().await.unwrap_or_default();
-            bail!(
-                "terracotta reset failed with status {}: {body}",
-                status.as_u16()
-            );
+            bail!("terracotta reset failed with status {}: {body}", status.as_u16());
         }
     }
 
@@ -1165,14 +1134,11 @@ pub async fn reset_state() -> eyre::Result<()> {
 pub fn parse_room_code(code: &str) -> eyre::Result<String> {
     if code.starts_with("U/") || code.starts_with("u/") {
         let inner = &code[2..];
-        if inner.len() == 19 && inner.chars().filter(|&c| c == '-').count() == 3
-        {
+        if inner.len() == 19 && inner.chars().filter(|&c| c == '-').count() == 3 {
             let segments: Vec<&str> = inner.split('-').collect();
             if segments.len() == 4
                 && segments.iter().all(|s| s.len() == 4)
-                && segments
-                    .iter()
-                    .all(|s| s.chars().all(|c| c.is_ascii_alphanumeric()))
+                && segments.iter().all(|s| s.chars().all(|c| c.is_ascii_alphanumeric()))
             {
                 return Ok(format!("U/{inner}"));
             }
@@ -1195,9 +1161,6 @@ pub async fn get_logs() -> eyre::Result<String> {
         .send()
         .await
         .wrap_err("failed to fetch terracotta logs")?;
-    let body = resp
-        .text()
-        .await
-        .wrap_err("failed to read terracotta logs")?;
+    let body = resp.text().await.wrap_err("failed to read terracotta logs")?;
     Ok(body)
 }
