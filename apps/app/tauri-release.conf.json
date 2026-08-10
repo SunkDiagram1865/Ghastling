@@ -15,7 +15,7 @@
 			"endpoints": [
 				"https://github.com/SunkDiagram1865/Ghastling/releases/latest/download/latest.json"
 			],
-			"pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDZBOURFNEJCQzE0NTUxOApSV1FZVlJTOFM5NnBCajRiMmR1UnBwdDFna0hDRXpJN3owZ0t4c2JsRVc5WUt5Q1dwQXR4ZWhrbwo=",
+			"pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEE2QTdBNDdFQzI4MDk0MDMKUldRRGxJRENmcVNucHNaVG1OWG15VjVJM1V4MkpYcnIxS2VmaTA1L3Z5aGdxSFptaEE1SVoxdGsK",
 			"windows": {
 				"installMode": "quiet"
 			}

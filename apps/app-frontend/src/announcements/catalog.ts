@@ -31,7 +31,7 @@ export const launcherAnnouncements: readonly LauncherAnnouncement[] = [
 	{
 		id: 'launcher-0.0.4·',
 		version: '0.0.4',
-		publishedAt: '2026-08-10',
+		publishedAt: '2026-08-11',
 		title: 'Ghastling Launcher 0.0.4',
 		changes: {
 			added: [
