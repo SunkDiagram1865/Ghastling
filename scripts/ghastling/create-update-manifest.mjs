@@ -40,7 +40,7 @@ for (const target of targets) {
 	}
 
 	const signature = fs.readFileSync(signaturePath, 'utf8')
-	const url = `https://github.com/SunkDiagram1865/Ghastling/releases/latest/download/${asset.name}`
+	const url = `https://github.com/SunkDiagram1865/Ghastling/releases/download/${tag}/${asset.name}`
 
 	for (const platform of target.platforms) {
 		platforms[platform] = { signature, url }
