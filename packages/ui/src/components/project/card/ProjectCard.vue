@@ -27,12 +27,12 @@
 				/>
 			</div>
 			<div class="p-4 flex flex-col gap-3 grow">
-				<div class="flex gap-3">
-					<Avatar :src="iconUrl" size="96px" class="project-card__icon ease-brightness" no-shadow />
-					<div class="flex flex-col gap-2 w-full">
-						<div class="grid grid-cols-[1fr_auto] gap-4">
-							<div class="flex flex-col gap-1">
-								<div class="flex gap-2 items-center">
+				<div class="flex gap-3 min-w-0">
+					<Avatar :src="iconUrl" size="96px" class="project-card__icon ease-brightness shrink-0" no-shadow />
+					<div class="flex flex-col gap-2 w-full min-w-0">
+						<div class="grid grid-cols-[minmax(0,1fr)_auto] gap-4 min-w-0">
+							<div class="flex flex-col gap-1 min-w-0">
+								<div class="flex gap-2 items-center min-w-0 overflow-hidden">
 									<ProjectCardTitle :title="title" compact />
 									<span
 										v-if="provider"
@@ -121,8 +121,8 @@
 				class="project-card__icon grid-project-card-list__icon ease-brightness"
 				no-shadow
 			/>
-			<div class="flex flex-col gap-2 grid-project-card-list__info">
-				<div class="flex gap-2 items-center">
+			<div class="flex flex-col gap-2 grid-project-card-list__info min-w-0">
+				<div class="flex gap-2 items-center min-w-0 overflow-hidden">
 					<ProjectCardTitle :title="title" />
 					<span
 						v-if="provider"
@@ -334,7 +334,7 @@ const cssColor = computed(() => {
 		'icon info stats stats'
 		'icon info stats stats'
 		'icon tags tags tags';
-	grid-template-columns: auto 1fr auto auto;
+	grid-template-columns: auto minmax(0, 1fr) auto auto;
 }
 
 .grid-project-card-list.has-actions {
@@ -342,7 +342,7 @@ const cssColor = computed(() => {
 		'icon info actions actions'
 		'icon info dummy stats'
 		'icon tags tags stats';
-	grid-template-columns: auto 1fr auto auto;
+	grid-template-columns: auto minmax(0, 1fr) auto auto;
 }
 
 .grid-project-card-list__icon {
@@ -375,7 +375,7 @@ const cssColor = computed(() => {
 			'icon info stats'
 			'icon info stats'
 			'tags tags tags';
-		grid-template-columns: auto 1fr auto;
+		grid-template-columns: auto minmax(0, 1fr) auto;
 	}
 
 	.grid-project-card-list.has-actions {
@@ -383,7 +383,7 @@ const cssColor = computed(() => {
 			'icon info actions'
 			'icon info stats'
 			'tags tags stats';
-		grid-template-columns: auto 1fr auto;
+		grid-template-columns: auto minmax(0, 1fr) auto;
 	}
 }
 
@@ -398,7 +398,7 @@ const cssColor = computed(() => {
 			'icon info'
 			'tags tags'
 			'stats stats';
-		grid-template-columns: auto 1fr;
+		grid-template-columns: auto minmax(0, 1fr);
 	}
 
 	.grid-project-card-list.has-actions {
@@ -408,7 +408,7 @@ const cssColor = computed(() => {
 			'tags tags'
 			'stats stats'
 			'actions actions';
-		grid-template-columns: auto 1fr;
+		grid-template-columns: auto minmax(0, 1fr);
 	}
 
 	.grid-project-card-list__stats,

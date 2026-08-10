@@ -89,6 +89,16 @@
 						{{ account.profile.name }}
 					</p>
 				</button>
+				<div class="flex shrink-0 items-center">
+					<button
+						v-tooltip="formatMessage(messages.copyUuid)"
+						type="button"
+						class="button-base border-0 bg-transparent p-1.5 cursor-pointer text-secondary hover:text-brand"
+						@click="copyAccountUuid(account)"
+					>
+						<CopyIcon />
+					</button>
+				</div>
 				<ButtonStyled circular color="red" color-fill="none" hover-color-fill="background">
 					<button
 						v-tooltip="formatMessage(messages.removeAccount)"
@@ -128,18 +138,28 @@
 						{{ account.profile.name }}
 					</p>
 					<span class="text-secondary text-xs shrink-0">
-						{{ account.yggdrasil?.server_name || formatMessage(messages.thirdPartyBadge) }}
-					</span>
+					{{ account.yggdrasil?.server_name || formatMessage(messages.thirdPartyBadge) }}
+				</span>
+			</button>
+			<div class="flex shrink-0 items-center">
+				<button
+					v-tooltip="formatMessage(messages.copyUuid)"
+					type="button"
+					class="button-base border-0 bg-transparent p-1.5 cursor-pointer text-secondary hover:text-brand"
+					@click="copyAccountUuid(account)"
+				>
+					<CopyIcon />
 				</button>
-				<ButtonStyled circular color="red" color-fill="none" hover-color-fill="background">
-					<button
-						v-tooltip="formatMessage(messages.removeAccount)"
-						class="mr-1"
-						@click="logout(account)"
-					>
-						<TrashIcon />
-					</button>
-				</ButtonStyled>
+			</div>
+			<ButtonStyled circular color="red" color-fill="none" hover-color-fill="background">
+				<button
+					v-tooltip="formatMessage(messages.removeAccount)"
+					class="mr-1"
+					@click="logout(account)"
+				>
+					<TrashIcon />
+				</button>
+			</ButtonStyled>
 			</div>
 		</div>
 
@@ -173,6 +193,16 @@
 						{{ formatMessage(messages.offlineBadge) }}
 					</span>
 				</button>
+				<div class="flex shrink-0 items-center">
+					<button
+						v-tooltip="formatMessage(messages.copyUuid)"
+						type="button"
+						class="button-base border-0 bg-transparent p-1.5 cursor-pointer text-secondary hover:text-brand"
+						@click="copyAccountUuid(account)"
+					>
+						<CopyIcon />
+					</button>
+				</div>
 				<ButtonStyled circular color="red" color-fill="none" hover-color-fill="background">
 					<button
 						v-tooltip="formatMessage(messages.removeAccount)"
@@ -230,6 +260,34 @@
 			>
 				{{ formatMessage(messages.chineseUsernameWarning) }}
 			</p>
+			<Checkbox
+				v-model="offlineCustomUuid"
+				:disabled="loginDisabled"
+				:label="formatMessage(messages.customUuidLabel)"
+			/>
+			<Admonition
+				v-if="offlineCustomUuid"
+				type="warning"
+				:body="formatMessage(messages.customUuidWarning)"
+			/>
+			<label v-if="offlineCustomUuid" class="flex flex-col gap-2 font-semibold">
+				{{ formatMessage(messages.customUuidInputLabel) }}
+				<StyledInput
+					v-model="offlineUuid"
+					:disabled="loginDisabled"
+					:placeholder="formatMessage(messages.customUuidPlaceholder)"
+					autocomplete="off"
+					spellcheck="false"
+					maxlength="36"
+					@keyup.enter="addOfflineAccount()"
+				/>
+			</label>
+			<p
+				v-if="offlineCustomUuid && offlineUuid.length > 0 && !offlineUuidValid"
+				class="m-0 text-sm text-red"
+			>
+				{{ formatMessage(messages.customUuidValidation) }}
+			</p>
 			<div class="input-group push-right">
 				<ButtonStyled>
 					<button :disabled="loginDisabled" @click="offlineAccountModal?.hide()">
@@ -237,7 +295,7 @@
 					</button>
 				</ButtonStyled>
 				<ButtonStyled color="brand">
-					<button :disabled="loginDisabled || !offlineUsernameValid" @click="addOfflineAccount()">
+					<button :disabled="loginDisabled || !offlineFormValid" @click="addOfflineAccount()">
 						<SpinnerIcon v-if="loginDisabled" class="animate-spin" />
 						<PlusIcon v-else />
 						{{ formatMessage(messages.createOfflineAccount) }}
@@ -347,6 +405,7 @@
 
 <script setup lang="ts">
 import {
+	CopyIcon,
 	LogInIcon,
 	PlusIcon,
 	RefreshCwIcon,
@@ -354,6 +413,7 @@ import {
 	TrashIcon,
 } from '@modrinth/assets'
 import {
+	Admonition,
 	Avatar,
 	ButtonStyled,
 	Checkbox,
@@ -465,8 +525,16 @@ let refreshGeneration = 0
 let defaultUserUpdateQueue = Promise.resolve()
 const offlineAccountModal = ref<InstanceType<typeof ModalWrapper> | null>(null)
 const offlineUsername = ref('')
+const offlineCustomUuid = ref(false)
+const offlineUuid = ref('')
 const offlineUsernameValid = computed(() =>
 	/^[\p{L}\p{N}_]{1,16}$/u.test(offlineUsername.value.trim()),
+)
+const offlineUuidValid = computed(() =>
+	/^[a-fA-F0-9]{32}$/u.test(offlineUuid.value.replaceAll('-', '')),
+)
+const offlineFormValid = computed(
+	() => offlineUsernameValid.value && (!offlineCustomUuid.value || offlineUuidValid.value),
 )
 const offlineUsernameContainsChinese = computed(() =>
 	/\p{Script=Han}/u.test(offlineUsername.value.trim()),
@@ -714,6 +782,8 @@ async function login() {
 
 function showOfflineAccountModal() {
 	offlineUsername.value = ''
+	offlineCustomUuid.value = false
+	offlineUuid.value = ''
 	offlineAccountModal.value?.show()
 }
 
@@ -894,11 +964,14 @@ async function selectYggdrasilProfile(profileId: string) {
 }
 
 async function addOfflineAccount() {
-	if (!offlineUsernameValid.value || loginDisabled.value) return
+	if (!offlineFormValid.value || loginDisabled.value) return
 
 	loginDisabled.value = true
 	try {
-		const account = await add_offline_user(offlineUsername.value.trim())
+		const account = await add_offline_user(
+			offlineUsername.value.trim(),
+			offlineCustomUuid.value ? offlineUuid.value.replaceAll('-', '') : undefined,
+		)
 		offlineAccountModal.value?.hide()
 		await setAccount(account)
 		trackEvent('OfflineAccountAdd')
@@ -906,6 +979,14 @@ async function addOfflineAccount() {
 		handleError(error as Error)
 	} finally {
 		loginDisabled.value = false
+	}
+}
+
+async function copyAccountUuid(account: MinecraftCredential) {
+	try {
+		await navigator.clipboard.writeText(account.profile.id)
+	} catch (error) {
+		handleError(error as Error)
 	}
 }
 
@@ -1057,6 +1138,30 @@ const messages = defineMessages({
 		id: 'minecraft-account.offline-modal.chinese-username-warning',
 		defaultMessage:
 			'Minecraft 1.18 and newer may reject Chinese usernames when entering singleplayer worlds or servers. Use this account with an older version, or choose an English username for newer versions.',
+	},
+	copyUuid: {
+		id: 'minecraft-account.copy-uuid',
+		defaultMessage: 'Copy UUID',
+	},
+	customUuidLabel: {
+		id: 'minecraft-account.offline-modal.custom-uuid',
+		defaultMessage: 'Custom UUID',
+	},
+	customUuidWarning: {
+		id: 'minecraft-account.offline-modal.custom-uuid-warning',
+		defaultMessage: "If you don't understand what this is, do not enable this feature.",
+	},
+	customUuidInputLabel: {
+		id: 'minecraft-account.offline-modal.custom-uuid-input-label',
+		defaultMessage: 'UUID',
+	},
+	customUuidPlaceholder: {
+		id: 'minecraft-account.offline-modal.custom-uuid-placeholder',
+		defaultMessage: '00000000-0000-0000-0000-000000000000',
+	},
+	customUuidValidation: {
+		id: 'minecraft-account.offline-modal.custom-uuid-validation',
+		defaultMessage: 'Use 32 hexadecimal characters. Hyphens are optional.',
 	},
 	createOfflineAccount: {
 		id: 'minecraft-account.offline-modal.create',

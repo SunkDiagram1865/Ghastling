@@ -45,9 +45,26 @@ pub async fn finish_login(
 }
 
 #[tracing::instrument]
-pub async fn add_offline_user(username: &str) -> crate::Result<Credentials> {
+pub async fn add_offline_user(
+    username: &str,
+    uuid: Option<uuid::Uuid>,
+) -> crate::Result<Credentials> {
     let state = State::get().await?;
-    let credentials = Credentials::offline(username)?;
+    let credentials = match uuid {
+        Some(uuid) => Credentials::offline_with_uuid(username, uuid)?,
+        None => Credentials::offline(username)?,
+    };
+
+    if uuid.is_some() {
+        let users = Credentials::get_all_without_refresh(&state.pool).await?;
+        if users.contains_key(&credentials.offline_profile.id) {
+            return Err(crate::ErrorKind::InputError(
+                "An account with this UUID already exists".to_string(),
+            )
+            .as_error());
+        }
+    }
+
     credentials.upsert(&state.pool).await?;
     Ok(credentials)
 }

@@ -3410,6 +3410,24 @@
 	"minecraft-account.offline-modal.chinese-username-warning": {
 		"message": "Minecraft 1.18 及以上版本可能会拒绝中文用户名，导致无法进入单人世界或服务器。请在旧版本中使用此账户，或为新版本改用英文用户名。"
 	},
+	"minecraft-account.copy-uuid": {
+		"message": "复制 UUID"
+	},
+	"minecraft-account.offline-modal.custom-uuid": {
+		"message": "自定义 UUID"
+	},
+	"minecraft-account.offline-modal.custom-uuid-warning": {
+		"message": "如果您不了解这是什么，请不要开启此功能。"
+	},
+	"minecraft-account.offline-modal.custom-uuid-input-label": {
+		"message": "UUID 值"
+	},
+	"minecraft-account.offline-modal.custom-uuid-placeholder": {
+		"message": "00000000-0000-0000-0000-000000000000"
+	},
+	"minecraft-account.offline-modal.custom-uuid-validation": {
+		"message": "请输入 32 位十六进制字符，可包含连字符。"
+	},
 	"minecraft-account.offline-modal.description": {
 		"message": "选择离线游戏中使用的用户名。此账户只能加入允许离线玩家的服务器。"
 	},

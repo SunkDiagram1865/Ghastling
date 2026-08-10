@@ -288,8 +288,36 @@ fn keyring_error(
 }
 
 #[tauri::command]
-pub async fn add_offline_user(username: String) -> Result<Credentials> {
-    Ok(minecraft_auth::add_offline_user(&username).await?)
+pub async fn add_offline_user(
+    username: String,
+    uuid: Option<String>,
+) -> Result<Credentials> {
+    Ok(
+        minecraft_auth::add_offline_user(&username, parse_custom_uuid(uuid)?)
+            .await?,
+    )
+}
+
+fn parse_custom_uuid(uuid: Option<String>) -> Result<Option<uuid::Uuid>> {
+    let Some(uuid) = uuid else {
+        return Ok(None);
+    };
+    let uuid = uuid.trim().replace('-', "");
+    if uuid.len() != 32
+        || !uuid.chars().all(|character| character.is_ascii_hexdigit())
+    {
+        return Err(theseus::ErrorKind::InputError(
+            "Custom UUID must be 32 hexadecimal characters; hyphens are optional"
+                .to_string(),
+        )
+        .as_error()
+        .into());
+    }
+
+    Ok(Some(uuid::Uuid::parse_str(&uuid).map_err(|_| {
+        theseus::ErrorKind::InputError("Invalid custom UUID".to_string())
+            .as_error()
+    })?))
 }
 
 #[tauri::command]

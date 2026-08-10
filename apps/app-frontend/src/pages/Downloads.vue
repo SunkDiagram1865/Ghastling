@@ -50,7 +50,14 @@
 				class="!p-4"
 			>
 				<div class="flex items-center gap-3">
+					<img
+						v-if="bar.bar_type?.icon"
+						:src="displayIcon(bar.bar_type.icon)"
+						alt=""
+						class="size-12 rounded-xl object-cover"
+					/>
 					<div
+						v-else
 						class="flex size-12 items-center justify-center rounded-xl bg-brand-highlight text-brand"
 					>
 						<DownloadIcon />
@@ -106,7 +113,7 @@
 							/>
 						</div>
 						<div class="mt-1 flex flex-wrap items-center gap-2 text-sm text-secondary">
-							<span>{{ phaseLabel(job.phase) }}</span>
+							<span>{{ jobPhaseLabel(job) }}</span>
 							<BulletDivider />
 							<span>{{ formatDate(job.finished ?? job.modified) }}</span>
 							<template v-if="job.instance_id">
@@ -128,6 +135,28 @@
 								<span>{{ metric }}</span>
 							</template>
 						</div>
+						<div v-if="activeRequestItems(job).length" class="mt-2 flex flex-col gap-1">
+							<div
+								v-for="item in activeRequestItems(job).slice(0, 3)"
+								:key="`${item.id}-${item.request_url}`"
+								class="flex min-w-0 items-center gap-2 text-xs text-secondary"
+							>
+								<GlobeIcon class="size-3.5 shrink-0" />
+								<span v-if="item.source" class="shrink-0">
+									{{ downloadSourceLabel(item.source) }}
+								</span>
+								<code v-tooltip="item.request_url" class="min-w-0 flex-1 truncate">{{
+									item.request_url
+								}}</code>
+							</div>
+							<div v-if="activeRequestItems(job).length > 3" class="text-xs text-secondary">
+								{{
+									formatMessage(messages.moreActiveRequests, {
+										count: activeRequestItems(job).length - 3,
+									})
+								}}
+							</div>
+						</div>
 					</div>
 					<div class="flex flex-wrap items-center gap-2">
 						<ButtonStyled v-if="canCancel(job)" color="red" type="outlined" size="small">
@@ -140,13 +169,18 @@
 								<RefreshCwIcon />{{ formatMessage(messages.retry) }}
 							</button>
 						</ButtonStyled>
+						<ButtonStyled v-if="job.status === 'waiting_for_user'" color="brand" size="small">
+							<button :disabled="busy.has(job.job_id)" @click="resolveMissing(job)">
+								<DownloadIcon />{{ formatMessage(messages.completeMissingFiles) }}
+							</button>
+						</ButtonStyled>
 						<ButtonStyled v-if="job.error" type="outlined" size="small">
 							<button :disabled="busy.has(job.job_id)" @click="copyDiagnostics(job)">
 								<ClipboardCopyIcon />{{ formatMessage(messages.copyDiagnostics) }}
 							</button>
 						</ButtonStyled>
 						<ButtonStyled
-							v-if="job.instance_id && !job.instance_deleted"
+							v-if="job.instance_id && !job.instance_deleted && job.status !== 'waiting_for_user'"
 							type="outlined"
 							size="small"
 						>
@@ -188,6 +222,21 @@
 					/>
 				</div>
 
+				<Admonition
+					v-if="job.status === 'waiting_for_user'"
+					class="mx-4 mb-4"
+					type="warning"
+					:header="formatMessage(messages.actionNeeded)"
+				>
+					{{
+						formatMessage(messages.missingRequiredContent, {
+							completed: completedRequiredFiles(job),
+							total: job.summary.files_total ?? job.items.length,
+							missing: missingRequiredFiles(job),
+						})
+					}}
+				</Admonition>
+
 				<div
 					v-if="expanded.has(job.job_id)"
 					class="border-0 border-t border-solid border-divider p-4"
@@ -203,7 +252,7 @@
 					<Table
 						v-if="job.items.length"
 						:columns="itemColumns"
-						:data="job.items"
+						:data="reorderJobItems(job)"
 						row-key="id"
 						table-min-width="42rem"
 						virtualized
@@ -226,6 +275,18 @@
 								<div v-if="row.error" class="truncate text-xs text-red">
 									{{ itemError(row) }}
 								</div>
+								<div
+									v-if="row.request_url"
+									class="flex min-w-0 items-center gap-1.5 text-xs text-secondary"
+								>
+									<GlobeIcon class="size-3 shrink-0" />
+									<span v-if="row.source" class="shrink-0">
+										{{ downloadSourceLabel(row.source) }}
+									</span>
+									<code v-tooltip="row.request_url" class="min-w-0 flex-1 truncate">{{
+										row.request_url
+									}}</code>
+								</div>
 								<ButtonStyled v-if="row.manual_url" type="transparent" size="small">
 									<button class="!px-0" @click.stop="openManualDownload(row)">
 										<ExternalIcon />{{ formatMessage(messages.manualDownload) }}
@@ -234,7 +295,10 @@
 							</div>
 						</template>
 						<template #cell-status="{ row }">
-							<Badge :color="itemStatusColor(row.status)" :type="statusLabel(row.status)" />
+							<Badge
+								:color="itemStatusColor(row.status)"
+								:type="itemStatusLabel(job, row.status)"
+							/>
 						</template>
 						<template #cell-attempts="{ row }">
 							<span>{{ itemAttempts(row) }}</span>
@@ -273,6 +337,7 @@
 		:proceed-label="formatMessage(messages.clearHistory)"
 		@proceed="clearHistory"
 	/>
+	<MissingModpackContentModal ref="missingContentModal" />
 </template>
 
 <script setup lang="ts">
@@ -283,6 +348,7 @@ import {
 	CurseForgeIcon,
 	DownloadIcon,
 	ExternalIcon,
+	GlobeIcon,
 	ModrinthIcon,
 	RefreshCwIcon,
 	SearchIcon,
@@ -314,6 +380,7 @@ import { openUrl } from '@tauri-apps/plugin-opener'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
+import MissingModpackContentModal from '@/components/ui/modal/MissingModpackContentModal.vue'
 import {
 	download_job_support_details,
 	type InstallJobSnapshot,
@@ -338,6 +405,7 @@ const historyStatus = ref('all')
 const expanded = ref(new Set<string>())
 const busy = ref(new Set<string>())
 const clearHistoryModal = ref<InstanceType<typeof ConfirmModal>>()
+const missingContentModal = ref<InstanceType<typeof MissingModpackContentModal>>()
 
 const messages = defineMessages({
 	inProgress: { id: 'app.downloads.in-progress', defaultMessage: 'In progress' },
@@ -354,6 +422,16 @@ const messages = defineMessages({
 	},
 	cancel: { id: 'app.downloads.cancel', defaultMessage: 'Cancel' },
 	retry: { id: 'app.downloads.retry', defaultMessage: 'Retry' },
+	completeMissingFiles: {
+		id: 'app.downloads.complete-missing-files',
+		defaultMessage: 'Complete missing files',
+	},
+	actionNeeded: { id: 'app.downloads.action-needed', defaultMessage: 'Action needed' },
+	missingRequiredContent: {
+		id: 'app.downloads.missing-required-content',
+		defaultMessage:
+			'{completed} / {total} required files are ready. {missing, plural, one {# file still needs to be downloaded.} other {# files still need to be downloaded.}}',
+	},
 	copyDiagnostics: { id: 'app.downloads.copy-diagnostics', defaultMessage: 'Copy diagnostics' },
 	openInstance: { id: 'app.downloads.open-instance', defaultMessage: 'Open instance' },
 	instanceDeleted: { id: 'app.downloads.instance-deleted', defaultMessage: 'Instance deleted' },
@@ -408,6 +486,14 @@ const messages = defineMessages({
 		defaultMessage: 'Project {projectId} · File {fileId}',
 	},
 	downloadSource: { id: 'app.downloads.download-source', defaultMessage: 'Source: {source}' },
+	verifyingDownloadedFiles: {
+		id: 'app.downloads.phase.verifying-downloaded-files',
+		defaultMessage: 'Verifying files and continuing installation',
+	},
+	pendingVerification: {
+		id: 'app.downloads.item-status.pending-verification',
+		defaultMessage: 'Pending verification',
+	},
 	downloadSourceOfficial: { id: 'app.downloads.source.official', defaultMessage: 'Official' },
 	downloadSourceBmclapi: { id: 'app.downloads.source.bmclapi', defaultMessage: 'OpenBMCLAPI' },
 	downloadSourceMcim: { id: 'app.downloads.source.mcim', defaultMessage: 'MCIM' },
@@ -431,6 +517,10 @@ const messages = defineMessages({
 	downloadFallbacks: {
 		id: 'app.downloads.download-fallbacks',
 		defaultMessage: '{count} fallbacks',
+	},
+	moreActiveRequests: {
+		id: 'app.downloads.more-active-requests',
+		defaultMessage: '+{count} active requests',
 	},
 })
 
@@ -581,7 +671,8 @@ function providerIcon(value: InstallJobSnapshot['provider']) {
 }
 
 function legacyProvider(bar: LoadingBar): InstallJobSnapshot['provider'] {
-	if (bar.bar_type?.type === 'pack_download') return 'curse_forge'
+	if (bar.bar_type?.type === 'pack_download' || bar.bar_type?.type === 'pack_file_download')
+		return 'curse_forge'
 	if (bar.bar_type?.type === 'minecraft_download') return 'minecraft'
 	if (bar.bar_type?.type === 'java_download') return 'java'
 	if (bar.bar_type?.type === 'launcher_update') return 'application'
@@ -600,6 +691,27 @@ function statusLabel(status: string) {
 
 function phaseLabel(phase: InstallPhaseId) {
 	return formatMessage(phaseMessages[phase])
+}
+
+function isRecoveryValidation(job: InstallJobSnapshot) {
+	return job.execution_mode === 'recovery_validation'
+}
+
+function isLocalRecoveryValidation(job: InstallJobSnapshot) {
+	return isRecoveryValidation(job) && activeRequestItems(job).length === 0
+}
+
+function jobPhaseLabel(job: InstallJobSnapshot) {
+	return isLocalRecoveryValidation(job)
+		? formatMessage(messages.verifyingDownloadedFiles)
+		: phaseLabel(job.phase)
+}
+
+function itemStatusLabel(job: InstallJobSnapshot, status: DownloadItem['status']) {
+	if (isRecoveryValidation(job) && status === 'queued') {
+		return formatMessage(messages.pendingVerification)
+	}
+	return statusLabel(status)
 }
 
 function statusColor(status: InstallJobStatus): 'green' | 'red' | 'orange' | 'blue' | 'gray' {
@@ -621,7 +733,7 @@ function itemStatusColor(
 }
 
 function canCancel(job: InstallJobSnapshot) {
-	return job.status === 'queued' || job.status === 'running'
+	return ['queued', 'running', 'waiting_for_user'].includes(job.status)
 }
 
 function canRetry(job: InstallJobSnapshot) {
@@ -629,13 +741,19 @@ function canRetry(job: InstallJobSnapshot) {
 }
 
 function showProgress(job: InstallJobSnapshot) {
-	return ['queued', 'running', 'canceling'].includes(job.status)
+	return ['queued', 'running', 'canceling', 'waiting_for_user'].includes(job.status)
 }
 
 function jobPercent(job: InstallJobSnapshot) {
+	if (job.status === 'succeeded') return 100
+	if (job.status === 'waiting_for_user') {
+		const total = job.summary.files_total ?? job.items.length
+		if (!total) return 0
+		return Math.min(99, Math.floor((completedRequiredFiles(job) / total) * 100))
+	}
 	const progress = effectiveInstallProgress(job)
-	if (!hasDeterminateInstallProgress(progress)) return job.status === 'succeeded' ? 100 : 0
-	return Math.min(100, Math.max(0, Math.round((progress.current / progress.total) * 100)))
+	if (!hasDeterminateInstallProgress(progress)) return 0
+	return Math.min(99, Math.max(0, Math.floor((progress.current / progress.total) * 100)))
 }
 
 function hasDeterminateProgress(job: InstallJobSnapshot) {
@@ -643,16 +761,52 @@ function hasDeterminateProgress(job: InstallJobSnapshot) {
 }
 
 function progressText(job: InstallJobSnapshot) {
+	if (job.status === 'waiting_for_user') {
+		return `${completedRequiredFiles(job)} / ${job.summary.files_total ?? job.items.length}`
+	}
+	if (isLocalRecoveryValidation(job)) {
+		const progress = effectiveInstallProgress(job)
+		if (hasDeterminateInstallProgress(progress)) {
+			const checked = job.progress?.secondary
+				? `${formatBytes(progress.current)} / ${formatBytes(progress.total)}`
+				: `${progress.current} / ${progress.total}`
+			return `${formatMessage(messages.verifyingDownloadedFiles)}: ${checked}`
+		}
+		return formatMessage(messages.verifyingDownloadedFiles)
+	}
+	const finalStage = job.items.find(
+		(item) => item.status === 'writing' || item.status === 'verifying',
+	)
+	if (finalStage) return statusLabel(finalStage.status)
+	const progress = effectiveInstallProgress(job)
+	if (
+		job.status === 'running' &&
+		hasDeterminateInstallProgress(progress) &&
+		progress.current >= progress.total &&
+		activeRequestItems(job).length === 0
+	)
+		return statusLabel('verifying')
 	if (job.summary.bytes_total)
 		return `${formatBytes(job.summary.bytes_downloaded)} / ${formatBytes(job.summary.bytes_total)}`
 	if (job.summary.files_total) return `${job.summary.files_completed} / ${job.summary.files_total}`
 	return phaseLabel(job.phase)
 }
 
+function completedRequiredFiles(job: InstallJobSnapshot) {
+	return job.items.filter((item) => item.status === 'completed' || item.status === 'skipped').length
+}
+
+function missingRequiredFiles(job: InstallJobSnapshot) {
+	if (job.pause_reason?.type === 'missing_required_content') {
+		return job.pause_reason.failed_files
+	}
+	return job.items.filter((item) => item.status === 'failed').length
+}
+
 function downloadTelemetry(job: InstallJobSnapshot) {
 	const summary = job.summary
 	const metrics: string[] = []
-	if (summary.source) {
+	if (summary.source && !isRecoveryValidation(job)) {
 		metrics.push(
 			formatMessage(messages.downloadSource, {
 				source: downloadSourceLabel(summary.source),
@@ -667,12 +821,28 @@ function downloadTelemetry(job: InstallJobSnapshot) {
 		)
 	}
 	if (summary.eta_seconds != null) {
-		metrics.push(formatDownloadEta(summary.eta_seconds))
+		const etaSecs = isLocalRecoveryValidation(job)
+			? formatDownloadEtaRecoveryValidation(job, summary.eta_seconds)
+			: summary.eta_seconds
+		metrics.push(formatDownloadEta(etaSecs))
 	}
-	if (summary.fallback_count > 0) {
+	if (summary.fallback_count > 0 && !isRecoveryValidation(job)) {
 		metrics.push(formatMessage(messages.downloadFallbacks, { count: summary.fallback_count }))
 	}
 	return metrics
+}
+
+function formatDownloadEtaRecoveryValidation(job: InstallJobSnapshot, fallbackSeconds: number) {
+	const progress = effectiveInstallProgress(job)
+	if (!hasDeterminateInstallProgress(progress)) return fallbackSeconds
+	const remaining = progress.total - progress.current
+	if (remaining <= 0) return 0
+	const speed = job.summary.speed_bytes_per_second
+	if (job.progress?.secondary) {
+		if (!speed || speed <= 0) return fallbackSeconds
+		return Math.max(0, Math.ceil(remaining / speed))
+	}
+	return Math.max(0, Math.ceil((remaining * fallbackSeconds) / Math.max(1, remaining)))
 }
 
 function downloadSourceLabel(source: string) {
@@ -686,6 +856,33 @@ function downloadSourceLabel(source: string) {
 		default:
 			return formatMessage(messages.downloadSourceAlternate)
 	}
+}
+
+const STATUS_ORDER: Record<string, number> = {
+	failed: 0,
+	downloading: 1,
+	queued: 2,
+	verifying: 3,
+	writing: 4,
+	completed: 5,
+	skipped: 6,
+	waiting_for_user: 7,
+	canceled: 8,
+}
+function compareItemStatus(a: DownloadItem, b: DownloadItem) {
+	return (STATUS_ORDER[a.status] ?? 9) - (STATUS_ORDER[b.status] ?? 9)
+}
+const itemsCache = new Map<string, { items: InstallJobSnapshot['items']; result: DownloadItem[] }>()
+function reorderJobItems(job: InstallJobSnapshot): DownloadItem[] {
+	const seen = itemsCache.get(job.job_id)
+	if (seen && seen.items === job.items) return seen.result
+	const result = [...job.items].sort(compareItemStatus)
+	itemsCache.set(job.job_id, { items: job.items, result })
+	return result
+}
+
+function activeRequestItems(job: InstallJobSnapshot) {
+	return job.items.filter((item) => item.status === 'downloading' && item.request_url)
 }
 
 function formatDownloadEta(seconds: number) {
@@ -709,7 +906,7 @@ function itemProgress(item: DownloadItem) {
 }
 
 function itemAttempts(item: DownloadItem) {
-	if (!item.attempt || !item.max_attempts) return formatMessage(messages.notAvailable)
+	if (item.attempt == null || item.max_attempts == null) return formatMessage(messages.notAvailable)
 	return formatMessage(messages.attemptProgress, {
 		attempt: item.attempt,
 		maxAttempts: item.max_attempts,
@@ -771,6 +968,10 @@ async function cancel(job: InstallJobSnapshot) {
 
 async function retry(job: InstallJobSnapshot) {
 	await withBusy(job.job_id, () => manager.retry(job.job_id))
+}
+
+async function resolveMissing(job: InstallJobSnapshot) {
+	await missingContentModal.value?.show(job)
 }
 
 async function remove(job: InstallJobSnapshot) {
