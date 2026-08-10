@@ -79,9 +79,9 @@ const cpuCoresText = computed(() => {
 		系统信息获取失败
 	</div>
 	<div v-else-if="info" class="flex items-end justify-center gap-12 py-4">
-		<div class="flex flex-col items-center">
-			<div class="relative w-36 h-24 overflow-hidden">
-				<svg class="w-36 h-24" viewBox="0 0 80 48" preserveAspectRatio="xMidYMid meet">
+		<div class="flex h-full flex-col items-center">
+			<div class="relative w-36 shrink-0 overflow-hidden h-24">
+				<svg class="h-24 w-36" viewBox="0 0 80 48" preserveAspectRatio="xMidYMid meet">
 					<path
 						d="M 6 46 A 34 34 0 0 1 74 46"
 						fill="none"
@@ -105,14 +105,14 @@ const cpuCoresText = computed(() => {
 					</span>
 				</div>
 			</div>
-			<div class="mt-1 text-center">
-				<span class="text-sm text-secondary">CPU: {{ cpuCoresText }}</span>
+			<div class="mt-1 flex min-h-[2.75rem] w-full items-center justify-center text-center">
+				<span class="text-sm whitespace-nowrap text-secondary">CPU: {{ cpuCoresText }}</span>
 			</div>
 		</div>
 
-		<div class="flex flex-col items-center">
-			<div class="relative w-36 h-24 overflow-hidden">
-				<svg class="w-36 h-24" viewBox="0 0 80 48" preserveAspectRatio="xMidYMid meet">
+		<div class="flex h-full flex-col items-center">
+			<div class="relative w-36 shrink-0 overflow-hidden h-24">
+				<svg class="h-24 w-36" viewBox="0 0 80 48" preserveAspectRatio="xMidYMid meet">
 					<path
 						d="M 6 46 A 34 34 0 0 1 74 46"
 						fill="none"
@@ -136,14 +136,14 @@ const cpuCoresText = computed(() => {
 					</span>
 				</div>
 			</div>
-			<div class="mt-1 text-center">
-				<span class="text-sm text-secondary">内存: {{ memoryUsedFormatted }} / {{ memoryTotalFormatted }}</span>
+			<div class="mt-1 flex min-h-[2.75rem] w-full items-center justify-center text-center">
+				<span class="text-sm whitespace-nowrap text-secondary">内存: {{ memoryUsedFormatted }} / {{ memoryTotalFormatted }}</span>
 			</div>
 		</div>
 
-		<div class="flex flex-col items-center">
-			<div class="relative w-36 h-24 overflow-hidden">
-				<svg class="w-36 h-24" viewBox="0 0 80 48" preserveAspectRatio="xMidYMid meet">
+		<div class="flex h-full flex-col items-center">
+			<div class="relative w-36 shrink-0 overflow-hidden h-24">
+				<svg class="h-24 w-36" viewBox="0 0 80 48" preserveAspectRatio="xMidYMid meet">
 					<path
 						d="M 6 46 A 34 34 0 0 1 74 46"
 						fill="none"
@@ -167,14 +167,14 @@ const cpuCoresText = computed(() => {
 					</span>
 				</div>
 			</div>
-			<div class="mt-1 text-center">
-				<span class="text-sm text-secondary">存储: {{ diskUsedFormatted }} / {{ diskTotalFormatted }}</span>
+			<div class="mt-1 flex min-h-[2.75rem] w-full items-center justify-center text-center">
+				<span class="text-sm whitespace-nowrap text-secondary">存储: {{ diskUsedFormatted }} / {{ diskTotalFormatted }}</span>
 			</div>
 		</div>
 
-		<div class="flex flex-col items-center">
-			<div class="relative w-36 h-24 overflow-hidden">
-				<svg class="w-36 h-24" viewBox="0 0 80 48" preserveAspectRatio="xMidYMid meet">
+		<div class="flex h-full flex-col items-center">
+			<div class="relative w-36 shrink-0 overflow-hidden h-24">
+				<svg class="h-24 w-36" viewBox="0 0 80 48" preserveAspectRatio="xMidYMid meet">
 					<path
 						d="M 6 46 A 34 34 0 0 1 74 46"
 						fill="none"
@@ -198,8 +198,8 @@ const cpuCoresText = computed(() => {
 					</span>
 				</div>
 			</div>
-			<div class="mt-1 text-center">
-				<span class="text-sm text-secondary">GPU</span>
+			<div class="mt-1 flex min-h-[2.75rem] w-full items-center justify-center text-center">
+				<span class="text-sm whitespace-nowrap text-secondary">GPU</span>
 			</div>
 		</div>
 	</div>
