@@ -39,6 +39,26 @@
 			:products="props.products"
 		/>
 		<ResubscribeModal ref="resubscribeModal" @resubscribe="handleResubscribeConfirm" />
+		<NewModal ref="newServerModal" header="添加服务器" max-width="480px">
+			<div class="flex flex-col gap-4">
+				<Admonition type="warning" header="注意">
+					这是 Modrinth 托管的服务器，与 Ghastling 无关。
+				</Admonition>
+				<ButtonStyled color="brand" type="outlined" class="self-start">
+					<button type="button" @click="openPurchaseLink">
+						<ExternalIcon />
+						前往购买
+					</button>
+				</ButtonStyled>
+			</div>
+			<template #actions>
+				<div class="flex justify-end">
+					<ButtonStyled type="outlined">
+						<button type="button" @click="newServerModal?.hide()">关闭</button>
+					</ButtonStyled>
+				</div>
+			</template>
+		</NewModal>
 
 		<div
 			v-if="hasError"
@@ -107,7 +127,7 @@
 						wrapper-class="w-full md:w-72"
 					/>
 					<ButtonStyled type="standard" color="brand">
-						<button @click="openPurchaseModal">
+						<button @click="openNewServerModal">
 							<PlusIcon />
 							{{ formatMessage(messages.newServerButton) }}
 						</button>
@@ -137,7 +157,7 @@
 				>
 					<ServerListEmpty
 						:logged-in="loggedIn"
-						@click-new-server="openPurchaseModal"
+						@click-new-server="openNewServerModal"
 						@click-sign-in="handleSignIn"
 					/>
 				</div>
@@ -229,7 +249,7 @@
 
 <script setup lang="ts">
 import type { Archon, Labrinth } from '@modrinth/api-client'
-import { HammerIcon, LoaderCircleIcon, PlusIcon, SearchIcon } from '@modrinth/assets'
+import { ExternalIcon, HammerIcon, LoaderCircleIcon, PlusIcon, SearchIcon } from '@modrinth/assets'
 import {
 	AutoLink,
 	ButtonStyled,
@@ -251,11 +271,14 @@ import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { useIntervalFn } from '@vueuse/core'
 import dayjs from 'dayjs'
 import Fuse from 'fuse.js'
+import { openUrl } from '@tauri-apps/plugin-opener'
 import type Stripe from 'stripe'
 import { type ComponentPublicInstance, computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import ServersUpgradeModalWrapper from '#ui/components/billing/ServersUpgradeModalWrapper.vue'
+import Admonition from '#ui/components/base/Admonition.vue'
+import NewModal from '#ui/components/modal/NewModal.vue'
 import type { ServerListingOwner } from '#ui/components/servers/access'
 import MedalServerListing from '#ui/components/servers/marketing/MedalServerListing.vue'
 import ServerListing from '#ui/components/servers/ServerListing.vue'
@@ -401,9 +424,18 @@ function startNewServerPolling(initialServers: Archon.Servers.v0.Server[]) {
 
 const guestPlanModal = ref<InstanceType<typeof ServersGuestPlanModal> | null>(null)
 const purchaseModal = ref<InstanceType<typeof ModrinthServersPurchaseModal> | null>(null)
+const newServerModal = ref<InstanceType<typeof NewModal> | null>(null)
 type UpgradeModalRef = ComponentPublicInstance<{ open: (id?: string) => void | Promise<void> }>
 const medalUpgradeModal = ref<UpgradeModalRef | null>(null)
 const resubscribeModal = ref<InstanceType<typeof ResubscribeModal> | null>(null)
+
+function openNewServerModal() {
+	newServerModal.value?.show()
+}
+
+async function openPurchaseLink() {
+	await openUrl('https://modrinth.com/hosting#plan')
+}
 const affiliateCode = ref<string | null>(null)
 const selectedCurrency = ref<string>('USD')
 
@@ -703,7 +735,7 @@ const hostingPurchaseIntent = createHostingPurchaseIntentContext({
 })
 provideHostingPurchaseIntent(hostingPurchaseIntent)
 
-const { openPurchaseModal, handleGuestPlanContinue, clearPurchaseIntent } = hostingPurchaseIntent
+const { handleGuestPlanContinue, clearPurchaseIntent } = hostingPurchaseIntent
 
 function openMedalUpgradeModal(serverId: string) {
 	medalUpgradeModal.value?.open(serverId)
