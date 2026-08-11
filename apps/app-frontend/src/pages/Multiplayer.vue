@@ -307,7 +307,7 @@ function playerRoleMessage(kind: TerracottaPlayer['kind']) {
 
 const binaryPathHint = computed(() => {
 	const name = platformKey.value?.includes('windows') ? 'terracotta.exe' : 'terracotta'
-	return `<launcher_dir>/terracotta/${name}`
+	return `com.cysunk.ghestling/terracotta/${name}`
 })
 
 const downloadStageText = computed(() => {
