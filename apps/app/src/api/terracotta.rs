@@ -19,8 +19,8 @@ pub fn init<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
 }
 
 #[tauri::command]
-pub async fn terracotta_get_state(
-) -> Result<theseus::terracotta::TerracottaState> {
+pub async fn terracotta_get_state()
+-> Result<theseus::terracotta::TerracottaState> {
     Ok(theseus::terracotta::get_state().await)
 }
 

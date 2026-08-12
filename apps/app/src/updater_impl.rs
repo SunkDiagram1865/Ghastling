@@ -103,8 +103,7 @@ async fn get_portable_update(update: &Update, source: &str) -> Result<Update> {
         "github" | "official" => {
             let zip_name = format!("Ghastling_{version}_x64.zip");
             let sig_name = format!("{zip_name}.sig");
-            let base =
-                "https://github.com/SunkDiagram1865/Ghastling/releases/download";
+            let base = "https://github.com/SunkDiagram1865/Ghastling/releases/download";
             (
                 format!("{base}/v{version}/{zip_name}"),
                 format!("{base}/v{version}/{sig_name}"),

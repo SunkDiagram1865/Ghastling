@@ -233,25 +233,27 @@ pub async fn delete_all_app_db_backups() -> Result<usize> {
     // Recursive deletion itself is implemented synchronously (count_and_remove_dir_sync)
     // to avoid the Rust "async fn recursion requires boxing" compiler error.
     // Outer JoinError maps to IO::Error via std::io::Error::new so we get a clean From impl.
-    let count = tokio::task::spawn_blocking(move || -> std::result::Result<usize, TheseusSerializableError> {
-        if !path.try_exists().unwrap_or(false) {
-            return Ok(0);
-        }
-        let mut count = 0usize;
-        for entry in std::fs::read_dir(&path)? {
-            let entry = entry?;
-            let entry_path = entry.path();
-            let file_type = entry.file_type()?;
-            if file_type.is_file() || file_type.is_symlink() {
-                if std::fs::remove_file(&entry_path).is_ok() {
-                    count += 1;
-                }
-            } else if file_type.is_dir() {
-                count += count_and_remove_dir_sync(&entry_path)?;
+    let count = tokio::task::spawn_blocking(
+        move || -> std::result::Result<usize, TheseusSerializableError> {
+            if !path.try_exists().unwrap_or(false) {
+                return Ok(0);
             }
-        }
-        Ok(count)
-    })
+            let mut count = 0usize;
+            for entry in std::fs::read_dir(&path)? {
+                let entry = entry?;
+                let entry_path = entry.path();
+                let file_type = entry.file_type()?;
+                if file_type.is_file() || file_type.is_symlink() {
+                    if std::fs::remove_file(&entry_path).is_ok() {
+                        count += 1;
+                    }
+                } else if file_type.is_dir() {
+                    count += count_and_remove_dir_sync(&entry_path)?;
+                }
+            }
+            Ok(count)
+        },
+    )
     .await
     .map_err(|join_err| {
         std::io::Error::new(
