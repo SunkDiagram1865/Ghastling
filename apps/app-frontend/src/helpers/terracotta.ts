@@ -60,5 +60,6 @@ export const terracotta = {
 			roomCode: roomCode.trim(),
 		}),
 	reset: () => invoke<void>(command('terracotta_reset')),
+	stop: () => invoke<void>(command('terracotta_stop')),
 	download: () => invoke<void>(command('terracotta_download')),
 }

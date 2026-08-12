@@ -85,3 +85,11 @@ export async function download_java_from_feed(vendor, jdkVersionMajor) {
 export async function download_java(vendor, version) {
 	return await invoke('plugin:jre|download_java', { vendor, version })
 }
+
+export async function list_managed_java_versions() {
+	return await invoke('plugin:jre|list_managed_java_versions')
+}
+
+export async function delete_managed_java(dirName) {
+	return await invoke('plugin:jre|delete_managed_java', { dirName })
+}

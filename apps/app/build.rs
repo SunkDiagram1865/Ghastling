@@ -128,6 +128,8 @@ fn main() {
                         "list_java_feed_versions",
                         "download_java_from_feed",
                         "download_java",
+                        "list_managed_java_versions",
+                        "delete_managed_java",
                     ])
                     .default_permission(
                         DefaultPermissionRule::AllowAllCommands,
@@ -343,6 +345,7 @@ fn main() {
                         "show_launcher_logs_folder",
                         "export_error_logs",
                         "show_app_db_backups_folder",
+                        "delete_all_app_db_backups",
                         "progress_bars_list",
                         "get_opening_command",
                     ])

@@ -30,6 +30,10 @@ defineProps({
 		type: String,
 		default: 'Proceed',
 	},
+	cancelLabel: {
+		type: String,
+		default: 'Cancel',
+	},
 	danger: {
 		type: Boolean,
 		default: true,
@@ -71,6 +75,7 @@ function proceed() {
 		:description="description"
 		:proceed-icon="proceedIcon"
 		:proceed-label="proceedLabel"
+		:cancel-label="cancelLabel"
 		:danger="danger"
 		:markdown="markdown"
 		@proceed="proceed"

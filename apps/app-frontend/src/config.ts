@@ -7,6 +7,7 @@ export const GhastlingBrandConfig = Object.freeze({
 	shortOrganizationName: 'GHS',
 	developerName: 'SunkDiagram1865',
 	website: 'https://sunkdiagram1865.github.io/Ghastling/',
+	releasesUrl: 'https://github.com/SunkDiagram1865/Ghastling/releases',
 	sourceUrl: 'https://www.ghs.red',
 	supportUrl: 'https://github.com/SunkDiagram1865/Ghastling/issues',
 	qqGroupNumber: '208375315',

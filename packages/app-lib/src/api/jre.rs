@@ -88,6 +88,104 @@ pub async fn remove_java_version(path: String) -> crate::Result<()> {
     JavaVersion::delete(&path, &state.pool).await
 }
 
+/// A Java installation managed by the launcher (stored in `java_versions_dir`).
+#[derive(Serialize)]
+pub struct ManagedJavaVersion {
+    pub dir_name: String,
+    pub java_version: Option<JavaVersion>,
+}
+
+/// Lists all Java installations in the launcher's `java_versions` directory.
+pub async fn list_managed_java_versions(
+) -> crate::Result<Vec<ManagedJavaVersion>> {
+    let state = State::get().await?;
+    let base = state.directories.java_versions_dir();
+
+    if !base.is_dir() {
+        return Ok(Vec::new());
+    }
+
+    let mut result = Vec::new();
+    for entry in std::fs::read_dir(&base)? {
+        let entry = entry?;
+        let path = entry.path();
+        if !path.is_dir() {
+            continue;
+        }
+        let dir_name = entry.file_name().to_string_lossy().to_string();
+
+        // Skip staging directories (`.*.installing`)
+        if dir_name.starts_with('.')
+            && dir_name.ends_with(".installing")
+        {
+            continue;
+        }
+
+        let java_bin = if cfg!(target_os = "macos") {
+            path.join("Contents/Home/bin/java")
+        } else {
+            path.join("bin").join(jre::JAVA_BIN)
+        };
+
+        let java_version = if java_bin.exists() {
+            jre::check_java_at_filepath(&java_bin).await.ok()
+        } else {
+            None
+        };
+
+        result.push(ManagedJavaVersion {
+            dir_name,
+            java_version,
+        });
+    }
+
+    Ok(result)
+}
+
+/// Deletes a Java installation directory from the launcher's `java_versions`
+/// directory and removes it from the database.
+pub async fn delete_managed_java(dir_name: String) -> crate::Result<()> {
+    // Reject any path separators to prevent directory traversal
+    if dir_name.contains(std::path::MAIN_SEPARATOR)
+        || dir_name.contains('/')
+        || dir_name.contains('\\')
+        || dir_name == ".."
+        || dir_name == "."
+    {
+        return Err(crate::ErrorKind::InputError(
+            "Invalid directory name".to_string(),
+        )
+        .into());
+    }
+
+    let state = State::get().await?;
+    let base = state.directories.java_versions_dir();
+    let target = base.join(&dir_name);
+
+    if !target.is_dir() {
+        return Err(crate::ErrorKind::InputError(format!(
+            "Directory {dir_name} does not exist in java_versions"
+        ))
+        .into());
+    }
+
+    // Remove from database if the Java executable exists
+    let java_bin = if cfg!(target_os = "macos") {
+        target.join("Contents/Home/bin/java")
+    } else {
+        target.join("bin").join(jre::JAVA_BIN)
+    };
+    if java_bin.exists() {
+        let path_str = java_bin.to_string_lossy().to_string();
+        let _ = JavaVersion::delete(&path_str, &state.pool).await;
+    }
+
+    // Delete the directory
+    io::remove_dir_all(&target).await?;
+
+    Ok(())
+}
+
 const JAVA_RESCAN_DEBOUNCE: Duration = Duration::from_secs(60);
 
 static JAVA_SCAN_STATE: LazyLock<tokio::sync::Mutex<Option<Instant>>> =

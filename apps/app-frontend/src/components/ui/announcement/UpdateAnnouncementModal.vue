@@ -52,7 +52,7 @@ defineExpose({ show, close })
 		<UpdateAnnouncementContent
 			:announcement="announcement"
 			:version="version"
-			:external-url="announcement?.externalUrl ?? GhastlingBrandConfig.website"
+			:external-url="announcement?.externalUrl ?? GhastlingBrandConfig.releasesUrl"
 		/>
 
 		<template #actions>

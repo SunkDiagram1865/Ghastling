@@ -16,13 +16,14 @@ import { computed, ref, watch } from 'vue'
 import ConfirmModalWrapper from '@/components/ui/modal/ConfirmModalWrapper.vue'
 import { purge_cache_types } from '@/helpers/cache.js'
 import { get, set } from '@/helpers/settings.ts'
-import { showAppDbBackupsFolder } from '@/helpers/utils.js'
+import { deleteAllAppDbBackups, showAppDbBackupsFolder } from '@/helpers/utils.js'
 import { useTheming } from '@/store/state'
 
-const { handleError } = injectNotificationManager()
+const { addNotification, handleError } = injectNotificationManager()
 const themeStore = useTheming()
 const settings = ref(await get())
 const purgeCacheConfirmModal = ref(null)
+const deleteBackupsConfirmModal = ref(null)
 const { formatMessage } = useVIntl()
 
 const isPortable = ref(false)
@@ -228,26 +229,41 @@ watch(
 )
 
 async function purgeCache() {
-	await purge_cache_types([
-		'project',
-		'project_v3',
-		'version',
-		'user',
-		'team',
-		'organization',
-		'file',
-		'loader_manifest',
-		'minecraft_manifest',
-		'categories',
-		'report_types',
-		'loaders',
-		'game_versions',
-		'donation_platforms',
-		'file_hash',
-		'file_update',
-		'search_results',
-		'search_results_v3',
-	]).catch(handleError)
+	try {
+		await purge_cache_types([
+			'project',
+			'project_v3',
+			'version',
+			'user',
+			'team',
+			'organization',
+			'file',
+			'loader_manifest',
+			'minecraft_manifest',
+			'categories',
+			'report_types',
+			'loaders',
+			'game_versions',
+			'donation_platforms',
+			'file_hash',
+			'file_update',
+			'search_results',
+			'search_results_v3',
+		])
+		addNotification({
+			type: 'success',
+			title: '清除缓存',
+			text: '已成功清除应用缓存，下次加载数据时将重新从网络获取。',
+		})
+	} catch (error) {
+		const msg = formatTauriError(error)
+		addNotification({
+			type: 'error',
+			title: '清除缓存失败',
+			text: msg || '未知错误（详情请查控制台）',
+		})
+		console.error('[purgeCache] failed:', error)
+	}
 }
 
 function handlePurgeCacheClick() {
@@ -261,6 +277,69 @@ function handlePurgeCacheClick() {
 
 async function openDbBackupsFolder() {
 	await showAppDbBackupsFolder().catch(handleError)
+}
+
+/**
+ * 把 Tauri invoke 返回的错误转成人类可读字符串。
+ * Tauri 2 的这些us错误序列化后通常是 { field_name, message } 纯对象，
+ * 不是 JS Error instance，所以需要额外处理才不会显示空内容。
+ */
+function formatTauriError(error) {
+	if (error instanceof Error) {
+		return error.message
+	}
+	if (error && typeof error === 'object') {
+		if (typeof error.message === 'string') {
+			const field =
+				typeof error.field_name === 'string' ? `[${error.field_name}] ` : ''
+			return `${field}${error.message}`
+		}
+		try {
+			return JSON.stringify(error)
+		} catch {
+			return String(error)
+		}
+	}
+	if (typeof error === 'string') {
+		return error
+	}
+	return String(error)
+}
+
+async function doDeleteBackups() {
+	try {
+		const count = await deleteAllAppDbBackups()
+		if (count > 0) {
+			addNotification({
+				type: 'success',
+				title: '删除备份',
+				text: `已成功删除 ${count} 个备份文件。`,
+			})
+		} else {
+			addNotification({
+				type: 'success',
+				title: '删除备份',
+				text: '未找到备份文件，文件夹已经是空的。',
+			})
+		}
+	} catch (error) {
+		const msg = formatTauriError(error)
+		addNotification({
+			type: 'error',
+			title: '删除备份失败',
+			text: msg || '未知错误（详情请查控制台）',
+		})
+		console.error('[deleteAllAppDbBackups] failed:', error)
+	}
+}
+
+function handleDeleteBackupsClick() {
+	if (themeStore.getFeatureFlag('skip_non_essential_warnings')) {
+		void doDeleteBackups()
+		return
+	}
+
+	deleteBackupsConfirmModal.value?.show()
 }
 
 async function findLauncherDir() {
@@ -303,27 +382,6 @@ async function findLauncherDir() {
 			</p>
 		</div>
 
-		<div class="flex flex-col gap-2.5">
-			<ConfirmModalWrapper
-				ref="purgeCacheConfirmModal"
-				:title="formatMessage(messages.purgeConfirmTitle)"
-				:description="formatMessage(messages.purgeConfirmDescription)"
-				:has-to-type="false"
-				:proceed-label="formatMessage(messages.purgeCache)"
-				:show-ad-on-close="false"
-				@proceed="purgeCache"
-			/>
-			<h2 class="m-0 text-lg font-semibold text-contrast">
-				{{ formatMessage(messages.appCache) }}
-			</h2>
-			<button id="purge-cache" class="btn min-w-max" @click="handlePurgeCacheClick">
-				<TrashIcon />
-				{{ formatMessage(messages.purgeCache) }}
-			</button>
-			<p class="m-0 leading-tight text-secondary">
-				{{ formatMessage(messages.appCacheDescription) }}
-			</p>
-		</div>
 
 		<div class="flex flex-col gap-3">
 			<div>
@@ -431,13 +489,56 @@ async function findLauncherDir() {
 		</div>
 
 		<div class="flex flex-col gap-2.5">
+			<ConfirmModalWrapper
+				ref="purgeCacheConfirmModal"
+				title="确认清除应用缓存？"
+				description="此操作会清除启动器的所有缓存数据。清除后启动器将重新从网络加载数据，并可能暂时降低速度。确定要继续吗？"
+				:has-to-type="false"
+				proceed-label="清除缓存"
+				cancel-label="取消"
+				:show-ad-on-close="false"
+				@proceed="purgeCache"
+			/>
+			<h2 class="m-0 text-lg font-semibold text-contrast">
+				应用缓存
+			</h2>
+			<button id="purge-cache" class="btn btn-danger min-w-max" @click="handlePurgeCacheClick">
+				<TrashIcon />
+				清除缓存
+			</button>
+			<p class="m-0 leading-tight text-secondary">
+				Ghastling Launcher 会缓存数据以加快加载速度。清除缓存会强制应用重新加载数据，并可能暂时降低速度。
+			</p>
+		</div>
+
+		<div class="flex flex-col gap-2.5">
+			<ConfirmModalWrapper
+				ref="deleteBackupsConfirmModal"
+				title="确认删除所有应用数据库备份？"
+				description="此操作会永久删除 Backups/app-db 文件夹内的所有备份文件，且无法撤销。确定要继续吗？"
+				:has-to-type="false"
+				proceed-label="删除备份"
+				cancel-label="取消"
+				:show-ad-on-close="false"
+				@proceed="doDeleteBackups"
+			/>
 			<h2 class="mt-0 m-0 text-lg font-semibold text-contrast">
 				{{ formatMessage(messages.databaseBackups) }}
 			</h2>
-			<button id="open-db-backups-folder" class="btn min-w-max" @click="openDbBackupsFolder">
-				<FolderOpenIcon />
-				{{ formatMessage(messages.openBackupsFolder) }}
-			</button>
+			<div class="flex flex-row items-center gap-2">
+				<button id="open-db-backups-folder" class="btn min-w-max" @click="openDbBackupsFolder">
+					<FolderOpenIcon />
+					{{ formatMessage(messages.openBackupsFolder) }}
+				</button>
+				<button
+					id="delete-db-backups"
+					class="btn btn-danger min-w-max"
+					@click="handleDeleteBackupsClick"
+				>
+					<TrashIcon />
+					删除备份
+				</button>
+			</div>
 			<p class="m-0 leading-tight text-secondary">
 				{{ formatMessage(messages.databaseBackupsDescription) }}
 			</p>

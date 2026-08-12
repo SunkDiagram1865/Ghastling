@@ -21,6 +21,8 @@ pub fn init<R: tauri::Runtime>() -> TauriPlugin<R> {
             list_java_feed_versions,
             download_java_from_feed,
             download_java,
+            list_managed_java_versions,
+            delete_managed_java,
         ])
         .build()
 }
@@ -134,4 +136,15 @@ pub async fn download_java(
     version: u32,
 ) -> Result<theseus::install::InstallJobSnapshot> {
     Ok(theseus::install::download_java(vendor, version).await?)
+}
+
+#[tauri::command]
+pub async fn list_managed_java_versions() -> Result<Vec<jre::ManagedJavaVersion>> {
+    Ok(jre::list_managed_java_versions().await?)
+}
+
+#[tauri::command]
+pub async fn delete_managed_java(dir_name: String) -> Result<()> {
+    jre::delete_managed_java(dir_name).await?;
+    Ok(())
 }

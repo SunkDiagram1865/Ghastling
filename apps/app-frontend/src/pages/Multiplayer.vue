@@ -231,6 +231,10 @@ const messages = defineMessages({
 		id: 'app.multiplayer.start-terracotta',
 		defaultMessage: 'Start Terracotta',
 	},
+	exitTerracotta: {
+		id: 'app.multiplayer.exit-terracotta',
+		defaultMessage: 'Exit multiplayer',
+	},
 	startDescription: {
 		id: 'app.multiplayer.start-description',
 		defaultMessage: "Start the multiplayer service to host games or join friends' rooms.",
@@ -257,6 +261,7 @@ const {
 	roomCodeInput,
 	start: startTerracotta,
 	state,
+	stop: stopTerracotta,
 } = useTerracottaSession()
 
 const tabLinks = computed(() => [
@@ -438,12 +443,20 @@ const isRecoverable = computed(() => {
 			class="!m-0"
 		>
 			<div class="flex flex-col gap-5">
-				<NavTabs
-					mode="local"
-					:active-index="tabIndex"
-					:links="tabLinks"
-					@tab-click="tabIndex = $event"
-				/>
+				<div class="flex flex-wrap items-center justify-between gap-3">
+					<NavTabs
+						mode="local"
+						:active-index="tabIndex"
+						:links="tabLinks"
+						@tab-click="tabIndex = $event"
+					/>
+					<ButtonStyled color="red" type="outlined">
+						<button type="button" :disabled="isActionPending" @click="stopTerracotta">
+							<LogOutIcon />
+							{{ formatMessage(messages.exitTerracotta) }}
+						</button>
+					</ButtonStyled>
+				</div>
 
 				<div>
 					<h2 class="m-0 text-lg font-semibold text-contrast">

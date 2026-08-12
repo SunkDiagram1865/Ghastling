@@ -59,7 +59,7 @@ const historyAnnouncements = computed(() =>
 			<UpdateAnnouncementContent
 				:announcement="currentAnnouncement"
 				:version="currentVersion"
-				:external-url="currentAnnouncement?.externalUrl ?? GhastlingBrandConfig.website"
+				:external-url="currentAnnouncement?.externalUrl ?? GhastlingBrandConfig.releasesUrl"
 			/>
 		</div>
 

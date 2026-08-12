@@ -62,6 +62,7 @@ export function useTerracottaSession() {
 	const host = () => runAction(() => terracotta.host(playerName.value))
 	const join = () => runAction(() => terracotta.join(playerName.value, roomCodeInput.value))
 	const reset = () => runAction(terracotta.reset)
+	const stop = () => runAction(terracotta.stop)
 	const download = () => runAction(terracotta.download, DOWNLOAD_POLL_INTERVAL)
 
 	onMounted(() => {
@@ -97,5 +98,6 @@ export function useTerracottaSession() {
 		roomCodeInput,
 		start,
 		state,
+		stop,
 	}
 }
