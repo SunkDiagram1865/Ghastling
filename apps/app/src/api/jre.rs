@@ -139,8 +139,7 @@ pub async fn download_java(
 }
 
 #[tauri::command]
-pub async fn list_managed_java_versions() -> Result<Vec<jre::ManagedJavaVersion>>
-{
+pub async fn list_managed_java_versions() -> Result<Vec<jre::ManagedJavaVersion>> {
     Ok(jre::list_managed_java_versions().await?)
 }
 

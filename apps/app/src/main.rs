@@ -17,6 +17,8 @@ use theseus::prelude::*;
 
 // 控制关闭窗口时是否最小化到系统托盘
 static CLOSE_TO_TRAY: AtomicBool = AtomicBool::new(false);
+// 标记是否正在为安装更新而退出（此时应绕过最小化到托盘）
+static IS_EXITING_FOR_UPDATE: AtomicBool = AtomicBool::new(false);
 
 mod api;
 mod error;
@@ -162,6 +164,7 @@ async fn set_restart_after_pending_update(
     state
         .restart_after_pending_update
         .store(should_restart, Ordering::Relaxed);
+    IS_EXITING_FOR_UPDATE.store(should_restart, Ordering::Relaxed);
     Ok(())
 }
 
@@ -392,9 +395,11 @@ fn main() {
             Ok(())
         })
         .on_window_event(|window, event| {
-            // 拦截窗口关闭：若启用了"最小化到托盘"，则隐藏窗口而非关闭
+            // 拦截窗口关闭：若启用了"最小化到托盘"且非更新退出，则隐藏窗口而非关闭
             if let tauri::WindowEvent::CloseRequested { api, .. } = event {
-                if CLOSE_TO_TRAY.load(Ordering::Relaxed) {
+                if CLOSE_TO_TRAY.load(Ordering::Relaxed)
+                    && !IS_EXITING_FOR_UPDATE.load(Ordering::Relaxed)
+                {
                     api.prevent_close();
                     let _ = window.hide();
                 }

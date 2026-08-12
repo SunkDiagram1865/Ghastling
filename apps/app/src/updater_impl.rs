@@ -100,14 +100,16 @@ async fn get_portable_update(update: &Update, source: &str) -> Result<Update> {
     let version = &update.version;
 
     let (portable_url, portable_sig_url) = match source {
-        "github" | "official" => (
-            format!(
-                "https://github.com/SunkDiagram1865/Ghastling/releases/download/v{version}/Ghastling Launcher.bin"
-            ),
-            format!(
-                "https://github.com/SunkDiagram1865/Ghastling/releases/download/v{version}/Ghastling Launcher.bin.sig"
-            ),
-        ),
+        "github" | "official" => {
+            let zip_name = format!("Ghastling_{version}_x64.zip");
+            let sig_name = format!("{zip_name}.sig");
+            let base =
+                "https://github.com/SunkDiagram1865/Ghastling/releases/download";
+            (
+                format!("{base}/v{version}/{zip_name}"),
+                format!("{base}/v{version}/{sig_name}"),
+            )
+        }
         _ => {
             return Err(theseus::Error::from(theseus::ErrorKind::OtherError(
                 format!("Unknown update source: {source}"),
@@ -116,7 +118,6 @@ async fn get_portable_update(update: &Update, source: &str) -> Result<Update> {
         }
     };
 
-    // 下载签名文件
     let signature = download_signature(&portable_sig_url).await?;
 
     let mut portable_update = update.clone();
@@ -206,7 +207,7 @@ pub async fn enqueue_update_for_installation<R: Runtime>(
             current_version: update.current_version.clone(),
         },
         1.0,
-        "Downloading update...",
+        "正在下载更新...",
     )
     .await?;
 
