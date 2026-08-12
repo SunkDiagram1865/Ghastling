@@ -258,6 +258,7 @@ import {
 	injectAuth,
 	injectModrinthClient,
 	injectNotificationManager,
+	injectPageContext,
 	IntlFormatted,
 	ModrinthServersPurchaseModal,
 	ResubscribeModal,
@@ -271,7 +272,6 @@ import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { useIntervalFn } from '@vueuse/core'
 import dayjs from 'dayjs'
 import Fuse from 'fuse.js'
-import { openUrl } from '@tauri-apps/plugin-opener'
 import type Stripe from 'stripe'
 import { type ComponentPublicInstance, computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -294,6 +294,7 @@ const router = useRouter()
 const route = useRoute()
 const auth = injectAuth()
 const client = injectModrinthClient()
+const pageContext = injectPageContext()
 const loggedIn = computed(() => !!auth.user.value)
 const { formatMessage } = useVIntl()
 
@@ -433,8 +434,8 @@ function openNewServerModal() {
 	newServerModal.value?.show()
 }
 
-async function openPurchaseLink() {
-	await openUrl('https://modrinth.com/hosting#plan')
+function openPurchaseLink() {
+	pageContext.openExternalUrl('https://modrinth.com/hosting#plan')
 }
 const affiliateCode = ref<string | null>(null)
 const selectedCurrency = ref<string>('USD')
