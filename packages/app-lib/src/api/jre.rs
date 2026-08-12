@@ -96,8 +96,8 @@ pub struct ManagedJavaVersion {
 }
 
 /// Lists all Java installations in the launcher's `java_versions` directory.
-pub async fn list_managed_java_versions(
-) -> crate::Result<Vec<ManagedJavaVersion>> {
+pub async fn list_managed_java_versions()
+-> crate::Result<Vec<ManagedJavaVersion>> {
     let state = State::get().await?;
     let base = state.directories.java_versions_dir();
 
@@ -115,9 +115,7 @@ pub async fn list_managed_java_versions(
         let dir_name = entry.file_name().to_string_lossy().to_string();
 
         // Skip staging directories (`.*.installing`)
-        if dir_name.starts_with('.')
-            && dir_name.ends_with(".installing")
-        {
+        if dir_name.starts_with('.') && dir_name.ends_with(".installing") {
             continue;
         }
 
