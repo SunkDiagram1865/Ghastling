@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { WrenchIcon } from '@modrinth/assets'
-import { ButtonStyled, Combobox, defineMessages, injectNotificationManager, Toggle, useVIntl } from '@modrinth/ui'
+import {
+	ButtonStyled,
+	Combobox,
+	defineMessages,
+	injectNotificationManager,
+	Toggle,
+	useVIntl,
+} from '@modrinth/ui'
 import { invoke } from '@tauri-apps/api/core'
 import { computed, inject, ref, watch } from 'vue'
 
@@ -104,7 +111,8 @@ const messages = defineMessages({
 	},
 	systemProxyDescription: {
 		id: 'app.advanced-settings.system-proxy.description',
-		defaultMessage: '使用系统代理进行网络下载。关闭后将直连网络，适用于代理配置导致下载失败的场景。',
+		defaultMessage:
+			'使用系统代理进行网络下载，适用于直连导致下载失败的场景。（注：为了启动器能够正常下载更新，不影响更新流程，下载启动器更新文件强制直连下载。）',
 	},
 	debugTitle: {
 		id: 'app.advanced-settings.debug.title',

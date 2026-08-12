@@ -156,7 +156,7 @@
 		"message": "系统代理"
 	},
 	"app.advanced-settings.system-proxy.description": {
-		"message": "使用系统代理进行网络下载。关闭后将直连网络，适用于代理配置导致下载失败的场景。"
+		"message": "使用系统代理进行网络下载，适用于直连导致下载失败的场景。（注：为了启动器能够正常下载更新，不影响更新流程，下载启动器更新文件强制直连下载。）"
 	},
 	"app.advanced-settings.debug.title": {
 		"message": "调试"

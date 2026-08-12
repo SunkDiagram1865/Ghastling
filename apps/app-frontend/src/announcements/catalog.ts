@@ -29,6 +29,18 @@ export const ANNOUNCEMENT_CHANGE_TYPES: readonly AnnouncementChangeType[] = [
 
 export const launcherAnnouncements: readonly LauncherAnnouncement[] = [
 	{
+		id: 'launcher-0.0.6·',
+		version: '0.0.6',
+		publishedAt: '2026-08-13',
+		title: 'Ghastling Launcher 0.0.6',
+		changes: {
+			fixed: [
+				'修复启动器在系统托盘时无法正常关闭启动器进行更新。',
+				'修复启动器无法完成更新显示未知 zip 类型。',
+			],
+		},
+	},
+	{
 		id: 'launcher-0.0.5·',
 		version: '0.0.5',
 		publishedAt: '2026-08-12',
