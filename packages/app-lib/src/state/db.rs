@@ -277,11 +277,12 @@ async fn reconcile_mojang_auth_source_column(
             migration.version == MOJANG_AUTH_SOURCE_MIGRATION_VERSION
         }) {
             let current_checksum: &[u8] = migration.checksum.as_ref();
-            let stored_checksum: Option<Vec<u8>> =
-                sqlx::query_scalar("SELECT checksum FROM _sqlx_migrations WHERE version = ?")
-                    .bind(MOJANG_AUTH_SOURCE_MIGRATION_VERSION)
-                    .fetch_optional(pool)
-                    .await?;
+            let stored_checksum: Option<Vec<u8>> = sqlx::query_scalar(
+                "SELECT checksum FROM _sqlx_migrations WHERE version = ?",
+            )
+            .bind(MOJANG_AUTH_SOURCE_MIGRATION_VERSION)
+            .fetch_optional(pool)
+            .await?;
 
             if let Some(ref stored) = stored_checksum {
                 if stored.as_slice() != current_checksum {
