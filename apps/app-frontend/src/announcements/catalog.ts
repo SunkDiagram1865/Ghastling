@@ -29,6 +29,24 @@ export const ANNOUNCEMENT_CHANGE_TYPES: readonly AnnouncementChangeType[] = [
 
 export const launcherAnnouncements: readonly LauncherAnnouncement[] = [
 	{
+		id: 'launcher-0.0.7·',
+		version: '0.0.7',
+		publishedAt: '2026-08-13',
+		title: 'Ghastling Launcher 0.0.7',
+		changes: {
+			added: [
+				'添加 Mojang 认证服务下载源。',
+				'添加红石联机，目前有红石联机和陶瓦联机两条路线选择。',
+				'添加外观设置的页面切换过渡动画开关。',
+				'添加自动导入缺失整合包文件的功能（同步 Axolotl)。',
+			],
+			changed: [
+				'翻译界面功能性调整。',
+				'少部分界面的英文汉化。',
+			],
+		},
+	},
+	{
 		id: 'launcher-0.0.6·',
 		version: '0.0.6',
 		publishedAt: '2026-08-13',

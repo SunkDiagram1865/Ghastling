@@ -423,7 +423,7 @@ v-model="settings.openai_system_prompt"
 		min-height: 6.5rem;
 		box-sizing: border-box;
 		padding: 1rem;
-		border: 1px solid var(--color-surface-5);
+		border: 1px solid var(--color-divider);
 		border-radius: var(--radius-lg);
 	}
 

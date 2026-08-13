@@ -3,6 +3,7 @@ use serde::{Serialize, Serializer};
 use thiserror::Error;
 
 pub mod auth;
+pub mod hongshi;
 pub mod import;
 pub mod install;
 pub mod instance;

@@ -129,6 +129,7 @@
 		"utils:default",
 		"worlds:default",
 		"drop:default",
-		"terracotta:default"
+		"terracotta:default",
+		"hongshi:default"
 	]
 }

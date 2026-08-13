@@ -31,9 +31,11 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 spotless {
+    lineEndings = com.diffplug.spotless.LineEnding.UNIX
     java {
         palantirJavaFormat()
         removeUnusedImports()
+        endWithNewline()
     }
 }
 

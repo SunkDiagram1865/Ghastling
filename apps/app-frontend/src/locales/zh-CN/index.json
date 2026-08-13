@@ -1662,7 +1662,7 @@
 		"message": "联机服务未运行。请创建房间或加入房间以开始联机。"
 	},
 	"app.multiplayer.not-running-title": {
-		"message": "开始联机会话"
+		"message": "开始陶瓦联机"
 	},
 	"app.multiplayer.share-code": {
 		"message": "将此代码分享给好友："
@@ -1742,9 +1742,6 @@
 	"app.multiplayer.installing": {
 		"message": "正在安装..."
 	},
-	"app.multiplayer.powered-by-terracotta": {
-		"message": "由 Terracotta | 陶瓦联机 强力驱动"
-	},
 	"app.multiplayer.back": {
 		"message": "返回"
 	},
@@ -1765,6 +1762,90 @@
 	},
 	"app.multiplayer.no-players": {
 		"message": "暂无玩家"
+	},
+	"app.multiplayer.powered-by-terracotta": {
+		"message": "由 陶瓦联机 强力驱动"
+	},
+	"app.multiplayer.powered-by-hongshi": {
+		"message": "由 红石联机 强力驱动"
+	},
+	"app.multiplayer.hongshi.title": {
+		"message": "开始红石联机"
+	},
+	"app.multiplayer.hongshi.not-running": {
+		"message": "联机服务未运行。请创建房间或加入房间以开始联机。"
+	},
+	"app.multiplayer.hongshi.start": {
+		"message": "启动红石联机"
+	},
+	"app.multiplayer.hongshi.download": {
+		"message": "下载红石联机"
+	},
+	"app.multiplayer.hongshi.binary-missing": {
+		"message": "请先下载红石联机内核，然后创建房间。"
+	},
+	"app.multiplayer.hongshi.local-port": {
+		"message": "本地 Minecraft 端口"
+	},
+	"app.multiplayer.hongshi.detected-port": {
+		"message": "{instance} — 端口 {port}"
+	},
+	"app.multiplayer.hongshi.manual-port": {
+		"message": "手动输入端口"
+	},
+	"app.multiplayer.hongshi.port-hint": {
+		"message": "在游戏中开放局域网，Ghastling 会自动检测端口；外部游戏可使用手动端口。"
+	},
+	"app.multiplayer.hongshi.node": {
+		"message": "中继节点"
+	},
+	"app.multiplayer.hongshi.node-auto": {
+		"message": "自动 — 最低延迟"
+	},
+	"app.multiplayer.hongshi.node-label": {
+		"message": "{name} — {latency} 毫秒{cached}"
+	},
+	"app.multiplayer.hongshi.cached": {
+		"message": "（缓存）"
+	},
+	"app.multiplayer.hongshi.unreachable": {
+		"message": "不可达"
+	},
+	"app.multiplayer.hongshi.refresh-nodes": {
+		"message": "刷新节点"
+	},
+	"app.multiplayer.hongshi.create": {
+		"message": "创建公共房间"
+	},
+	"app.multiplayer.hongshi.creating": {
+		"message": "正在创建隧道..."
+	},
+	"app.multiplayer.hongshi.selecting-node": {
+		"message": "正在选择最佳中继节点..."
+	},
+	"app.multiplayer.hongshi.public-address": {
+		"message": "公共地址"
+	},
+	"app.multiplayer.hongshi.public-address-hint": {
+		"message": "好友可以在 Minecraft 中直接输入此地址，无需安装红石联机。"
+	},
+	"app.multiplayer.hongshi.limits": {
+		"message": "隧道在无玩家 10 分钟或总计 6 小时后关闭。最多 10 名玩家，共享 10 Mbps 带宽。"
+	},
+	"app.multiplayer.hongshi.port-changed": {
+		"message": "Minecraft 开放了不同的局域网端口，请重启隧道后再分享地址。"
+	},
+	"app.multiplayer.hongshi.restart": {
+		"message": "重启隧道"
+	},
+	"app.multiplayer.hongshi.open-logs": {
+		"message": "打开红石联机日志"
+	},
+	"app.multiplayer.hongshi.closed": {
+		"message": "红石联机房间已关闭，请创建新房间以获取新地址。"
+	},
+	"app.multiplayer.hongshi.unsupported": {
+		"message": "红石联机不支持当前操作系统或架构。"
 	},
 	"app.navigation.worlds": {
 		"message": "世界"

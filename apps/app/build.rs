@@ -421,6 +421,23 @@ fn main() {
                     .default_permission(
                         DefaultPermissionRule::AllowAllCommands,
                     ),
+            )
+            .plugin(
+                "hongshi",
+                InlinedPlugin::new()
+                    .commands(&[
+                        "hongshi_get_state",
+                        "hongshi_get_nodes",
+                        "hongshi_get_detected_ports",
+                        "hongshi_download",
+                        "hongshi_host",
+                        "hongshi_stop",
+                        "hongshi_reset",
+                        "hongshi_open_logs",
+                    ])
+                    .default_permission(
+                        DefaultPermissionRule::AllowAllCommands,
+                    ),
             ),
     )
     .expect("Failed to run tauri-build");

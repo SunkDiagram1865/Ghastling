@@ -35,7 +35,8 @@ pub async fn check_reachable() -> Result<()> {
 
 /// Check the Mojang services, returning their individual reachability states.
 #[tauri::command]
-pub async fn check_mojang_services() -> Result<Vec<minecraft_auth::MojangServiceStatus>> {
+pub async fn check_mojang_services()
+-> Result<Vec<minecraft_auth::MojangServiceStatus>> {
     Ok(minecraft_auth::check_mojang_services().await)
 }
 

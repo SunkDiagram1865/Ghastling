@@ -5,6 +5,7 @@ pub mod curseforge;
 pub mod drop_classifier;
 pub mod friends;
 pub mod handler;
+pub mod hongshi;
 pub mod instance;
 pub mod jre;
 pub mod logs;

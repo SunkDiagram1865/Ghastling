@@ -228,10 +228,9 @@ async fn reconcile_mojang_auth_source_column(
     // reconcile by recording the migration as applied so it doesn't try to
     // re-add the column and trigger a duplicate column error.
     if mojang_auth_source_exists && !migration_applied {
-        if let Some(migration) = MIGRATOR
-            .iter()
-            .find(|migration| migration.version == MOJANG_AUTH_SOURCE_MIGRATION_VERSION)
-        {
+        if let Some(migration) = MIGRATOR.iter().find(|migration| {
+            migration.version == MOJANG_AUTH_SOURCE_MIGRATION_VERSION
+        }) {
             sqlx::query(
                 "CREATE TABLE IF NOT EXISTS _sqlx_migrations (
                     version BIGINT PRIMARY KEY,

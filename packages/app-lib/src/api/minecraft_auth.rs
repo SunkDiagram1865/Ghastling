@@ -50,19 +50,21 @@ const MOJANG_SERVICES: [(&str, &str); 5] = [
 
 #[tracing::instrument]
 pub async fn check_mojang_services() -> Vec<MojangServiceStatus> {
-    futures::future::join_all(MOJANG_SERVICES.map(|(service, url)| async move {
-        let reachable = INSECURE_REQWEST_CLIENT
-            .get(url)
-            .timeout(Duration::from_secs(5))
-            .send()
-            .await
-            .is_ok();
-        MojangServiceStatus {
-            service,
-            url,
-            reachable,
-        }
-    }))
+    futures::future::join_all(MOJANG_SERVICES.map(
+        |(service, url)| async move {
+            let reachable = INSECURE_REQWEST_CLIENT
+                .get(url)
+                .timeout(Duration::from_secs(5))
+                .send()
+                .await
+                .is_ok();
+            MojangServiceStatus {
+                service,
+                url,
+                reachable,
+            }
+        },
+    ))
     .await
 }
 
