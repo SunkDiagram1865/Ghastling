@@ -130,8 +130,8 @@ jobs:
           $version = "${{ github.ref_name }}" -replace '^v', ''
           $appName = "Ghastling Launcher"
           $repoRoot = (Resolve-Path .).Path
-          $releaseDir = Join-Path $repoRoot "apps/app/target/release"
-          $outDir = Join-Path $repoRoot "apps/app/target/release/bundle/portable"
+          $releaseDir = Join-Path $repoRoot "target/release"
+          $outDir = Join-Path $repoRoot "target/release/bundle/portable"
           $appExe = Join-Path $releaseDir "${appName}.exe"
 
           # The only payload we ship inside Ghastling_<version>_x64.zip is
