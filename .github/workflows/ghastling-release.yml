@@ -129,74 +129,66 @@ jobs:
         run: |
           $version = "${{ github.ref_name }}" -replace '^v', ''
           $appName = "Ghastling Launcher"
-          $outDir = "target/release/bundle/portable"
-          $buildDir = "target/portable-build/ziproot"
+          $repoRoot = (Resolve-Path .).Path
+          $releaseDir = Join-Path $repoRoot "apps/app/target/release"
+          $outDir = Join-Path $repoRoot "apps/app/target/release/bundle/portable"
+          $appExe = Join-Path $releaseDir "${appName}.exe"
 
+          # The only payload we ship inside Ghastling_<version>_x64.zip is
+          # the single standalone "Ghastling Launcher.exe". All frontend
+          # assets are embedded into the binary by Tauri's portable target,
+          # so no sidecar resources folder is needed.
           New-Item -ItemType Directory -Force -Path $outDir | Out-Null
-          New-Item -ItemType Directory -Force -Path $buildDir | Out-Null
+          if (-not (Test-Path $appExe)) {
+            Write-Error "Cannot find ${appExe}. Did the Tauri build step succeed?"
+            exit 1
+          }
 
-          # Reuse the binary already built
-          $appExe = "target/release/${appName}.exe"
-          if (Test-Path $appExe) {
-            Copy-Item -Force $appExe "$buildDir\${appName}.exe"
+          $zipName = "Ghastling_${version}_x64.zip"
+          $zipPath = Join-Path $outDir $zipName
+          if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
 
-            # Create portable zip using .NET ZipArchive with forced Deflate compression
-            # Tauri updater only accepts one compression method at a time, so we must
-            # ensure ALL entries use Deflate (not Stored) to avoid "Compression method not supported"
-            $zipName = "Ghastling_${version}_x64.zip"
-            $zipPath = Join-Path $outDir $zipName
-            if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $zipStream = [System.IO.File]::Create($zipPath)
+          $zipArchive = New-Object System.IO.Compression.ZipArchive($zipStream, [System.IO.Compression.ZipArchiveMode]::Create)
+          try {
+              # Single entry, exactly named "Ghastling Launcher.exe" at the
+              # zip root (FLAT, no wrapper dir). Force Deflate (method 8) so
+              # the Tauri updater does not hit "Compression method not
+              # supported" on Stored entries.
+              $entry = $zipArchive.CreateEntry("${appName}.exe", [System.IO.Compression.CompressionLevel]::Optimal)
+              $entryStream = $entry.Open()
+              try {
+                  $fileStream = [System.IO.File]::OpenRead($appExe)
+                  try {
+                      $fileStream.CopyTo($entryStream)
+                  } finally {
+                      $fileStream.Dispose()
+                  }
+              } finally {
+                  $entryStream.Dispose()
+              }
+          } finally {
+              $zipArchive.Dispose()
+              $zipStream.Dispose()
+          }
+          $sizeMB = [math]::Round((Get-Item $zipPath).Length / 1MB, 2)
+          Write-Output "Created zip: $zipName ($sizeMB MB) with a single entry: ${appName}.exe"
 
-            Add-Type -AssemblyName System.IO.Compression.FileSystem
-            $zipStream = [System.IO.File]::Create($zipPath)
-            $zipArchive = New-Object System.IO.Compression.ZipArchive($zipStream, [System.IO.Compression.ZipArchiveMode]::Create)
-            try {
-                $files = Get-ChildItem -Path $buildDir -File -Recurse
-                foreach ($file in $files) {
-                    $relativePath = $file.FullName.Substring($buildDir.Length + 1)
-                    # Use forward slashes for ZIP entry names (portable format)
-                    $entryName = $relativePath -replace '\\', '/'
-                    # Force Deflate compression for EVERY entry (CompressionLevel.Optimal = Deflate)
-                    # Do NOT use CreateEntryFromFile with CompressionLevel because it may
-                    # fall back to Stored for incompressible files; write stream manually.
-                    $entry = $zipArchive.CreateEntry($entryName, [System.IO.Compression.CompressionLevel]::Optimal)
-                    # CreateEntry with CompressionLevel.Optimal guarantees Deflate (8) method
-                    $entryStream = $entry.Open()
-                    try {
-                        $fileStream = [System.IO.File]::OpenRead($file.FullName)
-                        try {
-                            $fileStream.CopyTo($entryStream)
-                        } finally {
-                            $fileStream.Dispose()
-                        }
-                    } finally {
-                        $entryStream.Dispose()
-                    }
-                }
-            } finally {
-                $zipArchive.Dispose()
-                $zipStream.Dispose()
-            }
-            Write-Output "Created portable zip with forced Deflate: $zipPath"
+          # Sign the portable zip for Tauri auto-update
+          $zipPath = Resolve-Path $zipPath
 
-            # Sign the portable zip for Tauri auto-update
-            $zipPath = Resolve-Path $zipPath
+          cd apps/app
+          pnpm tauri signer sign --password "$env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD" "$zipPath"
+          cd ../..
 
-            cd apps/app
-            pnpm tauri signer sign --password "$env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD" "$zipPath"
-            cd ../..
-
-            $sigPath = "${zipPath}.sig"
-            if (Test-Path $sigPath) {
-              gh release upload "${{ github.ref_name }}" $zipPath --clobber
-              gh release upload "${{ github.ref_name }}" $sigPath --clobber
-              Write-Output "Uploaded portable zip $zipName and signature"
-            } else {
-              Write-Error "Signature file not generated for $zipName"
-              exit 1
-            }
+          $sigPath = "${zipPath}.sig"
+          if (Test-Path $sigPath) {
+            gh release upload "${{ github.ref_name }}" $zipPath --clobber
+            gh release upload "${{ github.ref_name }}" $sigPath --clobber
+            Write-Output "Uploaded portable zip $zipName and signature"
           } else {
-            Write-Error "Binary not found at $appExe"
+            Write-Error "Signature file not generated for $zipName"
             exit 1
           }
 
