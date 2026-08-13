@@ -43,6 +43,16 @@ jobs:
       - name: Disable Jekyll
         run: touch apps/ghastling/.output/public/.nojekyll
 
+      - name: Preserve README.md from website branch
+        run: |
+          git clone --depth 1 --branch website https://github.com/sunkdiagram1865/Ghastling /tmp/website-branch || true
+          if [ -f /tmp/website-branch/README.md ]; then
+            cp /tmp/website-branch/README.md apps/ghastling/.output/public/README.md
+            echo "Preserved README.md from website branch"
+          else
+            echo "No README.md found on website branch (first deploy?)"
+          fi
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
