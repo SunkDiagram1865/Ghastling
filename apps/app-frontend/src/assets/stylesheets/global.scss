@@ -236,6 +236,36 @@ img {
 
 @import '@modrinth/assets/omorphia.scss';
 
+// 页面切换过渡动画容器
+.page-transition-grid {
+	display: grid;
+	min-height: 100%;
+}
+
+.page-transition-layer {
+	grid-area: 1 / 1;
+	min-width: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.page-slide-enter-active {
+		transition:
+			transform 0.18s ease,
+			opacity 0.14s ease;
+		will-change: transform, opacity;
+	}
+
+	.page-slide-enter-from {
+		transform: translateY(12px);
+		opacity: 0;
+	}
+
+	.page-slide-enter-to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
 input {
 	border-radius: var(--size-rounded-sm);
 	box-sizing: border-box;

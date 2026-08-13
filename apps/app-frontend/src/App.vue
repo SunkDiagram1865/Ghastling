@@ -2578,13 +2578,17 @@ provideAppUpdateDownloadProgress(appUpdateDownload)
 			>
 				{{ formatMessage(messages.authUnreachableBody) }}
 			</Admonition>
-			<RouterView v-slot="{ Component }">
-				<template v-if="Component">
-					<Suspense @pending="onSuspensePending" @resolve="onSuspenseResolve">
-						<component :is="Component"></component>
-					</Suspense>
-				</template>
-			</RouterView>
+			<div class="page-transition-grid">
+				<RouterView v-slot="{ Component, route }">
+					<Transition name="page-slide" :css="themeStore.getFeatureFlag('page_transitions')">
+						<div v-if="Component" :key="route.fullPath" class="page-transition-layer">
+							<Suspense @pending="onSuspensePending" @resolve="onSuspenseResolve">
+								<component :is="Component"></component>
+							</Suspense>
+						</div>
+					</Transition>
+				</RouterView>
+			</div>
 		</div>
 		<div
 			class="app-sidebar mt-px shrink-0 flex flex-col border-0 border-l-[1px] border-[--brand-gradient-border] border-solid"

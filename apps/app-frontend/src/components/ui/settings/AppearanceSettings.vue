@@ -38,6 +38,7 @@ const worldsInHomeFlag: FeatureFlag = 'worlds_in_home'
 const skipNonEssentialWarningsFlag: FeatureFlag = 'skip_non_essential_warnings'
 const skipUnknownPackWarningFlag: FeatureFlag = 'skip_unknown_pack_warning'
 const showPlayTimeFlag: FeatureFlag = 'show_instance_play_time'
+const pageTransitionsFlag: FeatureFlag = 'page_transitions'
 
 const messages = defineMessages({
 	colorThemeTitle: {
@@ -305,6 +306,14 @@ const messages = defineMessages({
 	discoverModsDescription: {
 		id: 'app.appearance-settings.discover-mods.description',
 		defaultMessage: 'Show the "Discover mods" section on the Home page.',
+	},
+	pageTransitionsTitle: {
+		id: 'app.appearance-settings.page-transitions.title',
+		defaultMessage: '页面切换过渡动画',
+	},
+	pageTransitionsDescription: {
+		id: 'app.appearance-settings.page-transitions.description',
+		defaultMessage: '在启动器页面之间切换时播放过渡动画。',
 	},
 })
 
@@ -789,6 +798,26 @@ watch(showDiscoverMods, (val) => {
 				(e) => {
 					themeStore.advancedRendering = !!e
 					settings.advanced_rendering = themeStore.advancedRendering
+				}
+			"
+		/>
+	</div>
+
+	<div class="mt-6 flex items-center justify-between gap-4">
+		<div>
+			<h2 class="m-0 text-lg font-semibold text-contrast">
+				{{ formatMessage(messages.pageTransitionsTitle) }}
+			</h2>
+			<p class="m-0 mt-1">{{ formatMessage(messages.pageTransitionsDescription) }}</p>
+		</div>
+		<Toggle
+			id="page-transitions"
+			:model-value="themeStore.getFeatureFlag(pageTransitionsFlag)"
+			@update:model-value="
+				() => {
+					const enabled = !themeStore.getFeatureFlag(pageTransitionsFlag)
+					themeStore.featureFlags[pageTransitionsFlag] = enabled
+					settings.feature_flags[pageTransitionsFlag] = enabled
 				}
 			"
 		/>

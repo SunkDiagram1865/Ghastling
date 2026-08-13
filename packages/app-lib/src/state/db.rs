@@ -63,6 +63,7 @@ async fn open_migrated_app_db(db_path: &Path) -> crate::Result<Pool<Sqlite>> {
 
     reconcile_compatible_migration_checksums(&pool).await?;
     reconcile_existing_java_discovery_migration(&pool).await?;
+    reconcile_mojang_auth_source_column(&pool).await?;
     MIGRATOR.run(&pool).await?;
     record_current_app_version(&pool).await?;
 
@@ -189,6 +190,86 @@ async fn reconcile_colliding_java_discovery_migration(
         )
         .execute(pool)
         .await?;
+    }
+
+    Ok(())
+}
+
+async fn reconcile_mojang_auth_source_column(
+    pool: &Pool<Sqlite>,
+) -> crate::Result<()> {
+    const MOJANG_AUTH_SOURCE_MIGRATION_VERSION: i64 = 20260815000000;
+
+    let mojang_auth_source_exists: bool = sqlx::query_scalar(
+        "SELECT EXISTS(SELECT 1 FROM pragma_table_info('settings') WHERE name = 'mojang_auth_source')",
+    )
+    .fetch_one(pool)
+    .await?;
+
+    let has_migrations_table: bool = sqlx::query_scalar(
+        "SELECT EXISTS(SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = '_sqlx_migrations')",
+    )
+    .fetch_one(pool)
+    .await?;
+
+    let migration_applied = if has_migrations_table {
+        let applied: bool = sqlx::query_scalar(
+            "SELECT EXISTS(SELECT 1 FROM _sqlx_migrations WHERE version = ?)",
+        )
+        .bind(MOJANG_AUTH_SOURCE_MIGRATION_VERSION)
+        .fetch_one(pool)
+        .await?;
+        applied
+    } else {
+        false
+    };
+
+    // If column already exists but migration is not recorded, we need to
+    // reconcile by recording the migration as applied so it doesn't try to
+    // re-add the column and trigger a duplicate column error.
+    if mojang_auth_source_exists && !migration_applied {
+        if let Some(migration) = MIGRATOR
+            .iter()
+            .find(|migration| migration.version == MOJANG_AUTH_SOURCE_MIGRATION_VERSION)
+        {
+            sqlx::query(
+                "CREATE TABLE IF NOT EXISTS _sqlx_migrations (
+                    version BIGINT PRIMARY KEY,
+                    description TEXT NOT NULL,
+                    installed_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    success BOOLEAN NOT NULL,
+                    checksum BLOB NOT NULL,
+                    execution_time BIGINT NOT NULL
+                )",
+            )
+            .execute(pool)
+            .await?;
+
+            sqlx::query(
+                "INSERT OR IGNORE INTO _sqlx_migrations (version, description, success, checksum, execution_time) VALUES (?, ?, TRUE, ?, 0)",
+            )
+            .bind(migration.version)
+            .bind(migration.description.as_ref())
+            .bind(migration.checksum.as_ref())
+            .execute(pool)
+            .await?;
+
+            tracing::warn!(
+                version = MOJANG_AUTH_SOURCE_MIGRATION_VERSION,
+                "Reconciled mojang_auth_source column with canonical migration"
+            );
+        }
+    } else if !mojang_auth_source_exists && migration_applied {
+        // Column doesn't exist but migration says it was applied - remove the
+        // bogus record so the migration can run properly.
+        sqlx::query("DELETE FROM _sqlx_migrations WHERE version = ?")
+            .bind(MOJANG_AUTH_SOURCE_MIGRATION_VERSION)
+            .execute(pool)
+            .await?;
+        tracing::warn!(
+            version = MOJANG_AUTH_SOURCE_MIGRATION_VERSION,
+            "Removed stale mojang_auth_source migration record (column was missing)"
+        );
     }
 
     Ok(())

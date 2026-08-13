@@ -15,6 +15,7 @@ export const DEFAULT_FEATURE_FLAGS = {
 	skip_unknown_pack_warning: false,
 	i18n_debug: false,
 	show_instance_play_time: true,
+	page_transitions: true,
 	advanced_filters_collapsed: true,
 }
 

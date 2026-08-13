@@ -558,7 +558,8 @@ pub fn resolve_download_routes_for(
         crate::state::DownloadSourceMode::Auto => {
             order_auto_routes(&mut routes)
         }
-        crate::state::DownloadSourceMode::OfficialOnly => {
+        crate::state::DownloadSourceMode::OfficialOnly
+        | crate::state::DownloadSourceMode::OfficialPreferred => {
             routes.retain(|route| !route.is_mirror);
         }
         crate::state::DownloadSourceMode::MirrorPreferred => {

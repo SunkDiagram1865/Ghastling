@@ -164,7 +164,7 @@
 		},
 	})
 
-	const providers: TranslationProvider[] = ['microsoft', 'google', 'openai-compatible']
+	const providers: TranslationProvider[] = ['google', 'microsoft', 'openai-compatible']
 	const modes = ['bilingual', 'translation-only'] as const
 	const styles: TranslationStyle[] = ['default', 'weakened', 'brand', 'border', 'background']
 	const languages = ['follow-app', ...LOCALES.map((locale) => locale.code)]

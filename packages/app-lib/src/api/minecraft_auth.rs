@@ -27,6 +27,45 @@ pub async fn check_reachable() -> crate::Result<()> {
     Ok(())
 }
 
+#[derive(Clone, Debug, Serialize)]
+pub struct MojangServiceStatus {
+    pub service: &'static str,
+    pub url: &'static str,
+    pub reachable: bool,
+}
+
+const MOJANG_SERVICES: [(&str, &str); 5] = [
+    ("auth", "https://authserver.mojang.com/"),
+    ("account", "https://api.mojang.com/"),
+    (
+        "session",
+        "https://sessionserver.mojang.com/session/minecraft/hasJoined",
+    ),
+    ("services", "https://api.minecraftservices.com/"),
+    (
+        "profiles",
+        "https://api.mojang.com/users/profiles/minecraft/",
+    ),
+];
+
+#[tracing::instrument]
+pub async fn check_mojang_services() -> Vec<MojangServiceStatus> {
+    futures::future::join_all(MOJANG_SERVICES.map(|(service, url)| async move {
+        let reachable = INSECURE_REQWEST_CLIENT
+            .get(url)
+            .timeout(Duration::from_secs(5))
+            .send()
+            .await
+            .is_ok();
+        MojangServiceStatus {
+            service,
+            url,
+            reachable,
+        }
+    }))
+    .await
+}
+
 #[tracing::instrument]
 pub async fn begin_login() -> crate::Result<MinecraftLoginFlow> {
     let state = State::get().await?;

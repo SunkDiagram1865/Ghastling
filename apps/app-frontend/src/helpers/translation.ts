@@ -16,7 +16,7 @@ export interface TranslatableHit {
 	summary?: string
 }
 
-export type TranslationProvider = 'microsoft' | 'google' | 'openai-compatible'
+export type TranslationProvider = 'google' | 'microsoft' | 'openai-compatible'
 export type TranslationMode = 'bilingual' | 'translation-only'
 export type TranslationStyle = 'default' | 'weakened' | 'brand' | 'border' | 'background'
 export type TranslationTextFormat = 'plain' | 'html'

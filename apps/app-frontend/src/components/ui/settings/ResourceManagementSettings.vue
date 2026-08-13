@@ -7,6 +7,7 @@ import {
 	injectNotificationManager,
 	Slider,
 	StyledInput,
+	Toggle,
 	useVIntl,
 } from '@modrinth/ui'
 import { open } from '@tauri-apps/plugin-dialog'
@@ -15,6 +16,10 @@ import { computed, ref, watch } from 'vue'
 
 import ConfirmModalWrapper from '@/components/ui/modal/ConfirmModalWrapper.vue'
 import { purge_cache_types } from '@/helpers/cache.js'
+import {
+	getMissingContentScannerSettings,
+	setMissingContentScannerSettings,
+} from '@/helpers/downloads-scanner.ts'
 import { get, set } from '@/helpers/settings.ts'
 import { deleteAllAppDbBackups, showAppDbBackupsFolder } from '@/helpers/utils.js'
 import { useTheming } from '@/store/state'
@@ -25,6 +30,15 @@ const settings = ref(await get())
 const purgeCacheConfirmModal = ref(null)
 const deleteBackupsConfirmModal = ref(null)
 const { formatMessage } = useVIntl()
+
+const missingContentScannerSettings = ref(getMissingContentScannerSettings())
+watch(
+	missingContentScannerSettings,
+	(newValue) => {
+		setMissingContentScannerSettings(newValue)
+	},
+	{ deep: true },
+)
 
 const isPortable = ref(false)
 
@@ -79,9 +93,13 @@ const messages = defineMessages({
 		id: 'app.settings.resources.source.automatic',
 		defaultMessage: 'Automatic (recommended)',
 	},
-	officialSource: {
-		id: 'app.settings.resources.source.official',
-		defaultMessage: 'Prefer official sources',
+	officialPreferredSource: {
+		id: 'app.settings.resources.source.official-preferred',
+		defaultMessage: '优先官方源',
+	},
+	officialOnlySource: {
+		id: 'app.settings.resources.source.official-only',
+		defaultMessage: '仅原始源（不使用镜像）',
 	},
 	openBmclApiSource: {
 		id: 'app.settings.resources.source.open-bmcl-api',
@@ -123,6 +141,26 @@ const messages = defineMessages({
 		id: 'app.settings.resources.curseforge-mirror-description',
 		defaultMessage: 'CurseForge public API requests and file downloads.',
 	},
+	mojangAuthService: {
+		id: 'app.settings.resources.mojang-auth-service',
+		defaultMessage: 'Mojang 认证服务',
+	},
+	mojangAuthServiceDescription: {
+		id: 'app.settings.resources.mojang-auth-service-description',
+		defaultMessage: '用于登录和验证账户的 Mojang 认证服务。',
+	},
+	mojangAuthOfficialPreferred: {
+		id: 'app.settings.resources.source.mojang-official-preferred',
+		defaultMessage: '优先官方源',
+	},
+	mojangAuthMirrorPreferred: {
+		id: 'app.settings.resources.source.mojang-mirror-preferred',
+		defaultMessage: '优先 Fallen-Proxy',
+	},
+	mojangAuthOfficialOnly: {
+		id: 'app.settings.resources.source.mojang-official-only',
+		defaultMessage: '仅官方源',
+	},
 	maximumDownloads: {
 		id: 'app.settings.resources.maximum-downloads',
 		defaultMessage: 'Maximum concurrent downloads',
@@ -144,6 +182,34 @@ const messages = defineMessages({
 		id: 'app.settings.resources.maximum-writes-description',
 		defaultMessage:
 			'The maximum number of files the launcher can write to disk at once. Use a lower value if you frequently get I/O errors. An app restart is required.',
+	},
+	missingContentAutoImport: {
+		id: 'app.settings.resources.missing-content-auto-import',
+		defaultMessage: '自动导入缺失的整合包文件',
+	},
+	missingContentAutoImportDescription: {
+		id: 'app.settings.resources.missing-content-auto-import-description',
+		defaultMessage: '在解析缺失整合包文件时监控目录，自动校验并导入匹配的文件。',
+	},
+	missingContentImportDirectory: {
+		id: 'app.settings.resources.missing-content-import-directory',
+		defaultMessage: '监控导入目录',
+	},
+	missingContentImportDirectoryDescription: {
+		id: 'app.settings.resources.missing-content-import-directory-description',
+		defaultMessage: '未选择时使用系统下载文件夹，不扫描子目录。',
+	},
+	systemDownloadsDirectory: {
+		id: 'app.settings.resources.system-downloads-directory',
+		defaultMessage: '系统下载文件夹',
+	},
+	selectImportDirectory: {
+		id: 'app.settings.resources.select-import-directory',
+		defaultMessage: '选择监控目录',
+	},
+	resetImportDirectory: {
+		id: 'app.settings.resources.reset-import-directory',
+		defaultMessage: '使用系统下载文件夹',
 	},
 	databaseBackups: {
 		id: 'app.settings.resources.database-backups',
@@ -177,19 +243,32 @@ const automaticSourceOption = computed(() => ({
 	value: 'auto',
 	label: formatMessage(messages.automaticSource),
 }))
-const officialSourceOption = computed(() => ({
+const officialPreferredSourceOption = computed(() => ({
+	value: 'official_preferred',
+	label: formatMessage(messages.officialPreferredSource),
+}))
+const officialOnlySourceOption = computed(() => ({
 	value: 'official_only',
-	label: formatMessage(messages.officialSource),
+	label: formatMessage(messages.officialOnlySource),
 }))
 const minecraftSourceOptions = computed(() => [
 	automaticSourceOption.value,
-	officialSourceOption.value,
+	officialPreferredSourceOption.value,
 	{ value: 'mirror_preferred', label: formatMessage(messages.openBmclApiSource) },
+	officialOnlySourceOption.value,
 ])
 const mcimSourceOptions = computed(() => [
 	automaticSourceOption.value,
-	officialSourceOption.value,
+	officialPreferredSourceOption.value,
 	{ value: 'mirror_preferred', label: formatMessage(messages.mcimSource) },
+	officialOnlySourceOption.value,
+])
+const mojangAuthSource = downloadSourceModel('mojang_auth_source')
+const mojangAuthSourceOptions = computed(() => [
+	automaticSourceOption.value,
+	{ value: 'official_preferred', label: formatMessage(messages.mojangAuthOfficialPreferred) },
+	{ value: 'mirror_preferred', label: formatMessage(messages.mojangAuthMirrorPreferred) },
+	{ value: 'official_only', label: formatMessage(messages.mojangAuthOfficialOnly) },
 ])
 const downloadConcurrencyMode = computed({
 	get: () => (settings.value.auto_concurrent_downloads ? 'auto' : 'manual'),
@@ -353,6 +432,22 @@ async function findLauncherDir() {
 		settings.value.custom_dir = newDir
 	}
 }
+
+async function findMissingContentImportDirectory() {
+	const newDir = await open({
+		multiple: false,
+		directory: true,
+		title: formatMessage(messages.selectImportDirectory),
+	})
+
+	if (newDir) {
+		missingContentScannerSettings.value.directory = newDir
+	}
+}
+
+function resetMissingContentImportDirectory() {
+	missingContentScannerSettings.value.directory = null
+}
 </script>
 
 <template>
@@ -448,6 +543,20 @@ async function findLauncherDir() {
 					<Combobox v-model="curseforgeDownloadSource" :options="mcimSourceOptions" />
 				</div>
 			</div>
+
+			<div class="flex items-center justify-between gap-4">
+				<div class="flex flex-col gap-1">
+					<h3 class="m-0 text-base font-semibold text-contrast">
+						{{ formatMessage(messages.mojangAuthService) }}
+					</h3>
+					<p class="m-0 leading-tight text-secondary">
+						{{ formatMessage(messages.mojangAuthServiceDescription) }}
+					</p>
+				</div>
+				<div class="w-48 shrink-0">
+					<Combobox v-model="mojangAuthSource" :options="mojangAuthSourceOptions" />
+				</div>
+			</div>
 		</div>
 
 		<div class="flex flex-col gap-2.5">
@@ -485,6 +594,62 @@ async function findLauncherDir() {
 			/>
 			<p class="m-0 leading-tight text-secondary">
 				{{ formatMessage(messages.maximumWritesDescription) }}
+			</p>
+		</div>
+
+		<div class="flex flex-col gap-2.5">
+			<div class="flex items-center justify-between gap-4">
+				<div>
+					<h2 class="m-0 text-lg font-semibold text-contrast">
+						{{ formatMessage(messages.missingContentAutoImport) }}
+					</h2>
+					<p class="m-0 mt-1 leading-tight text-secondary">
+						{{ formatMessage(messages.missingContentAutoImportDescription) }}
+					</p>
+				</div>
+				<Toggle
+					id="missing-content-auto-import"
+					v-model="missingContentScannerSettings.enabled"
+				/>
+			</div>
+
+			<h3 class="mb-0 mt-2 text-base font-semibold text-contrast">
+				{{ formatMessage(messages.missingContentImportDirectory) }}
+			</h3>
+			<StyledInput
+				id="missing-content-import-directory"
+				:model-value="
+					missingContentScannerSettings.directory ??
+					formatMessage(messages.systemDownloadsDirectory)
+				"
+				:icon="FolderOpenIcon"
+				type="text"
+				readonly
+				wrapper-class="w-full"
+			>
+				<template #right>
+					<ButtonStyled circular>
+						<button
+							class="ml-1.5"
+							:disabled="!missingContentScannerSettings.enabled"
+							:title="formatMessage(messages.selectImportDirectory)"
+							@click="findMissingContentImportDirectory"
+						>
+							<FolderSearchIcon />
+						</button>
+					</ButtonStyled>
+				</template>
+			</StyledInput>
+			<button
+				v-if="missingContentScannerSettings.directory"
+				class="btn min-w-max"
+				:disabled="!missingContentScannerSettings.enabled"
+				@click="resetMissingContentImportDirectory"
+			>
+				{{ formatMessage(messages.resetImportDirectory) }}
+			</button>
+			<p class="m-0 leading-tight text-secondary">
+				{{ formatMessage(messages.missingContentImportDirectoryDescription) }}
 			</p>
 		</div>
 

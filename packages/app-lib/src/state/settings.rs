@@ -15,6 +15,7 @@ pub enum DownloadSourceMode {
     Auto = 0,
     OfficialOnly = 1,
     MirrorPreferred = 2,
+    OfficialPreferred = 3,
 }
 
 impl DownloadSourceMode {
@@ -23,6 +24,7 @@ impl DownloadSourceMode {
             Self::Auto => "auto",
             Self::OfficialOnly => "official_only",
             Self::MirrorPreferred => "mirror_preferred",
+            Self::OfficialPreferred => "official_preferred",
         }
     }
 
@@ -30,6 +32,7 @@ impl DownloadSourceMode {
         match value {
             "official_only" => Self::OfficialOnly,
             "mirror_preferred" => Self::MirrorPreferred,
+            "official_preferred" => Self::OfficialPreferred,
             _ => Self::Auto,
         }
     }
@@ -38,6 +41,7 @@ impl DownloadSourceMode {
         match value {
             1 => Self::OfficialOnly,
             2 => Self::MirrorPreferred,
+            3 => Self::OfficialPreferred,
             _ => Self::Auto,
         }
     }
@@ -45,7 +49,7 @@ impl DownloadSourceMode {
     pub(crate) fn prefers_mirror(self, auto_prefers_mirror: bool) -> bool {
         match self {
             Self::Auto => auto_prefers_mirror,
-            Self::OfficialOnly => false,
+            Self::OfficialOnly | Self::OfficialPreferred => false,
             Self::MirrorPreferred => true,
         }
     }
@@ -66,6 +70,8 @@ pub struct Settings {
     pub modrinth_source: DownloadSourceMode,
     #[serde(default)]
     pub curseforge_source: DownloadSourceMode,
+    #[serde(default)]
+    pub mojang_auth_source: DownloadSourceMode,
     #[serde(default, rename = "use_minecraft_mirror", skip_serializing)]
     legacy_use_minecraft_mirror: Option<bool>,
     #[serde(default, rename = "use_modrinth_mirror", skip_serializing)]
@@ -140,6 +146,7 @@ pub enum FeatureFlag {
     I18nDebug,
     ShowInstancePlayTime,
     SkipNonEssentialWarnings,
+    PageTransitions,
     AdvancedFiltersCollapsed,
 }
 
@@ -154,7 +161,7 @@ impl Settings {
             SELECT
                 max_concurrent_writes, max_concurrent_downloads,
                 auto_concurrent_downloads, minecraft_metadata_source,
-                minecraft_file_source, modrinth_source, curseforge_source,
+                minecraft_file_source, modrinth_source, curseforge_source, mojang_auth_source,
                 theme, locale, default_page, collapsed_navigation, hide_nametag_skins_page, advanced_rendering, native_decorations,
                 discord_rpc, developer_mode, telemetry, personalized_ads, use_system_proxy,
                 onboarded, onboarding_version, onboarding_instance_tour_completed,
@@ -189,6 +196,9 @@ impl Settings {
             ),
             curseforge_source: DownloadSourceMode::from_string(
                 &res.curseforge_source,
+            ),
+            mojang_auth_source: DownloadSourceMode::from_string(
+                &res.mojang_auth_source,
             ),
             legacy_use_minecraft_mirror: None,
             legacy_use_modrinth_mirror: None,
@@ -289,6 +299,7 @@ impl Settings {
         let minecraft_file_source = self.minecraft_file_source.as_str();
         let modrinth_source = self.modrinth_source.as_str();
         let curseforge_source = self.curseforge_source.as_str();
+        let mojang_auth_source = self.mojang_auth_source.as_str();
         let auto_prefers_mirror = self.auto_prefers_mirror();
         let use_minecraft_mirror = self
             .minecraft_file_source
@@ -364,7 +375,8 @@ impl Settings {
                 transparent_background = $51,
                 transparent_background_opacity = $52,
                 transparent_background_blur = $53,
-                use_system_proxy = $54
+                use_system_proxy = $54,
+                mojang_auth_source = $55
             ",
             max_concurrent_writes,
             max_concurrent_downloads,
@@ -420,6 +432,7 @@ impl Settings {
             transparent_background_opacity,
             self.transparent_background_blur,
             self.use_system_proxy,
+            mojang_auth_source,
         )
         .execute(exec)
         .await?;

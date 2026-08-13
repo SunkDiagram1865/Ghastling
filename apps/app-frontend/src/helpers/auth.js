@@ -22,6 +22,14 @@ export async function check_reachable() {
 }
 
 /**
+ * Check the Mojang services mirrored by the Fallen proxy, returning their
+ * individual reachability states.
+ */
+export async function check_mojang_services() {
+	return await invoke('plugin:auth|check_mojang_services')
+}
+
+/**
  * Authenticate a user with Hydra - part 1.
  * This begins the authentication flow quasi-synchronously.
  *

@@ -13,6 +13,7 @@ fn main() {
                 InlinedPlugin::new()
                     .commands(&[
                         "check_reachable",
+                        "check_mojang_services",
                         "login",
                         "begin_yggdrasil_login",
                         "finish_yggdrasil_login",
