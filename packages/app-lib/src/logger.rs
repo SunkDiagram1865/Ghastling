@@ -721,9 +721,9 @@ mod tests {
         assert!(output.contains("mirror_status=cache_miss"));
         assert!(output.contains("status=302"));
         assert!(output.contains("?<query omitted>"));
-        assert!(output.contains(
-            "redirect_url=\"https://cdn.modrinth.com/data/test/file name.mrpack\""
-        ));
+        assert!(
+            output.contains("redirect_url=\"https://cdn.modrinth.com/data/test/file name.mrpack\"")
+        );
         assert!(fits_within_console_lines(&output, 80, 5));
     }
 

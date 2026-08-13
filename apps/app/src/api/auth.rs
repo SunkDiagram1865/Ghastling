@@ -315,8 +315,7 @@ fn parse_custom_uuid(uuid: Option<String>) -> Result<Option<uuid::Uuid>> {
         || !uuid.chars().all(|character| character.is_ascii_hexdigit())
     {
         return Err(theseus::ErrorKind::InputError(
-            "Custom UUID must be 32 hexadecimal characters; hyphens are optional"
-                .to_string(),
+            "Custom UUID must be 32 hexadecimal characters; hyphens are optional".to_string(),
         )
         .as_error()
         .into());

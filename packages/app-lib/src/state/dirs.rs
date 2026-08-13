@@ -262,7 +262,11 @@ impl DirectoryInfo {
                 .await?;
 
                 if !is_dir_writable(&move_dir).await? {
-                    return Err(crate::ErrorKind::DirectoryMoveError(format!("Cannot move directory to {}: directory is not writable", move_dir.display())).into());
+                    return Err(crate::ErrorKind::DirectoryMoveError(format!(
+                        "Cannot move directory to {}: directory is not writable",
+                        move_dir.display()
+                    ))
+                    .into());
                 }
 
                 const MOVE_DIRS: &[&str] = &[
@@ -353,16 +357,13 @@ impl DirectoryInfo {
                                                 "Failed to create directory {}: {}",
                                                 parent.display(),
                                                 e
-                                            )
+                                            ),
                                         ))
                                     })?;
                                 }
 
-                                crate::util::io::rename_or_move(
-                                    &x.old,
-                                    &x.new,
-                                )
-                                .await
+                                crate::util::io::rename_or_move(&x.old, &x.new)
+                                    .await
                                     .map_err(|e| {
                                         crate::Error::from(crate::ErrorKind::DirectoryMoveError(
                                             format!(
@@ -373,11 +374,7 @@ impl DirectoryInfo {
                                         ))
                                     })?;
 
-                                let _ = emit_loading(
-                                    &loader_bar_id,
-                                    90.0 / paths_len as f64,
-                                    None,
-                                );
+                                let _ = emit_loading(&loader_bar_id, 90.0 / paths_len as f64, None);
 
                                 success_idxs.insert(idx);
 
@@ -408,7 +405,12 @@ impl DirectoryInfo {
                     if let Some(disk_usage) = get_disk_usage(&move_dir)?
                         && total_size > disk_usage
                     {
-                        return Err(crate::ErrorKind::DirectoryMoveError(format!("Not enough space to move directory to {}: only {} bytes available", app_dir.display(), disk_usage)).into());
+                        return Err(crate::ErrorKind::DirectoryMoveError(format!(
+                            "Not enough space to move directory to {}: only {} bytes available",
+                            app_dir.display(),
+                            disk_usage
+                        ))
+                        .into());
                     }
 
                     let loader_bar_id = Arc::new(&loader_bar_id);
@@ -416,14 +418,17 @@ impl DirectoryInfo {
                         let loader_bar_id = loader_bar_id.clone();
 
                         async move {
-                            crate::util::fetch::copy(
-                                &x.old,
-                                &x.new,
-                                io_semaphore,
-                            )
-                            .await.map_err(|e| { crate::Error::from(
-                                crate::ErrorKind::DirectoryMoveError(format!("Failed to move directory from {} to {}: {e:?}", x.old.display(), x.new.display())))
-                            })?;
+                            crate::util::fetch::copy(&x.old, &x.new, io_semaphore)
+                                .await
+                                .map_err(|e| {
+                                    crate::Error::from(crate::ErrorKind::DirectoryMoveError(
+                                        format!(
+                                            "Failed to move directory from {} to {}: {e:?}",
+                                            x.old.display(),
+                                            x.new.display()
+                                        ),
+                                    ))
+                                })?;
 
                             let _ = emit_loading(
                                 &loader_bar_id,

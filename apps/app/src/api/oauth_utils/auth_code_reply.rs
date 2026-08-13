@@ -130,7 +130,10 @@ async fn handle_reply(
             .body(
                 include_str!("auth_code_reply/page.html")
                     .replace("{{title}}", "Success")
-                    .replace("{{message}}", "You have successfully signed in! You can close this page now."),
+                    .replace(
+                        "{{message}}",
+                        "You have successfully signed in! You can close this page now.",
+                    ),
             )
     } else {
         hyper::Response::builder()
@@ -139,7 +142,10 @@ async fn handle_reply(
             .body(
                 include_str!("auth_code_reply/page.html")
                     .replace("{{title}}", "Error")
-                    .replace("{{message}}", "Authorization code not found. Please try signing in again."),
+                    .replace(
+                        "{{message}}",
+                        "Authorization code not found. Please try signing in again.",
+                    ),
             )
     }?;
 

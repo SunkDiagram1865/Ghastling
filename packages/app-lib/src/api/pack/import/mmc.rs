@@ -269,19 +269,57 @@ pub(crate) async fn import_mmc_instance_dir(
 
                 // Modrinth Managed Pack
                 // Kept separate as we may in the future want to add special handling for modrinth managed packs
-                import_mmc_unmanaged(instance_id, minecraft_folder, "Imported Modrinth Modpack".to_string(), description, mmc_pack, reporter, details, symlink).await?;
+                import_mmc_unmanaged(
+                    instance_id,
+                    minecraft_folder,
+                    "Imported Modrinth Modpack".to_string(),
+                    description,
+                    mmc_pack,
+                    reporter,
+                    details,
+                    symlink,
+                )
+                .await?;
             }
-            Some(MMCManagedPackType::Flame | MMCManagedPackType::ATLauncher) => {
+            Some(
+                MMCManagedPackType::Flame | MMCManagedPackType::ATLauncher,
+            ) => {
                 // For flame/atlauncher managed packs
                 // Treat as unmanaged, but with 'minecraft' folder instead of '.minecraft'
-                import_mmc_unmanaged(instance_id, minecraft_folder, "Imported Modpack".to_string(), description, mmc_pack, reporter, details, symlink).await?;
-            },
+                import_mmc_unmanaged(
+                    instance_id,
+                    minecraft_folder,
+                    "Imported Modpack".to_string(),
+                    description,
+                    mmc_pack,
+                    reporter,
+                    details,
+                    symlink,
+                )
+                .await?;
+            }
             Some(_) => {
                 // For managed packs that aren't modrinth, flame, atlauncher
                 // Treat as unmanaged
-                import_mmc_unmanaged(instance_id, minecraft_folder, "ImportedModpack".to_string(), description, mmc_pack, reporter, details, symlink).await?;
-            },
-            _ => return Err(crate::ErrorKind::InputError("Instance is managed, but managed pack type not specified in instance.cfg".to_string()).into())
+                import_mmc_unmanaged(
+                    instance_id,
+                    minecraft_folder,
+                    "ImportedModpack".to_string(),
+                    description,
+                    mmc_pack,
+                    reporter,
+                    details,
+                    symlink,
+                )
+                .await?;
+            }
+            _ => {
+                return Err(crate::ErrorKind::InputError(
+                    "Instance is managed, but managed pack type not specified in instance.cfg"
+                        .to_string(),
+                )
+                .into());
+            }
         }
     } else {
         // Directly import unmanaged pack

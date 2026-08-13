@@ -646,18 +646,16 @@ fn replace_nonempty(text: &mut String, value: &str, replacement: &str) {
 }
 
 fn censor_ip_addresses(text: String) -> String {
-    let text = Regex::new(
-        r"\b(?:(?:25[0-5]|2[0-4]\d|1?\d?\d)\.){3}(?:25[0-5]|2[0-4]\d|1?\d?\d)\b",
-    )
-    .expect("valid IPv4 regex")
-    .replace_all(&text, |captures: &Captures<'_>| {
-        let value = &captures[0];
-        match value.parse::<Ipv4Addr>() {
-            Ok(_) => "...".to_string(),
-            _ => value.to_string(),
-        }
-    })
-    .into_owned();
+    let text = Regex::new(r"\b(?:(?:25[0-5]|2[0-4]\d|1?\d?\d)\.){3}(?:25[0-5]|2[0-4]\d|1?\d?\d)\b")
+        .expect("valid IPv4 regex")
+        .replace_all(&text, |captures: &Captures<'_>| {
+            let value = &captures[0];
+            match value.parse::<Ipv4Addr>() {
+                Ok(_) => "...".to_string(),
+                _ => value.to_string(),
+            }
+        })
+        .into_owned();
 
     Regex::new(r"(?i)\b[0-9a-f:.%]{3,}\b")
         .expect("valid IPv6 candidate regex")

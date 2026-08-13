@@ -429,16 +429,18 @@ pub async fn fetch_yggdrasil_profile(
         .properties
         .iter()
         .find(|property| property.name == "textures")
-        .and_then(|property| match decode_session_skin(profile.id, &property.value) {
-            Ok(skin) => skin,
-            Err(error) => {
-                tracing::warn!(
-                    "Unable to decode the Yggdrasil skin for profile {}: {error}",
-                    profile.id
-                );
-                None
-            }
-        });
+        .and_then(
+            |property| match decode_session_skin(profile.id, &property.value) {
+                Ok(skin) => skin,
+                Err(error) => {
+                    tracing::warn!(
+                        "Unable to decode the Yggdrasil skin for profile {}: {error}",
+                        profile.id
+                    );
+                    None
+                }
+            },
+        );
 
     Ok(Some(MinecraftProfile {
         id: profile.id,
@@ -671,9 +673,8 @@ mod tests {
     #[test]
     fn decodes_classic_and_slim_session_skins() {
         let profile_id = Uuid::new_v4();
-        let classic = BASE64_STANDARD.encode(
-            br#"{"textures":{"SKIN":{"url":"https://textures.example/skin.png"}}}"#,
-        );
+        let classic = BASE64_STANDARD
+            .encode(br#"{"textures":{"SKIN":{"url":"https://textures.example/skin.png"}}}"#);
         let slim = BASE64_STANDARD.encode(
             br#"{"textures":{"SKIN":{"url":"https://textures.example/slim.png","metadata":{"model":"slim"}}}}"#,
         );

@@ -1228,7 +1228,9 @@ async fn install_local_pack_file_recursive(
                 InstallPhaseDetails::Modpack {
                     project_id: None,
                     version_id: None,
-                    title: Some(format!("Scanning {filename} (level {current_depth}/{max_depth})")),
+                    title: Some(format!(
+                        "Scanning {filename} (level {current_depth}/{max_depth})"
+                    )),
                 },
             )
             .await?;
@@ -1247,8 +1249,10 @@ async fn install_local_pack_file_recursive(
                 // Not a valid zip, can't proceed further
                 let _ = tokio::fs::remove_dir_all(&scratch).await;
                 return Err(crate::ErrorKind::InputError(
-                    "Unrecognized modpack format: no known pack manifest was found in the archive".to_string()
-                ).into());
+                    "Unrecognized modpack format: no known pack manifest was found in the archive"
+                        .to_string(),
+                )
+                .into());
             }
         };
 
@@ -1325,9 +1329,9 @@ async fn install_local_pack_file_recursive(
 
     // If all else fails, return error
     Err(ErrorKind::InputError(
-        "Unrecognized modpack format: no known pack manifest was found in the archive"
-            .to_string(),
-    ).into())
+        "Unrecognized modpack format: no known pack manifest was found in the archive".to_string(),
+    )
+    .into())
 }
 
 /// Dispatches a local non-mrpack modpack file to its format-specific

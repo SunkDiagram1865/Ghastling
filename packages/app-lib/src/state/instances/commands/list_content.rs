@@ -882,9 +882,9 @@ async fn resolve_content_scope_with_instance(
 
             if content_set.instance_id != instance.id {
                 return Err(crate::ErrorKind::InputError(format!(
-					"Content set {content_set_id} does not belong to instance {}",
-					instance.id
-				))
+                    "Content set {content_set_id} does not belong to instance {}",
+                    instance.id
+                ))
                 .into());
             }
 

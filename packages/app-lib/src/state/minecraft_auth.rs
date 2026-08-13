@@ -1772,14 +1772,21 @@ async fn minecraft_entitlements(
     token: &str,
 ) -> Result<MinecraftEntitlements, MinecraftAuthenticationError> {
     let res = auth_retry(|| {
-		INSECURE_REQWEST_CLIENT
-			.get(format!("https://api.minecraftservices.com/entitlements/license?requestId={}", Uuid::new_v4()))
-			.header("Accept", "application/json")
-			.header("User-Agent", MINECRAFT_SERVICES_USER_AGENT)
-			.bearer_auth(token)
-			.send()
-	})
-    .await.map_err(|source| MinecraftAuthenticationError::Request { source, step: MinecraftAuthStep::MinecraftEntitlements })?;
+        INSECURE_REQWEST_CLIENT
+            .get(format!(
+                "https://api.minecraftservices.com/entitlements/license?requestId={}",
+                Uuid::new_v4()
+            ))
+            .header("Accept", "application/json")
+            .header("User-Agent", MINECRAFT_SERVICES_USER_AGENT)
+            .bearer_auth(token)
+            .send()
+    })
+    .await
+    .map_err(|source| MinecraftAuthenticationError::Request {
+        source,
+        step: MinecraftAuthStep::MinecraftEntitlements,
+    })?;
 
     let status = res.status();
     let text = res.text().await.map_err(|source| {

@@ -584,23 +584,18 @@ pub async fn create_symlink(
             if is_dir {
                 match junction::create(&target, &link) {
                     Ok(()) => Ok(()),
-                    Err(junction_err) => {
-                        match symlink_rs::symlink_dir(&target, &link) {
-                            Ok(()) => Ok(()),
-                            Err(symlink_err) => Err(IOError::with_path(
-                                std::io::Error::other(
-                                    format!(
-                                        "junction failed: {junction_err}; symlink failed: {symlink_err}"
-                                    ),
-                                ),
-                                &link,
+                    Err(junction_err) => match symlink_rs::symlink_dir(&target, &link) {
+                        Ok(()) => Ok(()),
+                        Err(symlink_err) => Err(IOError::with_path(
+                            std::io::Error::other(format!(
+                                "junction failed: {junction_err}; symlink failed: {symlink_err}"
                             )),
-                        }
-                    }
+                            &link,
+                        )),
+                    },
                 }
             } else {
-                symlink_rs::symlink_file(&target, &link)
-                    .map_err(|e| IOError::with_path(e, &link))
+                symlink_rs::symlink_file(&target, &link).map_err(|e| IOError::with_path(e, &link))
             }
         })
         .await

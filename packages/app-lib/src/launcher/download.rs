@@ -245,8 +245,7 @@ async fn download_minecraft_file(
         move |downloaded: u64,
               _total: u64|
               -> Pin<Box<dyn Future<Output = crate::Result<()>> + Send>> {
-            let previous =
-                last_downloaded.swap(downloaded, Ordering::Relaxed);
+            let previous = last_downloaded.swap(downloaded, Ordering::Relaxed);
             let progress = progress.clone();
             Box::pin(async move {
                 if downloaded >= previous {
@@ -1021,23 +1020,24 @@ pub async fn download_assets(
     let assets = stream::iter(index.objects.iter())
         .map(Ok::<(&String, &Asset), crate::Error>);
 
-    loading_try_for_each_concurrent(assets,
-            None,
-            loading_bar,
-            loading_amount,
-            num_futs,
-            None,
-            |(name, asset)| {
-                let progress = progress.clone();
-                async move {
+    loading_try_for_each_concurrent(
+        assets,
+        None,
+        loading_bar,
+        loading_amount,
+        num_futs,
+        None,
+        |(name, asset)| {
+            let progress = progress.clone();
+            async move {
                 let hash = &asset.hash;
                 let resource_path = st.directories.object_dir(hash);
-                let legacy_resource_path = st.directories.legacy_assets_dir().join(
-                    name.replace('/', &String::from(std::path::MAIN_SEPARATOR))
-                );
+                let legacy_resource_path = st
+                    .directories
+                    .legacy_assets_dir()
+                    .join(name.replace('/', &String::from(std::path::MAIN_SEPARATOR)));
                 let should_fetch_object = !resource_path.exists() || force;
-                let should_fetch_legacy =
-                    (with_legacy && !legacy_resource_path.exists()) || force;
+                let should_fetch_legacy = (with_legacy && !legacy_resource_path.exists()) || force;
                 let fetch_progress = if should_fetch_object || should_fetch_legacy {
                     progress.clone()
                 } else {
@@ -1103,8 +1103,10 @@ pub async fn download_assets(
 
                 tracing::trace!("Loaded asset with hash {hash}");
                 Ok(())
-                }
-            }).await?;
+            }
+        },
+    )
+    .await?;
     tracing::debug!("Done loading assets!");
     Ok(())
 }
@@ -1139,161 +1141,144 @@ pub async fn download_libraries(
         |library| {
             let progress = progress.clone();
             async move {
-            if let Some(rules) = &library.rules
-                && !parse_rules(
-                    rules,
-                    java_arch,
-                    &QuickPlayType::None,
-                    minecraft_updated,
-                )
-            {
-                tracing::trace!("Skipped library {}", &library.name);
-                return Ok(());
-            }
-
-            if !library.downloadable {
-                tracing::trace!(
-                    "Skipped non-downloadable library {}",
-                    &library.name
-                );
-                return Ok(());
-            }
-
-            // When a library has natives, we only need to download such natives, as PrismLauncher does
-            if let Some((os_key, classifiers)) =
-                library.natives_os_key_and_classifiers(java_arch)
-            {
-                let parsed_key = os_key
-                    .replace("${arch}", crate::util::platform::ARCH_WIDTH);
-
-                if let Some(native) = classifiers.get(&parsed_key) {
-                    let native_cache_path = st
-                        .directories
-                        .caches_dir()
-                        .join("minecraft-natives")
-                        .join(format!("{}.jar", native.sha1));
-                    download_minecraft_file(
-                        st,
-                        &native.url,
-                        Some(&native.sha1),
-                        Some(native.size as u64),
-                        &native_cache_path,
-                        ResourceClass::MinecraftLibrary,
-                        ContentValidation::Jar,
-                        force,
-                        progress.clone(),
-                        InstallErrorContext::new("download Minecraft native library")
-                            .minecraft_version(version.to_string())
-                            .file_path(library.name.clone())
-                            .target_path(
-                                st.directories
-                                    .version_natives_dir(version)
-                                    .display()
-                                    .to_string(),
-                            )
-                            .build(),
-                    )
-                    .await?;
-
-                    let native_target =
-                        st.directories.version_natives_dir(version);
-                    let library_name = library.name.clone();
-                    tokio::task::spawn_blocking(move || {
-                        let file = std::fs::File::open(&native_cache_path)?;
-                        let mut archive = zip::ZipArchive::new(file).map_err(
-                            |error| {
-                                crate::ErrorKind::LauncherError(format!(
-                                    "Failed to open native library archive {library_name}: {error}",
-                                ))
-                            },
-                        )?;
-                        archive.extract(native_target).map_err(|error| {
-                            crate::ErrorKind::LauncherError(format!(
-                                "Failed to extract native library {library_name}: {error}",
-                            ))
-                        })?;
-                        Ok::<_, crate::Error>(())
-                    })
-                    .await??;
-                    tracing::debug!("Fetched native {}", &library.name);
-                }
-            } else {
-                let artifact_path = d::get_path_from_artifact(&library.name)?;
-                let path = st.directories.libraries_dir().join(&artifact_path);
-
-                if path.exists() && !force {
+                if let Some(rules) = &library.rules
+                    && !parse_rules(rules, java_arch, &QuickPlayType::None, minecraft_updated)
+                {
+                    tracing::trace!("Skipped library {}", &library.name);
                     return Ok(());
                 }
 
-                if let Some(d::minecraft::LibraryDownloads {
-                    artifact: Some(ref artifact),
-                    ..
-                }) = library.downloads
-                    && !artifact.url.is_empty()
-                {
-                    download_minecraft_file(
-                        st,
-                        &artifact.url,
-                        Some(&artifact.sha1),
-                        Some(artifact.size as u64),
-                        &path,
-                        ResourceClass::MinecraftLibrary,
-                        ContentValidation::None,
-                        force,
-                        progress.clone(),
-                        InstallErrorContext::new("download Minecraft library")
-                            .minecraft_version(version.to_string())
-                            .file_path(library.name.clone())
-                            .target_path(path.display().to_string())
-                            .build(),
-                    )
-                    .await?;
-
-                    tracing::trace!(
-                        "Fetched library {} to path {:?}",
-                        &library.name,
-                        &path
-                    );
-                } else {
-                    let Some(url) = legacy_library_download_url(
-                        library.url.as_deref(),
-                        &artifact_path,
-                    ) else {
-                        return Err(crate::ErrorKind::LauncherError(format!(
-                            "No safe Maven repository is known for required library {}",
-                            library.name
-                        ))
-                        .into());
-                    };
-
-                    download_minecraft_file(
-                        st,
-                        &url,
-                        legacy_library_sha1(library),
-                        None,
-                        &path,
-                        ResourceClass::Loader,
-                        legacy_library_content_validation(&artifact_path),
-                        force,
-                        progress.clone(),
-                        InstallErrorContext::new("download loader library")
-                            .minecraft_version(version.to_string())
-                            .file_path(library.name.clone())
-                            .target_path(path.display().to_string())
-                            .build(),
-                    )
-                    .await?;
-
-                    tracing::debug!(
-                        "Fetched legacy library {} to path {:?}",
-                        &library.name,
-                        &path
-                    );
+                if !library.downloadable {
+                    tracing::trace!("Skipped non-downloadable library {}", &library.name);
+                    return Ok(());
                 }
-            }
 
-            tracing::debug!("Loaded library {}", library.name);
-            Ok(())
+                // When a library has natives, we only need to download such natives, as PrismLauncher does
+                if let Some((os_key, classifiers)) =
+                    library.natives_os_key_and_classifiers(java_arch)
+                {
+                    let parsed_key = os_key.replace("${arch}", crate::util::platform::ARCH_WIDTH);
+
+                    if let Some(native) = classifiers.get(&parsed_key) {
+                        let native_cache_path = st
+                            .directories
+                            .caches_dir()
+                            .join("minecraft-natives")
+                            .join(format!("{}.jar", native.sha1));
+                        download_minecraft_file(
+                            st,
+                            &native.url,
+                            Some(&native.sha1),
+                            Some(native.size as u64),
+                            &native_cache_path,
+                            ResourceClass::MinecraftLibrary,
+                            ContentValidation::Jar,
+                            force,
+                            progress.clone(),
+                            InstallErrorContext::new("download Minecraft native library")
+                                .minecraft_version(version.to_string())
+                                .file_path(library.name.clone())
+                                .target_path(
+                                    st.directories
+                                        .version_natives_dir(version)
+                                        .display()
+                                        .to_string(),
+                                )
+                                .build(),
+                        )
+                        .await?;
+
+                        let native_target = st.directories.version_natives_dir(version);
+                        let library_name = library.name.clone();
+                        tokio::task::spawn_blocking(move || {
+                            let file = std::fs::File::open(&native_cache_path)?;
+                            let mut archive = zip::ZipArchive::new(file).map_err(|error| {
+                                crate::ErrorKind::LauncherError(format!(
+                                    "Failed to open native library archive {library_name}: {error}",
+                                ))
+                            })?;
+                            archive.extract(native_target).map_err(|error| {
+                                crate::ErrorKind::LauncherError(format!(
+                                    "Failed to extract native library {library_name}: {error}",
+                                ))
+                            })?;
+                            Ok::<_, crate::Error>(())
+                        })
+                        .await??;
+                        tracing::debug!("Fetched native {}", &library.name);
+                    }
+                } else {
+                    let artifact_path = d::get_path_from_artifact(&library.name)?;
+                    let path = st.directories.libraries_dir().join(&artifact_path);
+
+                    if path.exists() && !force {
+                        return Ok(());
+                    }
+
+                    if let Some(d::minecraft::LibraryDownloads {
+                        artifact: Some(ref artifact),
+                        ..
+                    }) = library.downloads
+                        && !artifact.url.is_empty()
+                    {
+                        download_minecraft_file(
+                            st,
+                            &artifact.url,
+                            Some(&artifact.sha1),
+                            Some(artifact.size as u64),
+                            &path,
+                            ResourceClass::MinecraftLibrary,
+                            ContentValidation::None,
+                            force,
+                            progress.clone(),
+                            InstallErrorContext::new("download Minecraft library")
+                                .minecraft_version(version.to_string())
+                                .file_path(library.name.clone())
+                                .target_path(path.display().to_string())
+                                .build(),
+                        )
+                        .await?;
+
+                        tracing::trace!("Fetched library {} to path {:?}", &library.name, &path);
+                    } else {
+                        let Some(url) =
+                            legacy_library_download_url(library.url.as_deref(), &artifact_path)
+                        else {
+                            return Err(crate::ErrorKind::LauncherError(format!(
+                                "No safe Maven repository is known for required library {}",
+                                library.name
+                            ))
+                            .into());
+                        };
+
+                        download_minecraft_file(
+                            st,
+                            &url,
+                            legacy_library_sha1(library),
+                            None,
+                            &path,
+                            ResourceClass::Loader,
+                            legacy_library_content_validation(&artifact_path),
+                            force,
+                            progress.clone(),
+                            InstallErrorContext::new("download loader library")
+                                .minecraft_version(version.to_string())
+                                .file_path(library.name.clone())
+                                .target_path(path.display().to_string())
+                                .build(),
+                        )
+                        .await?;
+
+                        tracing::debug!(
+                            "Fetched legacy library {} to path {:?}",
+                            &library.name,
+                            &path
+                        );
+                    }
+                }
+
+                tracing::debug!("Loaded library {}", library.name);
+                Ok(())
             }
         },
     )
@@ -1394,7 +1379,8 @@ mod tests {
                 "org/ow2/asm/asm/9.10.1/asm-9.10.1.jar",
             ),
             Some(
-                "https://repo.maven.apache.org/maven2/org/ow2/asm/asm/9.10.1/asm-9.10.1.jar".to_string(),
+                "https://repo.maven.apache.org/maven2/org/ow2/asm/asm/9.10.1/asm-9.10.1.jar"
+                    .to_string(),
             ),
         );
         assert_eq!(

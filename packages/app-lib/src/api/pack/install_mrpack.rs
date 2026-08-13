@@ -747,10 +747,8 @@ pub(crate) async fn install_zipped_mrpack_files_with_reporter(
             let content_context = content_context.clone();
             async move {
                 let project_size = project.file_size as u64;
-                let project_path =
-                    content_context.resolve_install_path(&project);
-                let target_path =
-                    content_context.instance_full_path.join(&project_path);
+                let project_path = content_context.resolve_install_path(&project);
+                let target_path = content_context.instance_full_path.join(&project_path);
 
                 //TODO: Future update: prompt user for optional files in a modpack
                 if let Some(env) = project.env.as_ref()
@@ -773,22 +771,15 @@ pub(crate) async fn install_zipped_mrpack_files_with_reporter(
                     return Ok(());
                 }
 
-                let context =
-                    InstallErrorContext::new("download modpack content file")
-                        .maybe_project_id(
-                            content_context.pack_project_id.clone(),
-                        )
-                        .maybe_version_id(
-                            content_context.pack_version_id.clone(),
-                        )
-                        .file_path(project_path.clone())
-                        .target_path(target_path.display().to_string())
-                        .urls(project.downloads.clone())
-                        .maybe_expected_hash(
-                            project.hashes.get(&PackFileHash::Sha1).cloned(),
-                        )
-                        .expected_size(project_size)
-                        .build();
+                let context = InstallErrorContext::new("download modpack content file")
+                    .maybe_project_id(content_context.pack_project_id.clone())
+                    .maybe_version_id(content_context.pack_version_id.clone())
+                    .file_path(project_path.clone())
+                    .target_path(target_path.display().to_string())
+                    .urls(project.downloads.clone())
+                    .maybe_expected_hash(project.hashes.get(&PackFileHash::Sha1).cloned())
+                    .expected_size(project_size)
+                    .build();
                 content_context
                     .reporter
                     .set_transient_context(context.clone())
@@ -796,12 +787,13 @@ pub(crate) async fn install_zipped_mrpack_files_with_reporter(
 
                 let progress_key = project_path.clone();
                 let progress_context = content_context.clone();
-                let min_download_progress_delta =
-                    (project_size / 200).max(256 * 1024);
+                let min_download_progress_delta = (project_size / 200).max(256 * 1024);
                 let mut last_reported_downloaded = 0_u64;
                 let mut report_download_progress = move |downloaded: u64,
                                                          _total_size: u64|
-                      -> Pin<Box<dyn Future<Output = crate::Result<()>> + Send>> {
+                      -> Pin<
+                    Box<dyn Future<Output = crate::Result<()>> + Send>,
+                > {
                     if downloaded < project_size
                         && downloaded.saturating_sub(last_reported_downloaded)
                             < min_download_progress_delta
@@ -830,13 +822,10 @@ pub(crate) async fn install_zipped_mrpack_files_with_reporter(
                                         .content_progress
                                         .load(Ordering::Relaxed),
                                     total: progress_context.num_files as u64,
-                                    secondary: (progress_context
-                                        .content_total_bytes
-                                        > 0)
+                                    secondary: (progress_context.content_total_bytes > 0)
                                         .then_some(InstallProgressSecondary {
                                             current: current_bytes,
-                                            total: progress_context
-                                                .content_total_bytes,
+                                            total: progress_context.content_total_bytes,
                                         }),
                                 }),
                                 progress_context.modpack_details.clone(),
@@ -845,8 +834,7 @@ pub(crate) async fn install_zipped_mrpack_files_with_reporter(
                         Ok(())
                     })
                 };
-                let progress =
-                    &mut report_download_progress as &mut FetchProgressFn<'_>;
+                let progress = &mut report_download_progress as &mut FetchProgressFn<'_>;
                 content_context
                     .report_download_attempt(
                         project_path.clone(),
@@ -865,21 +853,14 @@ pub(crate) async fn install_zipped_mrpack_files_with_reporter(
                 let integrity = Integrity {
                     size: Some(project_size),
                     sha1: project.hashes.get(&PackFileHash::Sha1).cloned(),
-                    sha512: project
-                        .hashes
-                        .get(&PackFileHash::Sha512)
-                        .cloned(),
+                    sha512: project.hashes.get(&PackFileHash::Sha512).cloned(),
                     ..Integrity::default()
                 };
                 let download = match download_to_path(
                     DownloadRequest::new(primary_url, ResourceClass::Modpack)
-                        .with_candidate_urls(
-                            project.downloads.iter().skip(1).cloned(),
-                        )
+                        .with_candidate_urls(project.downloads.iter().skip(1).cloned())
                         .with_integrity(integrity)
-                        .with_download_meta(
-                            content_context.download_meta.clone(),
-                        ),
+                        .with_download_meta(content_context.download_meta.clone()),
                     &target_path,
                     &state.download_semaphore,
                     &state.pool,
@@ -888,15 +869,11 @@ pub(crate) async fn install_zipped_mrpack_files_with_reporter(
                 .await
                 {
                     Ok(download) => {
-                        content_context
-                            .remove_active_download(&project_path)
-                            .await;
+                        content_context.remove_active_download(&project_path).await;
                         download
                     }
                     Err(error) => {
-                        content_context
-                            .remove_active_download(&project_path)
-                            .await;
+                        content_context.remove_active_download(&project_path).await;
                         content_context
                             .reporter
                             .persist_failure_context(context)
@@ -907,9 +884,7 @@ pub(crate) async fn install_zipped_mrpack_files_with_reporter(
                 let downloaded_bytes = download.size;
                 content_context.record_download_result(&download).await;
                 let path = target_path;
-                let sha1 = if let Some(hash) =
-                    project.hashes.get(&PackFileHash::Sha1)
-                {
+                let sha1 = if let Some(hash) = project.hashes.get(&PackFileHash::Sha1) {
                     hash.clone()
                 } else {
                     sha1_file_async(&path).await?.1
@@ -938,8 +913,7 @@ pub(crate) async fn install_zipped_mrpack_files_with_reporter(
                 if let Some(project_type) =
                     ProjectType::get_from_parent_folder(project.path.as_str())
                 {
-                    let file_info =
-                        content_context.file_infos_by_hash.get(&sha1);
+                    let file_info = content_context.file_infos_by_hash.get(&sha1);
                     let _permit = state.install_db_semaphore.acquire().await?;
                     content_context
                         .reporter
@@ -951,9 +925,7 @@ pub(crate) async fn install_zipped_mrpack_files_with_reporter(
                                 &sha1,
                                 downloaded_bytes,
                                 project_type,
-                                modpack_source_kind(
-                                    content_context.pack_version_id.as_deref(),
-                                ),
+                                modpack_source_kind(content_context.pack_version_id.as_deref()),
                                 file_info.map(|file| file.project_id.as_str()),
                                 file_info.map(|file| file.version_id.as_str()),
                                 state,

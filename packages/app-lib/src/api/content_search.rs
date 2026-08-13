@@ -842,13 +842,10 @@ mod tests {
                 .any(|translation| translation.curseforge_slug.as_deref()
                     == Some("applied-energistics-2"))
         );
-        assert!(
-            twilight_forest
-                .translations
-                .iter()
-                .any(|translation| translation.curseforge_slug.as_deref()
-                    == Some("the-twilight-forest"))
-        );
+        assert!(twilight_forest.translations.iter().any(|translation| {
+            translation.curseforge_slug.as_deref()
+                == Some("the-twilight-forest")
+        }));
         assert_eq!(
             twilight_forest.curseforge_query.as_deref(),
             Some("twilight forest")

@@ -733,16 +733,13 @@ pub async fn install_minecraft_for_instance_id_with_reporter(
 ) -> crate::Result<()> {
     let state = State::get().await?;
     let context =
-        crate::state::instances::commands::get_instance_launch_context(
-            instance_id,
-            &state.pool,
-        )
-        .await?
-        .ok_or_else(|| {
-            crate::ErrorKind::OtherError(format!(
-                "Tried to install a nonexistent or unloaded instance {instance_id}!"
-            ))
-        })?;
+        crate::state::instances::commands::get_instance_launch_context(instance_id, &state.pool)
+            .await?
+            .ok_or_else(|| {
+                crate::ErrorKind::OtherError(format!(
+                    "Tried to install a nonexistent or unloaded instance {instance_id}!"
+                ))
+            })?;
 
     install_minecraft_with_reporter(&context, repairing, reporter).await
 }

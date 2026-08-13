@@ -117,50 +117,48 @@ impl FriendsSocket {
                                 Ok(msg) => {
                                     let server_message = match msg {
                                         Message::Text(text) => {
-                                            match ServerToClientMessage::deserialize(
-                                                Either::Left(&text),
-                                            ) {
+                                            match ServerToClientMessage::deserialize(Either::Left(
+                                                &text,
+                                            )) {
                                                 Ok(message) => Some(message),
                                                 Err(_) => {
                                                     if let Ok(notification) =
                                                         serde_json::from_str::<Value>(&text)
                                                     {
-                                                        let _ = Self::handle_notification(notification).await;
+                                                        let _ =
+                                                            Self::handle_notification(notification)
+                                                                .await;
                                                     }
                                                     None
                                                 }
                                             }
                                         }
                                         Message::Binary(bytes) => {
-                                            match ServerToClientMessage::deserialize(
-                                                Either::Right(&bytes),
-                                            ) {
+                                            match ServerToClientMessage::deserialize(Either::Right(
+                                                &bytes,
+                                            )) {
                                                 Ok(message) => Some(message),
                                                 Err(_) => {
                                                     if let Ok(notification) =
                                                         serde_json::from_slice::<Value>(&bytes)
                                                     {
-                                                        let _ = Self::handle_notification(notification).await;
+                                                        let _ =
+                                                            Self::handle_notification(notification)
+                                                                .await;
                                                     }
                                                     None
                                                 }
                                             }
                                         }
                                         Message::Ping(bytes) => {
-                                            if let Some(write) = write_handle
-                                                .write()
-                                                .await
-                                                .as_mut()
+                                            if let Some(write) = write_handle.write().await.as_mut()
                                             {
-                                                let _ = write
-                                                    .send(Message::Pong(bytes))
-                                                    .await;
+                                                let _ = write.send(Message::Pong(bytes)).await;
                                             }
 
                                             continue;
                                         }
-                                        Message::Pong(_)
-                                        | Message::Frame(_) => continue,
+                                        Message::Pong(_) | Message::Frame(_) => continue,
                                         Message::Close(_) => break,
                                     };
 

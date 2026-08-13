@@ -1486,15 +1486,12 @@ async fn fetch_advanced_with_client_and_progress(
                         async {
                             let mut bytes = Vec::new();
                             let mut downloaded = 0_u64;
-                            let mut next_progress_log =
-                                DOWNLOAD_PROGRESS_LOG_INTERVAL;
+                            let mut next_progress_log = DOWNLOAD_PROGRESS_LOG_INTERVAL;
 
                             while let Some(item) = stream.next().await {
                                 let chunk = item.wrap_err_with(|| {
-									eyre!(
-										"failed to read response body from {log_request_url}"
-									)
-								})?;
+                                    eyre!("failed to read response body from {log_request_url}")
+                                })?;
 
                                 downloaded += chunk.len() as u64;
                                 bytes.extend_from_slice(&chunk);
@@ -1515,9 +1512,7 @@ async fn fetch_advanced_with_client_and_progress(
                                     );
                                     while next_progress_log <= downloaded {
                                         next_progress_log = next_progress_log
-                                            .saturating_add(
-                                                DOWNLOAD_PROGRESS_LOG_INTERVAL,
-                                            );
+                                            .saturating_add(DOWNLOAD_PROGRESS_LOG_INTERVAL);
                                     }
                                 }
 
@@ -1526,9 +1521,7 @@ async fn fetch_advanced_with_client_and_progress(
                                 {
                                     emit_loading(
                                         bar,
-                                        (chunk.len() as f64
-                                            / total_size as f64)
-                                            * total,
+                                        (chunk.len() as f64 / total_size as f64) * total,
                                         None,
                                     )?;
                                 }
@@ -1543,10 +1536,8 @@ async fn fetch_advanced_with_client_and_progress(
                         .await
                     } else {
                         resp.bytes().await.wrap_err_with(|| {
-                            eyre!(
-                                "failed to read response body from {log_request_url}"
-                            )
-						})
+                            eyre!("failed to read response body from {log_request_url}")
+                        })
                     };
                     drop(permit);
 

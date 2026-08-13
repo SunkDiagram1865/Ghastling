@@ -184,14 +184,13 @@ pub async fn switch_project_version_with_dependencies(
     let metadata = super::get::get(instance_id).await?.ok_or_else(|| {
         crate::ErrorKind::InputError("Unknown instance".to_string())
     })?;
-    let path =
-        crate::state::instances::commands::switch_project_version_with_dependencies(
-            instance_id,
-            project_path,
-            version_id,
-            &state,
-        )
-        .await?;
+    let path = crate::state::instances::commands::switch_project_version_with_dependencies(
+        instance_id,
+        project_path,
+        version_id,
+        &state,
+    )
+    .await?;
     emit_instance(&metadata.instance.id, InstancePayloadType::Edited).await?;
 
     Ok(path)

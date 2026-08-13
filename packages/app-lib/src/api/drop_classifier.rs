@@ -617,10 +617,7 @@ pub(crate) fn classify_folder_content(path: &Path) -> DroppedItemType {
                         e.ok().is_some_and(|entry| {
                             let p = entry.path();
                             if p.is_dir() {
-                                let id = p
-                                    .file_name()
-                                    .and_then(|n| n.to_str())
-                                    .unwrap_or("");
+                                let id = p.file_name().and_then(|n| n.to_str()).unwrap_or("");
                                 let json_path = p.join(format!("{id}.json"));
                                 let exists = json_path.exists();
                                 tracing::debug!(

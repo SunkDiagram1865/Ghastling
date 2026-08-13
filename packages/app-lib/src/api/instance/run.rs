@@ -179,15 +179,15 @@ async fn run_credentials(
     {
         let server_id = uuid::Uuid::new_v4().to_string();
         let join_result = fetch::INSECURE_REQWEST_CLIENT
-			.post("https://sessionserver.mojang.com/session/minecraft/join")
-			.json(&json!({
-				"accessToken": &credentials.access_token,
-				"selectedProfile": credentials.offline_profile.id.simple().to_string(),
-				"serverId": &server_id,
-			}))
-			.timeout(Duration::from_secs(5))
-			.send()
-			.await;
+            .post("https://sessionserver.mojang.com/session/minecraft/join")
+            .json(&json!({
+                "accessToken": &credentials.access_token,
+                "selectedProfile": credentials.offline_profile.id.simple().to_string(),
+                "serverId": &server_id,
+            }))
+            .timeout(Duration::from_secs(5))
+            .send()
+            .await;
 
         match join_result {
             Ok(resp) if resp.status().is_success() => {
@@ -302,16 +302,13 @@ pub async fn try_update_playtime_by_instance_id(
 ) -> crate::Result<()> {
     let state = State::get().await?;
     let context =
-        crate::state::instances::commands::get_instance_launch_context(
-            instance_id,
-            &state.pool,
-        )
-        .await?
-        .ok_or_else(|| {
-            crate::ErrorKind::OtherError(format!(
-                "Tried to update playtime for nonexistent instance {instance_id}!"
-            ))
-        })?;
+        crate::state::instances::commands::get_instance_launch_context(instance_id, &state.pool)
+            .await?
+            .ok_or_else(|| {
+                crate::ErrorKind::OtherError(format!(
+                    "Tried to update playtime for nonexistent instance {instance_id}!"
+                ))
+            })?;
     let updated_recent_playtime = context.instance.recent_time_played;
     let res = if updated_recent_playtime > 0 {
         let modrinth_pack_version_id = match &context.link {

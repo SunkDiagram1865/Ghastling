@@ -16,6 +16,7 @@
 				"https://github.com/SunkDiagram1865/Ghastling/releases/latest/download/latest.json"
 			],
 			"pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEE2QTdBNDdFQzI4MDk0MDMKUldRRGxJRENmcVNucHNaVG1OWG15VjVJM1V4MkpYcnIxS2VmaTA1L3Z5aGdxSFptaEE1SVoxdGsK",
+			"compressionMethod": "deflated",
 			"windows": {
 				"installMode": "quiet"
 			}

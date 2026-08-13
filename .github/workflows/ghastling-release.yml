@@ -115,6 +115,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         run: pnpm tauri build --config tauri-release.conf.json
         working-directory: apps/app
 
@@ -138,15 +140,44 @@ jobs:
           if (Test-Path $appExe) {
             Copy-Item -Force $appExe "$buildDir\${appName}.exe"
 
-            # Create portable zip using .NET ZipFile with Deflate compression
+            # Create portable zip using .NET ZipArchive with forced Deflate compression
+            # Tauri updater only accepts one compression method at a time, so we must
+            # ensure ALL entries use Deflate (not Stored) to avoid "Compression method not supported"
             $zipName = "Ghastling_${version}_x64.zip"
             $zipPath = Join-Path $outDir $zipName
             if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
 
             Add-Type -AssemblyName System.IO.Compression.FileSystem
-            $compression = [System.IO.Compression.CompressionLevel]::Optimal
-            [System.IO.Compression.ZipFile]::CreateFromDirectory($buildDir, $zipPath, $compression, $false)
-            Write-Output "Created portable zip: $zipPath"
+            $zipStream = [System.IO.File]::Create($zipPath)
+            $zipArchive = New-Object System.IO.Compression.ZipArchive($zipStream, [System.IO.Compression.ZipArchiveMode]::Create)
+            try {
+                $files = Get-ChildItem -Path $buildDir -File -Recurse
+                foreach ($file in $files) {
+                    $relativePath = $file.FullName.Substring($buildDir.Length + 1)
+                    # Use forward slashes for ZIP entry names (portable format)
+                    $entryName = $relativePath -replace '\\', '/'
+                    # Force Deflate compression for EVERY entry (CompressionLevel.Optimal = Deflate)
+                    # Do NOT use CreateEntryFromFile with CompressionLevel because it may
+                    # fall back to Stored for incompressible files; write stream manually.
+                    $entry = $zipArchive.CreateEntry($entryName, [System.IO.Compression.CompressionLevel]::Optimal)
+                    # CreateEntry with CompressionLevel.Optimal guarantees Deflate (8) method
+                    $entryStream = $entry.Open()
+                    try {
+                        $fileStream = [System.IO.File]::OpenRead($file.FullName)
+                        try {
+                            $fileStream.CopyTo($entryStream)
+                        } finally {
+                            $fileStream.Dispose()
+                        }
+                    } finally {
+                        $entryStream.Dispose()
+                    }
+                }
+            } finally {
+                $zipArchive.Dispose()
+                $zipStream.Dispose()
+            }
+            Write-Output "Created portable zip with forced Deflate: $zipPath"
 
             # Sign the portable zip for Tauri auto-update
             $zipPath = Resolve-Path $zipPath

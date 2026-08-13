@@ -163,8 +163,8 @@ pub async fn list(
         .await?
     } else {
         sqlx::query_as!(
-			InstallJobRow,
-			"
+            InstallJobRow,
+            "
 			SELECT
 				id AS \"id!: String\",
 				instance_id,
@@ -179,9 +179,9 @@ pub async fn list(
 			WHERE dismissed = 0 AND status IN ('queued', 'running', 'failed', 'interrupted')
 			ORDER BY created ASC
 			",
-		)
-		.fetch_all(&app_state.pool)
-		.await?
+        )
+        .fetch_all(&app_state.pool)
+        .await?
     };
 
     rows.into_iter().map(row_to_record).collect()

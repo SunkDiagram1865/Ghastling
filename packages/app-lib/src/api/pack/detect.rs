@@ -81,7 +81,8 @@ fn open_error(path: &Path, error: impl std::fmt::Display) -> crate::Error {
         .is_some_and(|ext| ext.eq_ignore_ascii_case("rar"))
     {
         crate::ErrorKind::InputError(
-            "RAR modpack archives are not supported; please repackage the modpack as a zip file".to_string(),
+            "RAR modpack archives are not supported; please repackage the modpack as a zip file"
+                .to_string(),
         )
         .into()
     } else {
@@ -185,8 +186,7 @@ pub fn detect_local_pack_sync(path: &Path) -> crate::Result<DetectedLocalPack> {
         path.display()
     );
     Err(crate::ErrorKind::InputError(
-        "Unrecognized modpack format: no known pack manifest was found in the archive"
-            .to_string(),
+        "Unrecognized modpack format: no known pack manifest was found in the archive".to_string(),
     )
     .into())
 }

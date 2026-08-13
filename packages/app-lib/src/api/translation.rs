@@ -434,8 +434,7 @@ where
             }
             Err(_) => {
                 return Err(ErrorKind::OtherError(
-                    "TRANSLATION_NETWORK_FAILED: Translation network request failed"
-                        .to_string(),
+                    "TRANSLATION_NETWORK_FAILED: Translation network request failed".to_string(),
                 )
                 .into());
             }

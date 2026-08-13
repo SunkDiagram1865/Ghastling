@@ -958,8 +958,7 @@ pub async fn get_modpack_target(
     }
     .ok_or_else(|| {
         ErrorKind::InputError(
-            "The CurseForge modpack manifest cannot be downloaded automatically"
-                .to_string(),
+            "The CurseForge modpack manifest cannot be downloaded automatically".to_string(),
         )
     })?;
 
@@ -3518,20 +3517,14 @@ mod tests {
                 Some("https://www.curseforge.com/minecraft/mc-mods/example"),
                 12345,
             ),
-            Some(
-                "https://www.curseforge.com/minecraft/mc-mods/example/files/12345"
-                    .to_string()
-            )
+            Some("https://www.curseforge.com/minecraft/mc-mods/example/files/12345".to_string())
         );
         assert_eq!(
             curseforge_file_page_url(
                 Some("https://www.curseforge.com/minecraft/mc-mods/example/files/12345?tab=files"),
                 12345,
             ),
-            Some(
-                "https://www.curseforge.com/minecraft/mc-mods/example/files/12345"
-                    .to_string()
-            )
+            Some("https://www.curseforge.com/minecraft/mc-mods/example/files/12345".to_string())
         );
         assert_eq!(
             curseforge_file_page_url(

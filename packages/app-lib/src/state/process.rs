@@ -515,11 +515,15 @@ impl Process {
                                             .unwrap_or("")
                                             .trim();
                                         if let Err(e) = Self::maybe_handle_server_join_logging(
-											instance_id,
-											&timestamp,
-											message,
-                                        ).await {
-                                            tracing::error!("Failed to handle server join logging: {e}");
+                                            instance_id,
+                                            &timestamp,
+                                            message,
+                                        )
+                                        .await
+                                        {
+                                            tracing::error!(
+                                                "Failed to handle server join logging: {e}"
+                                            );
                                         }
                                     }
 

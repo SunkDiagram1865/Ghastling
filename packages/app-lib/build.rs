@@ -11,6 +11,8 @@ fn main() {
     println!("cargo::rerun-if-changed=java/build.gradle.kts");
     println!("cargo::rerun-if-changed=java/settings.gradle.kts");
     println!("cargo::rerun-if-changed=java/gradle.properties");
+    // Ensure sqlx::migrate!() macro re-embeds updated migration SQL
+    println!("cargo::rerun-if-changed=migrations");
 
     set_env();
     build_java_jars();

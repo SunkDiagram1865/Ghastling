@@ -1068,88 +1068,90 @@ pub async fn start(
     }
 
     let result = async {
-		{
-			let mut state = HONGSHI_STATE.lock().await;
-			state.status = HongshiStatus::SelectingNode;
-			state.local_port = Some(local_port);
-			state.node = None;
-			state.public_address = None;
-			state.created_at = None;
-			state.last_exit_code = None;
-			state.error_type = None;
-			state.error_message = None;
-			state.bound_instance_id = instance_id.clone();
-			state.port_changed = false;
-		}
+        {
+            let mut state = HONGSHI_STATE.lock().await;
+            state.status = HongshiStatus::SelectingNode;
+            state.local_port = Some(local_port);
+            state.node = None;
+            state.public_address = None;
+            state.created_at = None;
+            state.last_exit_code = None;
+            state.error_type = None;
+            state.error_message = None;
+            state.bound_instance_id = instance_id.clone();
+            state.port_changed = false;
+        }
         let binary = ensure_binary().await?;
 
-		let mut nodes = get_nodes(false).await?;
-		if let Some(name) = node_name.as_deref() {
-			nodes.retain(|node| node.name == name);
-			if nodes.is_empty() {
-				bail!("selected RedStone node no longer exists");
-			}
-		} else {
-			nodes.retain(|node| node.reachable);
-		}
-		if nodes.is_empty() {
-			bail!("no reachable RedStone node is available");
-		}
+        let mut nodes = get_nodes(false).await?;
+        if let Some(name) = node_name.as_deref() {
+            nodes.retain(|node| node.name == name);
+            if nodes.is_empty() {
+                bail!("selected RedStone node no longer exists");
+            }
+        } else {
+            nodes.retain(|node| node.reachable);
+        }
+        if nodes.is_empty() {
+            bail!("no reachable RedStone node is available");
+        }
 
-		let status_file = status_file_path();
-		let automatic = node_name.is_none();
-		let mut last_error = None;
-		for node in nodes {
-			{
-				let mut state = HONGSHI_STATE.lock().await;
-				state.status = HongshiStatus::Starting;
-				state.node = Some(node.clone());
-			}
-			let (child, job, started_at) = spawn_kernel(&binary, &node, local_port, &status_file).await?;
-			match wait_until_open(&child, &status_file, started_at).await? {
-				Ok(tunnel) => {
-					if tunnel.server != node.address {
-						let mut child = child.lock().await;
-						let _ = child.start_kill();
-						bail!("RedStone status file returned an unexpected server");
-					}
-					let public_address = format!("{}:{}", tunnel.server, tunnel.port);
-					{
-						let mut state = HONGSHI_STATE.lock().await;
-						state.status = HongshiStatus::Open;
-						state.public_address = Some(public_address);
-						state.created_at = tunnel.created;
-						state.last_exit_code = None;
-					}
-					let monitor = tokio::spawn(monitor_kernel(
-						child.clone(),
-						status_file.clone(),
-						started_at,
-					));
-					let mut runtime = HONGSHI_RUNTIME.lock().await;
-					runtime.child = Some(child);
-					runtime.job = Some(job);
-					runtime.monitor = Some(monitor);
-					runtime.status_file = Some(status_file);
-					return Ok(());
-				}
-				Err(exit_code) => {
-					last_error = Some(exit_code);
+        let status_file = status_file_path();
+        let automatic = node_name.is_none();
+        let mut last_error = None;
+        for node in nodes {
+            {
+                let mut state = HONGSHI_STATE.lock().await;
+                state.status = HongshiStatus::Starting;
+                state.node = Some(node.clone());
+            }
+            let (child, job, started_at) =
+                spawn_kernel(&binary, &node, local_port, &status_file).await?;
+            match wait_until_open(&child, &status_file, started_at).await? {
+                Ok(tunnel) => {
+                    if tunnel.server != node.address {
+                        let mut child = child.lock().await;
+                        let _ = child.start_kill();
+                        bail!("RedStone status file returned an unexpected server");
+                    }
+                    let public_address = format!("{}:{}", tunnel.server, tunnel.port);
+                    {
+                        let mut state = HONGSHI_STATE.lock().await;
+                        state.status = HongshiStatus::Open;
+                        state.public_address = Some(public_address);
+                        state.created_at = tunnel.created;
+                        state.last_exit_code = None;
+                    }
+                    let monitor = tokio::spawn(monitor_kernel(
+                        child.clone(),
+                        status_file.clone(),
+                        started_at,
+                    ));
+                    let mut runtime = HONGSHI_RUNTIME.lock().await;
+                    runtime.child = Some(child);
+                    runtime.job = Some(job);
+                    runtime.monitor = Some(monitor);
+                    runtime.status_file = Some(status_file);
+                    return Ok(());
+                }
+                Err(exit_code) => {
+                    last_error = Some(exit_code);
                     if !should_try_next_node(automatic, exit_code) {
-						break;
-					}
-				}
-			}
-		}
+                        break;
+                    }
+                }
+            }
+        }
 
-		let exit_code = last_error.unwrap_or(-1);
+        let exit_code = last_error.unwrap_or(-1);
         let error_type = error_type_for_exit(exit_code);
-		let message =
-			format!("RedStone failed to create a tunnel (exit code {exit_code}, type {error_type:?})");
-		set_start_error(error_type, message.clone(), Some(exit_code)).await;
-		bail!(message)
-	}
-	.await;
+        let message = format!(
+            "RedStone failed to create a tunnel (exit code {exit_code}, type {error_type:?})"
+        );
+        set_start_error(error_type, message.clone(), Some(exit_code)).await;
+        bail!(message)
+    }
+    .await;
 
     if let Err(error) = result {
         if HONGSHI_STATE.lock().await.status != HongshiStatus::Error {
@@ -1327,9 +1329,9 @@ mod tests {
     #[test]
     fn parses_open_and_closed_status_files() {
         let open = parse_tunnel_status(
-			"[tunnel]\nstatus=open\nserver=1.2.3.4\nport=41862\ncreated=2026-08-09 22:42:40\n",
-		)
-		.unwrap();
+            "[tunnel]\nstatus=open\nserver=1.2.3.4\nport=41862\ncreated=2026-08-09 22:42:40\n",
+        )
+        .unwrap();
         assert_eq!(open.port, 41862);
         assert_eq!(open.server, "1.2.3.4");
         assert!(

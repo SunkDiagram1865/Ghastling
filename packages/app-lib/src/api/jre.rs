@@ -691,8 +691,7 @@ fn resolved_runtime_link_target(
             Component::ParentDir => {
                 if !resolved.pop() {
                     return Err(crate::ErrorKind::InputError(
-                        "Java runtime manifest link escapes its install directory"
-                            .to_string(),
+                        "Java runtime manifest link escapes its install directory".to_string(),
                     )
                     .into());
                 }
@@ -1543,9 +1542,7 @@ async fn download_java_from_feed_inner(
         .find(|e| {
             e.vendor == vendor
                 && e.jdk_version_major == jdk_version_major
-                && e.packages
-                    .iter()
-                    .any(|p| p.os == os && p.arch == arch)
+                && e.packages.iter().any(|p| p.os == os && p.arch == arch)
         })
         .ok_or_else(|| {
             crate::ErrorKind::InputError(format!(

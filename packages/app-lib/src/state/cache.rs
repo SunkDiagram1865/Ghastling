@@ -1424,19 +1424,14 @@ impl CachedEntry {
                 let fetch_urls = keys
                     .iter()
                     .map(|x| {
-                        let metadata =
-                            daedalus::modded::loader_manifest_metadata_from_cache_key(
-                                &x.key().to_string(),
-                            );
+                        let metadata = daedalus::modded::loader_manifest_metadata_from_cache_key(
+                            &x.key().to_string(),
+                        );
 
                         (
                             metadata.cache_key,
                             metadata.loader,
-                            format!(
-                                "{}{}",
-                                env!("MODRINTH_LAUNCHER_META_URL"),
-                                metadata.path,
-                            ),
+                            format!("{}{}", env!("MODRINTH_LAUNCHER_META_URL"), metadata.path,),
                         )
                     })
                     .collect::<Vec<_>>();
@@ -1699,63 +1694,49 @@ impl CachedEntry {
                     }
                 });
 
-                let variations =
-                    futures::future::try_join_all(filtered_keys.iter().map(
-                        |((loaders_key, channel_policy_key, game_version), hashes)| async move {
-                            let channel_policy =
-                                ReleaseChannel::from_key(channel_policy_key);
-                            let mut remaining_hashes = hashes.clone();
-                            let mut found_versions = HashMap::new();
+                let variations = futures::future::try_join_all(filtered_keys.iter().map(
+                    |((loaders_key, channel_policy_key, game_version), hashes)| async move {
+                        let channel_policy = ReleaseChannel::from_key(channel_policy_key);
+                        let mut remaining_hashes = hashes.clone();
+                        let mut found_versions = HashMap::new();
 
-                            for version_types in
-                                channel_policy.version_type_fallbacks()
-                            {
-                                if remaining_hashes.is_empty() {
-                                    break;
-                                }
-
-                                let variation = fetch_json::<
-                                    HashMap<String, Vec<Version>>,
-                                >(
-                                    Method::POST,
-                                    concat!(
-                                        env!("MODRINTH_API_URL"),
-                                        "version_files/update_many"
-                                    ),
-                                    None,
-                                    Some(serde_json::json!({
-                                        "algorithm": "sha1",
-                                        "hashes": remaining_hashes.clone(),
-                                        "loaders": loaders_key.split('+').collect::<Vec<_>>(),
-                                        "game_versions": [game_version],
-                                        "version_types": version_types
-                                    })),
-                                    Some("/v2/version_files/update_many"),
-                                    fetch_semaphore,
-                                    pool,
-                                )
-                                .await?;
-
-                                for (hash, versions) in variation {
-                                    found_versions.insert(hash, versions);
-                                }
-
-                                remaining_hashes = hashes
-                                    .iter()
-                                    .filter(|hash| {
-                                        !found_versions
-                                            .contains_key(hash.as_str())
-                                    })
-                                    .cloned()
-                                    .collect();
+                        for version_types in channel_policy.version_type_fallbacks() {
+                            if remaining_hashes.is_empty() {
+                                break;
                             }
 
-                            Ok::<HashMap<String, Vec<Version>>, crate::Error>(
-                                found_versions,
+                            let variation = fetch_json::<HashMap<String, Vec<Version>>>(
+                                Method::POST,
+                                concat!(env!("MODRINTH_API_URL"), "version_files/update_many"),
+                                None,
+                                Some(serde_json::json!({
+                                    "algorithm": "sha1",
+                                    "hashes": remaining_hashes.clone(),
+                                    "loaders": loaders_key.split('+').collect::<Vec<_>>(),
+                                    "game_versions": [game_version],
+                                    "version_types": version_types
+                                })),
+                                Some("/v2/version_files/update_many"),
+                                fetch_semaphore,
+                                pool,
                             )
-                        },
-                    ))
-                    .await?;
+                            .await?;
+
+                            for (hash, versions) in variation {
+                                found_versions.insert(hash, versions);
+                            }
+
+                            remaining_hashes = hashes
+                                .iter()
+                                .filter(|hash| !found_versions.contains_key(hash.as_str()))
+                                .cloned()
+                                .collect();
+                        }
+
+                        Ok::<HashMap<String, Vec<Version>>, crate::Error>(found_versions)
+                    },
+                ))
+                .await?;
 
                 for (index, mut variation) in variations.into_iter().enumerate()
                 {
@@ -1812,20 +1793,17 @@ impl CachedEntry {
 
                             if !emitted_update {
                                 vals.push((
-                                    CacheValueType::FileUpdate
-                                        .get_empty_entry(format!(
-                                            "{hash}-{loaders_key}-{channel_policy_key}-{game_version}"
-                                        )),
+                                    CacheValueType::FileUpdate.get_empty_entry(format!(
+                                        "{hash}-{loaders_key}-{channel_policy_key}-{game_version}"
+                                    )),
                                     true,
                                 ));
                             }
                         } else {
                             vals.push((
-                                CacheValueType::FileUpdate.get_empty_entry(
-                                    format!(
-                                        "{hash}-{loaders_key}-{channel_policy_key}-{game_version}"
-                                    ),
-                                ),
+                                CacheValueType::FileUpdate.get_empty_entry(format!(
+                                    "{hash}-{loaders_key}-{channel_policy_key}-{game_version}"
+                                )),
                                 true,
                             ))
                         };

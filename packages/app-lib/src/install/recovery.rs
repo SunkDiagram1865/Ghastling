@@ -77,12 +77,12 @@ fn clear_deleted_new_instance_id(job_state: &mut InstallJobState) {
 
 fn display_from_request(state: &InstallJobState) -> Option<InstallJobDisplay> {
     match &state.request {
-        InstallRequest::CreateInstance { name, icon_path, .. } => {
-            Some(InstallJobDisplay {
-                title: name.clone(),
-                icon: icon_path.clone(),
-            })
-        }
+        InstallRequest::CreateInstance {
+            name, icon_path, ..
+        } => Some(InstallJobDisplay {
+            title: name.clone(),
+            icon: icon_path.clone(),
+        }),
         InstallRequest::CreateModpackInstance { location, .. } => match location {
             crate::api::pack::install_from::CreatePackLocation::FromVersionId {
                 title,
@@ -92,9 +92,7 @@ fn display_from_request(state: &InstallJobState) -> Option<InstallJobDisplay> {
                 title: title.clone(),
                 icon: icon_url.clone(),
             }),
-            crate::api::pack::install_from::CreatePackLocation::FromFile {
-                ..
-            } => None,
+            crate::api::pack::install_from::CreatePackLocation::FromFile { .. } => None,
         },
         InstallRequest::ImportInstance {
             instance_folder, ..

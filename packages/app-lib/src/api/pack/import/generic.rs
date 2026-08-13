@@ -48,10 +48,10 @@ pub async fn import_generic(
             "import_generic: instance_json::detect returned None for {}",
             dotminecraft.display()
         );
-		crate::ErrorKind::InputError(
+        crate::ErrorKind::InputError(
 			"Could not detect Minecraft version. Make sure the folder contains a valid version JSON.".into(),
 		)
-	})?;
+    })?;
     tracing::debug!(
         "import_generic: detect result: vanilla_name={} loader={:?} loader_version={:?}",
         info.vanilla_name,
