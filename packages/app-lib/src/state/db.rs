@@ -269,6 +269,34 @@ async fn reconcile_mojang_auth_source_column(
             version = MOJANG_AUTH_SOURCE_MIGRATION_VERSION,
             "Removed stale mojang_auth_source migration record (column was missing)"
         );
+    } else if mojang_auth_source_exists && migration_applied {
+        // Both column and migration record exist, but the checksum may be
+        // stale (migration SQL was modified). Update the checksum to the
+        // current one so MIGRATOR.run() doesn't reject it.
+        if let Some(migration) = MIGRATOR.iter().find(|migration| {
+            migration.version == MOJANG_AUTH_SOURCE_MIGRATION_VERSION
+        }) {
+            let current_checksum: &[u8] = migration.checksum.as_ref();
+            let stored_checksum: Option<Vec<u8>> =
+                sqlx::query_scalar("SELECT checksum FROM _sqlx_migrations WHERE version = ?")
+                    .bind(MOJANG_AUTH_SOURCE_MIGRATION_VERSION)
+                    .fetch_optional(pool)
+                    .await?;
+
+            if let Some(ref stored) = stored_checksum {
+                if stored.as_slice() != current_checksum {
+                    sqlx::query("UPDATE _sqlx_migrations SET checksum = ? WHERE version = ?")
+                        .bind(current_checksum)
+                        .bind(MOJANG_AUTH_SOURCE_MIGRATION_VERSION)
+                        .execute(pool)
+                        .await?;
+                    tracing::warn!(
+                        version = MOJANG_AUTH_SOURCE_MIGRATION_VERSION,
+                        "Updated stale mojang_auth_source migration checksum"
+                    );
+                }
+            }
+        }
     }
 
     Ok(())
