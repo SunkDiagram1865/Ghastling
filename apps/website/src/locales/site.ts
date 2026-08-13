@@ -144,7 +144,7 @@ export const siteLocaleMessages: Record<string, Record<string, string>> = {
 		'axolotl-site.navigation.changelog': '更新日志',
 		'axolotl-site.navigation.open-source': '开放源代码',
 		'axolotl-site.navigation.download': '下载',
-		'axolotl-site.navigation.open-settings': '打开显示设置',
+		'axolotl-site.navigation.open-settings': '打开设置',
 		'axolotl-site.navigation.open-menu': '打开导航',
 		'axolotl-site.navigation.close-menu': '关闭导航',
 		'axolotl-site.footer.description':
@@ -185,7 +185,7 @@ export const siteLocaleMessages: Record<string, Record<string, string>> = {
 			'安装 Axolotl，在一个清爽有序的空间中管理实例、模组与存档。',
 		'axolotl-site.footer.download-now': '立即下载',
 		'axolotl-site.footer.view-github': '前往 GitHub',
-		'axolotl-settings.title': '显示设置',
+		'axolotl-settings.title': '设置',
 		'axolotl-settings.description': '自定义 Axolotl 在此设备上的显示方式与语言。',
 		'axolotl-settings.downloads.title': '下载',
 		'axolotl-settings.downloads.description': '选择 Axolotl Launcher 安装程序的下载来源。',
