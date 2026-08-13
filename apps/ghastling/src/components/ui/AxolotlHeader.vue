@@ -29,7 +29,7 @@ const messages = defineMessages({
 	openSource: { id: 'axolotl-site.navigation.open-source', defaultMessage: '开放源代码' },
 	openSettings: {
 			id: 'axolotl-site.navigation.open-settings',
-		defaultMessage: '打开显示设置',
+		defaultMessage: '打开设置',
 	},
 	openMenu: { id: 'axolotl-site.navigation.open-menu', defaultMessage: '打开导航' },
 	closeMenu: { id: 'axolotl-site.navigation.close-menu', defaultMessage: '关闭导航' },

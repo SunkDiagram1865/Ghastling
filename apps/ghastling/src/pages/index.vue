@@ -73,24 +73,127 @@ const modManagementData = [
 	},
 ]
 
-const newProjects = Array.from({ length: 40 }, (_, index) => {
-	const project = modManagementData[index % modManagementData.length]
+const showcaseProjectSource = [
+	{
+		id: 'AANobbMI',
+		title: 'Sodium',
+		iconUrl:
+			'https://cdn.modrinth.com/data/AANobbMI/295862f4724dc3f78df3447ad6072b2dcd3ef0c9_96.webp',
+	},
+	{
+		id: 'YL57xq9U',
+		title: 'Iris Shaders',
+		iconUrl:
+			'https://cdn.modrinth.com/data/YL57xq9U/18d0e7f076d3d6ed5bedd472b853909aac5da202_96.webp',
+	},
+	{
+		id: 'gvQqBUqZ',
+		title: 'Lithium',
+		iconUrl:
+			'https://cdn.modrinth.com/data/gvQqBUqZ/bcc8686c13af0143adf4285d741256af824f70b7_96.webp',
+	},
+	{
+		id: 'mOgUt4GM',
+		title: 'Mod Menu',
+		iconUrl: 'https://cdn.modrinth.com/data/mOgUt4GM/5a20ed1450a0e1e79a1fe04e61bb4e5878bf1d20.png',
+	},
+	{
+		id: 'P7dR8mSH',
+		title: 'Fabric API',
+		iconUrl: 'https://cdn.modrinth.com/data/P7dR8mSH/icon.png',
+	},
+	{
+		id: '9s6osm5g',
+		title: 'Cloth Config API',
+		iconUrl:
+			'https://cdn.modrinth.com/data/9s6osm5g/ed8a2316cbb6f4fc5f510e8e13a59a85cbbbff4d_96.webp',
+	},
+	{
+		id: 'lhGA9TYQ',
+		title: 'Architectury API',
+		iconUrl:
+			'https://cdn.modrinth.com/data/lhGA9TYQ/05fe3a61c28faaccaec3533b92e1b321edde7bf6_96.webp',
+	},
+	{
+		id: 'nrJ2NpD0',
+		title: 'Craftify',
+		iconUrl: 'https://cdn.modrinth.com/data/nrJ2NpD0/4f21214db060ed4542b1f3983c4113d293480a1b.webp',
+	},
+	{
+		id: 'u6dRKJwZ',
+		title: 'Just Enough Items (JEI)',
+		iconUrl:
+			'https://cdn.modrinth.com/data/u6dRKJwZ/4a3f18ac0d096c9f8e9176984c44be4e58f94c89_96.webp',
+	},
+	{
+		id: 'LNytGWDc',
+		title: 'Create',
+		iconUrl:
+			'https://cdn.modrinth.com/data/LNytGWDc/61d716699bcf1ec42ed4926a9e1c7311be6087e2_96.webp',
+	},
+	{
+		id: '1bokaNcj',
+		title: "Xaero's Minimap",
+		iconUrl:
+			'https://cdn.modrinth.com/data/1bokaNcj/354080f65407e49f486fcf9c4580e82c45ae63b8_96.webp',
+	},
+	{
+		id: '8oi3bsk5',
+		title: 'Terralith',
+		iconUrl:
+			'https://cdn.modrinth.com/data/8oi3bsk5/1959d924a1088944bbf07a06ba523726112d7e7a_96.webp',
+	},
+	{
+		id: 'NNAgCjsB',
+		title: 'Entity Culling',
+		iconUrl:
+			'https://cdn.modrinth.com/data/NNAgCjsB/7873452d6cede4daed12da3d7d8c193ab88b4fd6_96.webp',
+	},
+	{
+		id: 'uXXizFIs',
+		title: 'FerriteCore',
+		iconUrl:
+			'https://cdn.modrinth.com/data/uXXizFIs/222a126f26f8f9ae1eb339f3b767677f18bff31f_96.webp',
+	},
+	{
+		id: 'fRiHVvU7',
+		title: 'EMI',
+		iconUrl: 'https://cdn.modrinth.com/data/fRiHVvU7/395fe5302b2bab612ef0623509f768f3c5a5ee0f.webp',
+	},
+	{
+		id: '9eGKb6K1',
+		title: 'Simple Voice Chat',
+		iconUrl: 'https://cdn.modrinth.com/data/9eGKb6K1/icon.png',
+	},
+	{
+		id: 'gu7yAYhd',
+		title: 'CC: Tweaked',
+		iconUrl: 'https://cdn.modrinth.com/data/gu7yAYhd/icon.png',
+	},
+	{
+		id: 'EsAfCjCV',
+		title: 'AppleSkin',
+		iconUrl: 'https://cdn.modrinth.com/data/EsAfCjCV/icon.png',
+	},
+].map((project) => ({
+	...project,
+	description: `${project.title} 可通过 Ghastling 内容浏览器获取。`,
+}))
 
-	return {
-		id: `${project.id}-${index}`,
-		icon_url: project.iconUrl,
-		title: project.name,
-		description: `${project.name} is ready to explore on Modrinth.`,
-	}
-})
-const val = Math.ceil(newProjects.length / 6)
-const rows = [
-	newProjects.slice(0, val),
-	newProjects.slice(val, val * 2),
-	newProjects.slice(val * 2, val * 3),
-	newProjects.slice(val * 3, val * 4),
-	newProjects.slice(val * 4, val * 5),
+const showcaseProjects = [
+	...showcaseProjectSource.map((project) => ({ ...project, isVisualDuplicate: false })),
+	...showcaseProjectSource.map((project) => ({
+		...project,
+		id: `${project.id}-repeat`,
+		isVisualDuplicate: true,
+	})),
 ]
+
+const showcaseRowCount = 5
+const perShowcaseRow = Math.ceil(showcaseProjects.length / showcaseRowCount)
+const rows = Array.from({ length: showcaseRowCount }, (_, index) =>
+	showcaseProjects.slice(index * perShowcaseRow, (index + 1) * perShowcaseRow),
+)
 
 const { formatMessage, locale } = useVIntl()
 
@@ -790,9 +893,10 @@ useHead(() => ({
 								<div
 									v-for="project in row"
 									:key="project.id"
-									class="project button-animation gradient-border"
+									class="project"
+									:aria-hidden="project.isVisualDuplicate ? 'true' : undefined"
 								>
-									<Avatar :src="project.icon_url!" alt="" size="sm" />
+									<Avatar :src="project.iconUrl!" alt="" size="sm" />
 									<div class="project-info">
 										<span class="title">
 											{{ project.title }}
@@ -1796,15 +1900,46 @@ useHead(() => ({
 					overflow: hidden;
 					user-select: none;
 
+					&:hover {
+						.row__content {
+							animation-play-state: paused !important;
+						}
+					}
+
 					.row__content {
 						flex-shrink: 0;
 						display: flex;
 						min-width: 100%;
 						gap: var(--gap);
-						transform: translateX(-15%);
+						animation: website-scroll 40s linear infinite;
+
+						@media (prefers-reduced-motion: reduce) {
+							animation-play-state: paused !important;
+						}
+
+						@keyframes website-scroll {
+							from {
+								transform: translateX(0);
+							}
+
+							to {
+								transform: translateX(calc(-100%));
+							}
+						}
 
 						&.offset {
-							transform: translateX(-130%);
+							transform: translateX(-100%);
+							animation: website-scroll-inverse 40s linear infinite;
+
+							@keyframes website-scroll-inverse {
+								from {
+									transform: translateX(calc(-100%));
+								}
+
+								to {
+									transform: translateX(0);
+								}
+							}
 						}
 					}
 
@@ -1812,7 +1947,7 @@ useHead(() => ({
 						position: relative;
 						display: flex;
 
-						cursor: pointer;
+						cursor: default;
 						padding: 1rem;
 						gap: 1rem;
 						border-radius: 1rem;
@@ -1820,8 +1955,12 @@ useHead(() => ({
 						transition:
 							background 0.5s ease-in-out,
 							transform 0.05s ease-in-out;
-						// Removed due to lag on mobile :(
 						background: var(--landing-blob-gradient);
+						user-select: none;
+
+						&:hover {
+							background: var(--landing-hover-card-gradient);
+						}
 
 						img {
 							height: 3rem;
@@ -1872,10 +2011,25 @@ useHead(() => ({
 				object-fit: contain;
 			}
 
+			h3 {
+				font-weight: 500;
+				font-size: var(--font-size-xl);
+				color: var(--landing-color-heading);
+				margin-bottom: 0.375rem;
+				text-align: center;
+			}
+
 			p {
+				font-size: var(--font-size-md);
+				color: var(--landing-color-subheading);
 				padding: var(--gap-xl);
 				padding-top: 0;
+				text-align: center;
 			}
+		}
+
+		:global(html.light-mode) .website .project {
+			background: rgba(255, 255, 255, 0.8) !important;
 		}
 
 		.feature {
