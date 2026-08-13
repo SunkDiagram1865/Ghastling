@@ -114,7 +114,7 @@ export const siteLocaleMessages: Record<string, Record<string, string>> = {
 		'axolotl-site.navigation.primary': '主导航',
 		'axolotl-site.navigation.mobile': '移动端导航',
 		'axolotl-site.navigation.open-source': '开放源代码',
-		'axolotl-site.navigation.open-settings': '打开显示设置',
+		'axolotl-site.navigation.open-settings': '打开设置',
 		'axolotl-site.navigation.open-menu': '打开导航',
 		'axolotl-site.navigation.close-menu': '关闭导航',
 		'axolotl-site.footer.description': '一款适用于 Windows x64 的自由开源 Minecraft 启动器。',
@@ -134,7 +134,7 @@ export const siteLocaleMessages: Record<string, Record<string, string>> = {
 		'axolotl-site.footer.cta-description':
 			'安装 Ghastling，在一个清爽有序的空间中管理实例、模组与存档。',
 		'axolotl-site.footer.view-github': '前往 GitHub',
-		'axolotl-settings.title': '显示设置',
+		'axolotl-settings.title': '设置',
 		'axolotl-settings.description': '自定义 Ghastling 在此设备上的显示方式。',
 		'axolotl-settings.close': '关闭设置',
 		'axolotl-settings.appearance.title': '外观',
