@@ -298,7 +298,7 @@ const messages = defineMessages({
 	},
 	hongshiPortHint: {
 		id: 'app.multiplayer.hongshi.port-hint',
-		defaultMessage: '在游戏中开放局域网，Ghastling 会自动检测端口；外部游戏可使用手动端口。',
+		defaultMessage: '在游戏中开放局域网，手动填写 Minecraft 生成的端口。',
 	},
 	hongshiNode: {
 		id: 'app.multiplayer.hongshi.node',

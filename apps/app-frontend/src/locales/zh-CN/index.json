@@ -1794,7 +1794,7 @@
 		"message": "手动输入端口"
 	},
 	"app.multiplayer.hongshi.port-hint": {
-		"message": "在游戏中开放局域网，Ghastling 会自动检测端口；外部游戏可使用手动端口。"
+		"message": "在游戏中开放局域网，手动填写 Minecraft 生成的端口。"
 	},
 	"app.multiplayer.hongshi.node": {
 		"message": "中继节点"
