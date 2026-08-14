@@ -1,7 +1,7 @@
 [package]
 name = "theseus"
 # The actual version is set by the theseus-build workflow on tagging
-version = "0.0.7"
+version = "0.0.8"
 edition.workspace = true
 
 [dependencies]
@@ -69,6 +69,7 @@ reqwest = { workspace = true, features = [
 	"multipart",
 	"rustls-tls-webpki-roots",
 	"stream",
+	"system-proxy",
 ] }
 rgb = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
