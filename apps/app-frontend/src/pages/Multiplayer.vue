@@ -242,7 +242,11 @@ const messages = defineMessages({
 	},
 	exitTerracotta: {
 		id: 'app.multiplayer.exit-terracotta',
-		defaultMessage: 'Exit multiplayer',
+		defaultMessage: '退出陶瓦联机',
+	},
+	exitHongshi: {
+		id: 'app.multiplayer.exit-hongshi',
+		defaultMessage: '退出红石联机',
 	},
 	startDescription: {
 		id: 'app.multiplayer.start-description',
@@ -610,10 +614,10 @@ const isRecoverable = computed(() => {
 					{{ formatMessage(messages.hongshiUnsupported) }}
 				</Admonition>
 				<div class="mt-4 flex flex-wrap gap-2">
-					<ButtonStyled type="outlined">
+					<ButtonStyled color="red" type="outlined">
 						<button type="button" @click="exitHongshiView">
-							<ArrowLeftIcon />
-							{{ formatMessage(messages.back) }}
+							<LogOutIcon />
+							{{ formatMessage(messages.exitHongshi) }}
 						</button>
 					</ButtonStyled>
 				</div>
@@ -652,10 +656,10 @@ const isRecoverable = computed(() => {
 								{{ formatMessage(messages.hongshiDownload) }}
 							</button>
 						</ButtonStyled>
-						<ButtonStyled type="outlined">
+						<ButtonStyled color="red" type="outlined">
 							<button type="button" @click="exitHongshiView">
-								<ArrowLeftIcon />
-								{{ formatMessage(messages.back) }}
+								<LogOutIcon />
+								{{ formatMessage(messages.exitHongshi) }}
 							</button>
 						</ButtonStyled>
 					</div>
@@ -734,12 +738,6 @@ const isRecoverable = computed(() => {
 								{{ formatMessage(messages.hongshiOpenLogs) }}
 							</button>
 						</ButtonStyled>
-						<ButtonStyled type="outlined">
-							<button type="button" @click="exitHongshiView">
-								<ArrowLeftIcon />
-								{{ formatMessage(messages.back) }}
-							</button>
-						</ButtonStyled>
 					</div>
 				</div>
 			</Card>
@@ -808,13 +806,21 @@ const isRecoverable = computed(() => {
 						{{ formatMessage(messages.hongshiClosedTunnel) }}
 					</Admonition>
 
-					<div>
-						<h2 class="m-0 text-lg font-semibold text-contrast">
-							{{ formatMessage(messages.hongshiTitle) }}
-						</h2>
-						<p class="mb-0 mt-1 text-secondary">
-							{{ formatMessage(messages.hongshiPortHint) }}
-						</p>
+					<div class="flex flex-wrap items-start justify-between gap-3">
+						<div>
+							<h2 class="m-0 text-lg font-semibold text-contrast">
+								{{ formatMessage(messages.hongshiTitle) }}
+							</h2>
+							<p class="mb-0 mt-1 text-secondary">
+								{{ formatMessage(messages.hongshiPortHint) }}
+							</p>
+						</div>
+						<ButtonStyled color="red" type="outlined">
+							<button type="button" @click="exitHongshiView">
+								<LogOutIcon />
+								{{ formatMessage(messages.exitHongshi) }}
+							</button>
+						</ButtonStyled>
 					</div>
 
 					<div class="grid gap-4 md:grid-cols-2">
@@ -887,12 +893,6 @@ const isRecoverable = computed(() => {
 							<button type="button" :disabled="isNodesLoading" @click="refreshNodes(true)">
 								<RefreshCwIcon :class="{ 'animate-spin': isNodesLoading }" />
 								{{ formatMessage(messages.hongshiRefreshNodes) }}
-							</button>
-						</ButtonStyled>
-						<ButtonStyled type="outlined">
-							<button type="button" @click="exitHongshiView">
-								<ArrowLeftIcon />
-								{{ formatMessage(messages.back) }}
 							</button>
 						</ButtonStyled>
 					</div>

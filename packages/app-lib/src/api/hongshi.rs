@@ -27,8 +27,7 @@ static HONGSHI_STATE: LazyLock<Mutex<HongshiState>> =
     LazyLock::new(|| Mutex::new(HongshiState::default()));
 static HONGSHI_RUNTIME: LazyLock<Mutex<HongshiRuntime>> =
     LazyLock::new(|| Mutex::new(HongshiRuntime::default()));
-static HONGSHI_OPERATION: LazyLock<Mutex<()>> =
-    LazyLock::new(|| Mutex::new(()));
+static HONGSHI_OPERATION: LazyLock<Mutex<()>> = LazyLock::new(|| Mutex::new(()));
 static HONGSHI_DOWNLOAD_URL: LazyLock<Mutex<Option<CachedDownloadUrl>>> =
     LazyLock::new(|| Mutex::new(None));
 static DETECTED_PORTS: LazyLock<Mutex<HashMap<String, DetectedLanPort>>> =
@@ -58,9 +57,7 @@ static LAN_PORT_PATTERNS: LazyLock<Vec<Regex>> = LazyLock::new(|| {
     .collect()
 });
 
-#[derive(
-    Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize,
-)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum HongshiStatus {
     Unsupported,
@@ -189,22 +186,18 @@ struct JobGuard;
 #[cfg(target_os = "windows")]
 fn attach_kill_on_close_job(process_id: u32) -> eyre::Result<JobGuard> {
     use windows::Win32::System::JobObjects::{
-        AssignProcessToJobObject, CreateJobObjectW,
-        JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE,
-        JOBOBJECT_EXTENDED_LIMIT_INFORMATION,
-        JobObjectExtendedLimitInformation, SetInformationJobObject,
+        AssignProcessToJobObject, CreateJobObjectW, JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE,
+        JOBOBJECT_EXTENDED_LIMIT_INFORMATION, JobObjectExtendedLimitInformation,
+        SetInformationJobObject,
     };
-    use windows::Win32::System::Threading::{
-        OpenProcess, PROCESS_SET_QUOTA, PROCESS_TERMINATE,
-    };
+    use windows::Win32::System::Threading::{OpenProcess, PROCESS_SET_QUOTA, PROCESS_TERMINATE};
 
     unsafe {
         let job = CreateJobObjectW(None, windows::core::PCWSTR::null())
             .wrap_err("failed to create RedStone job object")?;
         let guard = JobGuard(job);
         let mut information = JOBOBJECT_EXTENDED_LIMIT_INFORMATION::default();
-        information.BasicLimitInformation.LimitFlags =
-            JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
+        information.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
         SetInformationJobObject(
             job,
             JobObjectExtendedLimitInformation,
@@ -212,16 +205,11 @@ fn attach_kill_on_close_job(process_id: u32) -> eyre::Result<JobGuard> {
             std::mem::size_of::<JOBOBJECT_EXTENDED_LIMIT_INFORMATION>() as u32,
         )
         .wrap_err("failed to configure RedStone job object")?;
-        let process = OpenProcess(
-            PROCESS_SET_QUOTA | PROCESS_TERMINATE,
-            false,
-            process_id,
-        )
-        .wrap_err("failed to open RedStone process for job assignment")?;
+        let process = OpenProcess(PROCESS_SET_QUOTA | PROCESS_TERMINATE, false, process_id)
+            .wrap_err("failed to open RedStone process for job assignment")?;
         let assignment = AssignProcessToJobObject(job, process);
         let _ = windows::Win32::Foundation::CloseHandle(process);
-        assignment
-            .wrap_err("failed to assign RedStone process to job object")?;
+        assignment.wrap_err("failed to assign RedStone process to job object")?;
         Ok(guard)
     }
 }
@@ -249,9 +237,7 @@ fn hongshi_root() -> PathBuf {
     let base_dir = crate::state::DirectoryInfo::global_handle_if_ready()
         .map(|directories| directories.config_dir.clone())
         .or_else(|| {
-            crate::state::DirectoryInfo::initial_settings_dir_path(
-                crate::brand::BUNDLE_IDENTIFIER,
-            )
+            crate::state::DirectoryInfo::initial_settings_dir_path(crate::brand::BUNDLE_IDENTIFIER)
         })
         .unwrap_or_else(|| PathBuf::from("."));
     base_dir.join("hongshi")
@@ -291,11 +277,10 @@ fn valid_pe(bytes: &[u8]) -> bool {
     if bytes.len() < 0x40 || bytes[0..2] != [b'M', b'Z'] {
         return false;
     }
-    let pe_offset =
-        u32::from_le_bytes(bytes[0x3c..0x40].try_into().unwrap()) as usize;
-    pe_offset.checked_add(4).is_some_and(|end| {
-        end <= bytes.len() && bytes[pe_offset..end] == *b"PE\0\0"
-    })
+    let pe_offset = u32::from_le_bytes(bytes[0x3c..0x40].try_into().unwrap()) as usize;
+    pe_offset
+        .checked_add(4)
+        .is_some_and(|end| end <= bytes.len() && bytes[pe_offset..end] == *b"PE\0\0")
 }
 
 fn valid_binary(bytes: &[u8]) -> bool {
@@ -452,8 +437,8 @@ async fn request_download_url(endpoint: &str) -> eyre::Result<reqwest::Url> {
         .json::<HongshiDownloadResponse>()
         .await
         .wrap_err("invalid RedStone download response")?;
-    let download_url = reqwest::Url::parse(&response.url)
-        .wrap_err("invalid RedStone kernel download URL")?;
+    let download_url =
+        reqwest::Url::parse(&response.url).wrap_err("invalid RedStone kernel download URL")?;
     if download_url.scheme() != "https" {
         bail!("RedStone kernel download URL must use HTTPS")
     }
@@ -555,8 +540,7 @@ pub async fn download() -> eyre::Result<()> {
 async fn atomic_replace(source: &Path, destination: &Path) -> eyre::Result<()> {
     use std::os::windows::ffi::OsStrExt;
     use windows::Win32::Storage::FileSystem::{
-        MOVE_FILE_FLAGS, MOVEFILE_REPLACE_EXISTING, MOVEFILE_WRITE_THROUGH,
-        MoveFileExW,
+        MOVE_FILE_FLAGS, MOVEFILE_REPLACE_EXISTING, MOVEFILE_WRITE_THROUGH, MoveFileExW,
     };
     use windows::core::PCWSTR;
 
@@ -574,9 +558,7 @@ async fn atomic_replace(source: &Path, destination: &Path) -> eyre::Result<()> {
         MoveFileExW(
             PCWSTR(source.as_ptr()),
             PCWSTR(destination.as_ptr()),
-            MOVE_FILE_FLAGS(
-                MOVEFILE_REPLACE_EXISTING.0 | MOVEFILE_WRITE_THROUGH.0,
-            ),
+            MOVE_FILE_FLAGS(MOVEFILE_REPLACE_EXISTING.0 | MOVEFILE_WRITE_THROUGH.0),
         )
         .wrap_err("failed to atomically replace RedStone file")?;
     }
@@ -618,9 +600,9 @@ fn validate_host(host: &str) -> eyre::Result<String> {
             && label.len() <= 63
             && !label.starts_with('-')
             && !label.ends_with('-')
-            && label.chars().all(|character| {
-                character.is_ascii_alphanumeric() || character == '-'
-            })
+            && label
+                .chars()
+                .all(|character| character.is_ascii_alphanumeric() || character == '-')
     }) {
         bail!("invalid RedStone node hostname: {host}");
     }
@@ -630,20 +612,14 @@ fn validate_host(host: &str) -> eyre::Result<String> {
 
 fn unsafe_node_ip(ip: IpAddr) -> bool {
     match ip {
-        IpAddr::V4(ip) => {
-            ip.is_loopback() || ip.is_link_local() || ip.is_unspecified()
-        }
-        IpAddr::V6(ip) => {
-            ip.is_loopback()
-                || ip.is_unicast_link_local()
-                || ip.is_unspecified()
-        }
+        IpAddr::V4(ip) => ip.is_loopback() || ip.is_link_local() || ip.is_unspecified(),
+        IpAddr::V6(ip) => ip.is_loopback() || ip.is_unicast_link_local() || ip.is_unspecified(),
     }
 }
 
 fn parse_node_map(bytes: &[u8]) -> eyre::Result<BTreeMap<String, String>> {
-    let raw: HongshiNodeResponse = serde_json::from_slice(bytes)
-        .wrap_err("failed to parse RedStone node list")?;
+    let raw: HongshiNodeResponse =
+        serde_json::from_slice(bytes).wrap_err("failed to parse RedStone node list")?;
     let raw = match raw {
         HongshiNodeResponse::Map(nodes) => nodes,
         HongshiNodeResponse::List(nodes) => nodes
@@ -674,9 +650,7 @@ fn parse_node_map(bytes: &[u8]) -> eyre::Result<BTreeMap<String, String>> {
     Ok(nodes)
 }
 
-async fn write_node_cache(
-    nodes: &BTreeMap<String, String>,
-) -> eyre::Result<()> {
+async fn write_node_cache(nodes: &BTreeMap<String, String>) -> eyre::Result<()> {
     let path = node_cache_path();
     let parent = path
         .parent()
@@ -688,9 +662,7 @@ async fn write_node_cache(
     Ok(())
 }
 
-async fn load_node_map(
-    _force_refresh: bool,
-) -> eyre::Result<(BTreeMap<String, String>, bool)> {
+async fn load_node_map(_force_refresh: bool) -> eyre::Result<(BTreeMap<String, String>, bool)> {
     match NODE_CLIENT.get(NODE_ENDPOINT).send().await {
         Ok(response) => match response.error_for_status() {
             Ok(response) => {
@@ -714,18 +686,12 @@ async fn load_node_map(
     Ok((parse_node_map(&cached)?, true))
 }
 
-async fn probe_node(
-    name: String,
-    address: String,
-    cached: bool,
-) -> HongshiNode {
+async fn probe_node(name: String, address: String, cached: bool) -> HongshiNode {
     let started = Instant::now();
     let socket = lookup_host((address.as_str(), CONTROL_PORT))
         .await
         .ok()
-        .and_then(|mut addresses| {
-            addresses.find(|socket| !unsafe_node_ip(socket.ip()))
-        });
+        .and_then(|mut addresses| addresses.find(|socket| !unsafe_node_ip(socket.ip())));
     let reachable = if let Some(socket) = socket {
         tokio::time::timeout(NODE_PROBE_TIMEOUT, TcpStream::connect(socket))
             .await
@@ -819,9 +785,7 @@ fn parse_tunnel_status(contents: &str) -> eyre::Result<TunnelStatusFile> {
         .unwrap_or_default()
         .parse::<i32>()
         .wrap_err("invalid RedStone tunnel port")?;
-    if (status == "open" && !(1..=65535).contains(&port))
-        || (status == "closed" && port != -1)
-    {
+    if (status == "open" && !(1..=65535).contains(&port)) || (status == "closed" && port != -1) {
         bail!("invalid RedStone tunnel port for status {status}");
     }
     Ok(TunnelStatusFile {
@@ -850,18 +814,12 @@ async fn read_fresh_status(
     parse_tunnel_status(&contents).map(Some)
 }
 
-async fn process_exit_code(
-    child: &Arc<Mutex<Child>>,
-) -> eyre::Result<Option<i32>> {
+async fn process_exit_code(child: &Arc<Mutex<Child>>) -> eyre::Result<Option<i32>> {
     let mut child = child.lock().await;
     Ok(child.try_wait()?.map(|status| status.code().unwrap_or(-1)))
 }
 
-async fn set_start_error(
-    error_type: HongshiErrorType,
-    message: String,
-    exit_code: Option<i32>,
-) {
+async fn set_start_error(error_type: HongshiErrorType, message: String, exit_code: Option<i32>) {
     let mut state = HONGSHI_STATE.lock().await;
     state.status = HongshiStatus::Error;
     state.public_address = None;
@@ -873,12 +831,9 @@ async fn set_start_error(
 fn classify_start_error(message: &str) -> HongshiErrorType {
     if message.contains("install RedStone kernel") {
         HongshiErrorType::Install
-    } else if message.contains("node")
-        || message.contains("fetch RedStone nodes")
-    {
+    } else if message.contains("node") || message.contains("fetch RedStone nodes") {
         HongshiErrorType::NodeList
-    } else if message.contains("status") || message.contains("tunnel creation")
-    {
+    } else if message.contains("status") || message.contains("tunnel creation") {
         HongshiErrorType::StatusFile
     } else {
         HongshiErrorType::KernelStart
@@ -910,7 +865,8 @@ async fn spawn_kernel(
     }
     let _ = tokio::fs::remove_file(status_file).await;
     let started_at = SystemTime::now();
-    let mut child = Command::new(binary)
+    let mut command = Command::new(binary);
+    command
         .arg("-server")
         .arg(&node.address)
         .arg("-port")
@@ -921,7 +877,14 @@ async fn spawn_kernel(
         .stdin(Stdio::null())
         .stdout(Stdio::null())
         .stderr(Stdio::null())
-        .kill_on_drop(true)
+        .kill_on_drop(true);
+    #[cfg(windows)]
+    {
+        use std::os::windows::process::CommandExt;
+        const CREATE_NO_WINDOW: u32 = 0x08000000;
+        command.creation_flags(CREATE_NO_WINDOW);
+    }
+    let mut child = command
         .spawn()
         .wrap_err("failed to start RedStone kernel")?;
     let process_id = child
@@ -948,8 +911,7 @@ async fn wait_until_open(
         if let Some(exit_code) = process_exit_code(child).await? {
             return Ok(Err(exit_code));
         }
-        if let Some(status) = read_fresh_status(status_file, started_at).await?
-        {
+        if let Some(status) = read_fresh_status(status_file, started_at).await? {
             if status.status == "open" {
                 if let Some(exit_code) = process_exit_code(child).await? {
                     return Ok(Err(exit_code));
@@ -967,11 +929,7 @@ async fn wait_until_open(
     }
 }
 
-async fn monitor_kernel(
-    child: Arc<Mutex<Child>>,
-    status_file: PathBuf,
-    started_at: SystemTime,
-) {
+async fn monitor_kernel(child: Arc<Mutex<Child>>, status_file: PathBuf, started_at: SystemTime) {
     loop {
         match process_exit_code(&child).await {
             Ok(Some(exit_code)) => {
@@ -996,12 +954,7 @@ async fn monitor_kernel(
             }
             Ok(None) => {}
             Err(error) => {
-                set_start_error(
-                    HongshiErrorType::KernelExit,
-                    error.to_string(),
-                    None,
-                )
-                .await;
+                set_start_error(HongshiErrorType::KernelExit, error.to_string(), None).await;
                 break;
             }
         }
@@ -1059,9 +1012,9 @@ pub async fn start(
     }
     if let Some(instance_id) = instance_id.as_deref() {
         let ports = DETECTED_PORTS.lock().await;
-        let detected = ports.get(instance_id).ok_or_else(|| {
-            eyre::eyre!("selected Minecraft instance is no longer running")
-        })?;
+        let detected = ports
+            .get(instance_id)
+            .ok_or_else(|| eyre::eyre!("selected Minecraft instance is no longer running"))?;
         if detected.port != local_port {
             bail!("selected Minecraft instance opened a different LAN port");
         }
@@ -1156,8 +1109,7 @@ pub async fn start(
     if let Err(error) = result {
         if HONGSHI_STATE.lock().await.status != HongshiStatus::Error {
             let message = error.to_string();
-            set_start_error(classify_start_error(&message), message, None)
-                .await;
+            set_start_error(classify_start_error(&message), message, None).await;
         }
         return Err(error);
     }
@@ -1179,8 +1131,7 @@ pub async fn stop() -> eyre::Result<()> {
     if let Some(child) = child {
         let mut child = child.lock().await;
         let _ = child.start_kill();
-        let _ =
-            tokio::time::timeout(Duration::from_secs(3), child.wait()).await;
+        let _ = tokio::time::timeout(Duration::from_secs(3), child.wait()).await;
     }
     if let Some(monitor) = monitor {
         monitor.abort();
@@ -1221,9 +1172,7 @@ pub async fn observe_minecraft_log(
             instance_name: instance_name.to_string(),
             process_id: process_id.to_string(),
             port,
-            detected_at: chrono::Local::now()
-                .format("%Y-%m-%d %H:%M:%S")
-                .to_string(),
+            detected_at: chrono::Local::now().format("%Y-%m-%d %H:%M:%S").to_string(),
         },
     );
 
@@ -1240,10 +1189,7 @@ pub async fn minecraft_process_finished(instance_id: &str) {
     let should_stop = {
         let state = HONGSHI_STATE.lock().await;
         state.bound_instance_id.as_deref() == Some(instance_id)
-            && matches!(
-                state.status,
-                HongshiStatus::Starting | HongshiStatus::Open
-            )
+            && matches!(state.status, HongshiStatus::Starting | HongshiStatus::Open)
     };
     if should_stop && let Err(error) = stop().await {
         warn!("failed to stop RedStone after Minecraft exited: {error:#}");
@@ -1270,15 +1216,12 @@ mod tests {
 
     #[test]
     fn parses_node_map_and_rejects_unsafe_hosts() {
-        let nodes =
-            parse_node_map(r#"{"南京":"119.45.52.17"}"#.as_bytes()).unwrap();
+        let nodes = parse_node_map(r#"{"南京":"119.45.52.17"}"#.as_bytes()).unwrap();
         assert_eq!(nodes.get("南京").map(String::as_str), Some("119.45.52.17"));
         assert!(parse_node_map(br#"{"local":"127.0.0.1"}"#).is_err());
         assert!(parse_node_map(br#"{"bad":"https://example.com"}"#).is_err());
-        let nodes = parse_node_map(
-            br#"[{"host":"relay.example.com","region":"cn-east"}]"#,
-        )
-        .unwrap();
+        let nodes =
+            parse_node_map(br#"[{"host":"relay.example.com","region":"cn-east"}]"#).unwrap();
         assert_eq!(
             nodes.get("cn-east").map(String::as_str),
             Some("relay.example.com")
@@ -1334,18 +1277,8 @@ mod tests {
         .unwrap();
         assert_eq!(open.port, 41862);
         assert_eq!(open.server, "1.2.3.4");
-        assert!(
-            parse_tunnel_status(
-                "[tunnel]\nstatus=closed\nserver=1.2.3.4\nport=-1\n"
-            )
-            .is_ok()
-        );
-        assert!(
-            parse_tunnel_status(
-                "[tunnel]\nstatus=open\nserver=1.2.3.4\nport=-1\n"
-            )
-            .is_err()
-        );
+        assert!(parse_tunnel_status("[tunnel]\nstatus=closed\nserver=1.2.3.4\nport=-1\n").is_ok());
+        assert!(parse_tunnel_status("[tunnel]\nstatus=open\nserver=1.2.3.4\nport=-1\n").is_err());
     }
 
     #[tokio::test]
