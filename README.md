@@ -1,5 +1,11 @@
 # Ghastling Website
 
+由 GitHub 托管的小乐魂启动器静态官网
+
+[![Release](https://github.com/SunkDiagram1865/Ghastling/actions/workflows/ghastling-pages.yml/badge.svg)](https://github.com/SunkDiagram1865/Ghastling/actions/workflows/ghastling-pages.yml)
+
+
+
 ## 项目简介
 
 欢迎来到**小乐魂启动器**（Ghastling Launcher）的官方网站！
