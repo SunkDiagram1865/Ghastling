@@ -29,6 +29,21 @@ export const ANNOUNCEMENT_CHANGE_TYPES: readonly AnnouncementChangeType[] = [
 
 export const launcherAnnouncements: readonly LauncherAnnouncement[] = [
 	{
+		id: 'launcher-0.0.8·',
+		version: '0.0.8',
+		publishedAt: '2026-08-15',
+		title: 'Ghastling Launcher 0.0.8',
+		changes: {
+			fixed: [
+				'修复 CI 打包不走系统代理的问题。',
+				'创建联机弹 cmd 窗口的问题。',
+			],
+			changed: [
+				'更新红石联机 UI。',
+			],
+		},
+	},
+	{
 		id: 'launcher-0.0.7·',
 		version: '0.0.7',
 		publishedAt: '2026-08-13',
