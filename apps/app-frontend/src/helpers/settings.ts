@@ -39,7 +39,7 @@ const UPDATE_SOURCE_STORAGE_KEY = 'ghastling-update-source'
 
 export function getUpdateSource(): UpdateSource {
 	const value = localStorage.getItem(UPDATE_SOURCE_STORAGE_KEY)
-	const source = value === 'github' || value === 'official' ? 'github' : 'cnb'
+	const source: UpdateSource = 'github'
 	if (value !== source) {
 		localStorage.setItem(UPDATE_SOURCE_STORAGE_KEY, source)
 	}
